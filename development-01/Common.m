@@ -15,7 +15,6 @@
 -(NSInteger*)getImageSequenceId {
     NSLog(@"getImageSequenceId");
     DA *da = [DA da];
-    NSLog(@"da get");
     NSString *stmt_u = @"UPDATE seq_image_id SET id = id + 1";
     NSString *stmt_s = @"SELECT id FROM seq_image_id";
     [da open];

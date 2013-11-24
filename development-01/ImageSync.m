@@ -16,7 +16,8 @@
     
     ALAssetsLibrary *_library = [[ALAssetsLibrary alloc] init];
     // TODO iOS6と7では名前が違うので対応させる
-    NSString *_AlbumName = @"Saved Photos"; // for iOS7
+    //NSString *_AlbumName = @"Saved Photos"; // for iOS7
+    NSString *_AlbumName = @"Camera Roll"; // for iOS7
     NSMutableArray *_AlAssetsArr = [NSMutableArray array];
     Common *cm = [[Common alloc] init];
     
@@ -25,7 +26,7 @@
         //ALAssetsLibraryのすべてのアルバムが列挙される
         if (group) {
             //アルバム名が「_AlbumName」と同一だった時の処理
-            NSLog(@"%@", [group valueForProperty:ALAssetsGroupPropertyName]);
+            //NSLog(@"%@", [group valueForProperty:ALAssetsGroupPropertyName]);
             if ([_AlbumName compare:[group valueForProperty:ALAssetsGroupPropertyName]] == NSOrderedSame) {
                 //assetsEnumerationBlock
                 ALAssetsGroupEnumerationResultsBlock assetsEnumerationBlock = ^(ALAsset *result, NSUInteger index, BOOL *stop) {
@@ -36,10 +37,10 @@
                         
                     }else{
                         //NSMutableArraryに格納後の処理
-                        NSLog(@"%d", [_AlAssetsArr count]);
+                        //NSLog(@"%d", [_AlAssetsArr count]);
                         NSInteger assets_count = [_AlAssetsArr count];
-                        NSLog(@"before nslog");
-                        NSLog(@"%d", assets_count);
+                        //NSLog(@"before nslog");
+                        //NSLog(@"%d", assets_count);
                         
                         
                         // imageのデータをDBから取得
@@ -55,13 +56,13 @@
                             [org_paths setObject:@"1" forKey:org_path];
                         }
                         [da close];
-                        NSLog(@"org_paths : %@", org_paths);
+                        //NSLog(@"org_paths : %@", org_paths);
                         
                         for (int i=0; i<[_AlAssetsArr count]; i++) {
 
                             // 既に保存済の画像の場合はスキップ
-                            ALAssetRepresentation *defaultRepresentation = [[_AlAssetsArr objectAtIndex:i] defaultRepresentation];
-                            NSURL *image_url = [defaultRepresentation url];
+                            __weak ALAssetRepresentation *defaultRepresentation = [[_AlAssetsArr objectAtIndex:i] defaultRepresentation];
+                            __weak NSURL *image_url = [defaultRepresentation url];
                             NSLog(@"image_path string : %@", [image_url absoluteString]);
                             if ( [org_paths objectForKey:[image_url absoluteString]] ) {
                                 NSLog(@"continued");
@@ -69,26 +70,28 @@
                             }
                             
                             // 保存用に画像を取得
-                            UIImage *aImage = [UIImage imageWithCGImage:[defaultRepresentation fullScreenImage]];
-                            NSData *data = UIImageJPEGRepresentation(aImage, 0.5);
+                            //__weak UIImage *aImage = [UIImage imageWithCGImage:[defaultRepresentation fullScreenImage]];
+                            __weak UIImage *aImage = [UIImage imageWithCGImage:[[_AlAssetsArr objectAtIndex:i] thumbnail]];
+                            //__weak NSData *data = UIImageJPEGRepresentation(aImage, 0.5);
+                            __weak NSData *data = UIImageJPEGRepresentation(aImage, 0.9);
                             
-                            NSLog(@"image resize ended");
+                            //NSLog(@"image resize ended");
                             
-                            NSLog(@"uril instance");
-                            NSNumber *image_id = [NSNumber numberWithInteger:[cm getImageSequenceId]];
-                            NSLog(@"image_id:%@", image_id);
-                            NSString *path = [cm getImagePath:image_id];
+                            //NSLog(@"uril instance");
+                            __weak NSNumber *image_id = [NSNumber numberWithInteger:[cm getImageSequenceId]];
+                            //NSLog(@"image_id:%@", image_id);
+                            __weak NSString *path = [cm getImagePath:image_id];
                             NSLog(@"image_path:%@", path);
                             
                             if ([data writeToFile:path atomically:YES]) {
                                 // image_commonへ登録
-                                NSLog(@"start DB update");
+                                //NSLog(@"start DB update");
                                 
                                 NSString *stmt = @"INSERT INTO image_common (id, original_path, saved_at, created_at, updated_at) VALUES(?,?,?,?,?)";
                                 NSDate* date = [NSDate date];
                                 
-                                NSLog(@"image_url : %@", image_url);
-                                NSLog(@"%@", date);
+                                //NSLog(@"image_url : %@", image_url);
+                                //NSLog(@"%@", date);
                                 
                                 [da open];
                                 [da executeUpdate:stmt, image_id
