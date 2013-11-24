@@ -15,9 +15,8 @@
 -(void)main {
     
     ALAssetsLibrary *_library = [[ALAssetsLibrary alloc] init];
-    // TODO iOS6と7では名前が違うので対応させる
-    //NSString *_AlbumName = @"Saved Photos"; // for iOS7
-    NSString *_AlbumName = @"Camera Roll"; // for iOS7
+    // TODO iOS6と7以外への対応
+    NSDictionary *_AlbumName = [NSDictionary dictionaryWithObjectsAndKeys:@"1", @"Saved Photos", @"1", @"Camera Roll", nil];
     NSMutableArray *_AlAssetsArr = [NSMutableArray array];
     Common *cm = [[Common alloc] init];
     
@@ -26,8 +25,9 @@
         //ALAssetsLibraryのすべてのアルバムが列挙される
         if (group) {
             //アルバム名が「_AlbumName」と同一だった時の処理
-            //NSLog(@"%@", [group valueForProperty:ALAssetsGroupPropertyName]);
-            if ([_AlbumName compare:[group valueForProperty:ALAssetsGroupPropertyName]] == NSOrderedSame) {
+            NSLog(@"%@", [group valueForProperty:ALAssetsGroupPropertyName]);
+            NSString *group_name = [group valueForProperty:ALAssetsGroupPropertyName];
+            if ([_AlbumName objectForKey:group_name]) {
                 //assetsEnumerationBlock
                 ALAssetsGroupEnumerationResultsBlock assetsEnumerationBlock = ^(ALAsset *result, NSUInteger index, BOOL *stop) {
                     
