@@ -7,6 +7,7 @@
 //
 
 #import "FirstViewController.h"
+#import "Common.h"
 
 @interface FirstViewController ()
 
@@ -18,6 +19,10 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
+    
+    Common *cm = [[Common alloc] init];
+    [cm databaseInitializer];
+    [cm kickImageSync];
 }
 
 - (void)didReceiveMemoryWarning
@@ -25,5 +30,6 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
 
 @end
