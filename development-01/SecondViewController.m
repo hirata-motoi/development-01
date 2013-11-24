@@ -10,6 +10,7 @@
 #import "DA.h"
 #import "FMDatabase.h"
 #import "Common.h"
+#import "ScrollView.h"
 
 @interface SecondViewController ()
 
@@ -33,9 +34,9 @@
 
 - (void)showSyncedImageList {
     // scrollViewの作成
-    UIScrollView *scrollView = [[UIScrollView alloc] init];
+    ScrollView *scrollView = [[ScrollView alloc] init];
     scrollView.frame = self.view.bounds;
-    scrollView.delegate = self;
+
     
     // DBからimage listを取得
     NSMutableArray *imageInfo = [self getImageInfoFromDB];
@@ -46,9 +47,9 @@
         NSString *image_path = [unit objectForKey:@"image_path"];
         UIImage *image = [UIImage imageWithContentsOfFile:image_path];
         UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
-        imageView.tag = [unit objectForKey:@"image_id"];
+        imageView.tag = [[unit objectForKey:@"image_id"] intValue];
         imageView.userInteractionEnabled = YES;
-        imageView.multipleTouchEnabled = YES;
+        
         
         int x,y;
         x = ((count % 3) * 100) + 10;
@@ -87,26 +88,9 @@
         [imageInfo addObject:unit];
     }
     [da close];
-    NSLog(@"%@", imageInfo);
     return imageInfo;
 }
 
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    NSLog(@"aaaaaaaa");
-    UITouch *touch = [touches anyObject];
-    NSInteger *image_id = touch.view.tag;
-    
-    NSLog(@"touched : %@", image_id);
-}
-
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
-{
-}
-
-- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
-{
-}
 
 
 @end
