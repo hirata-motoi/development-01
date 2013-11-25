@@ -39,15 +39,26 @@
 -(void)databaseInitializer {
     
     NSString *image_common = @"CREATE TABLE IF NOT EXISTS image_common(id INTEGER PRIMARY KEY, original_path TEXT, comment TEXT, saved_at INTEGER, created_at INTEGER, updated_at INTEGER)";
-    
     NSString *seq_image_id = @"CREATE TABLE IF NOT EXISTS seq_image_id(id INTEGER PRIMARY KEY)";
+    NSString *tags = @"CREATE TABLE IF NOT EXISTS tags(id INTEGER PRIMARY KEY, tag_name TEXT)";
+    NSString *tag_map = @"CREATE TABLE IF NOT EXISTS tag_map(tag_id INTEGER, image_id INTEGER)";
+//    NSString *create_i1_to_tag_map = @"CREATE INDEX i1 ON tag_map(tag_id)";
+//    NSString *create_i2_to_tag_map = @"CREATE INDEX i2 ON tag_map(image_id)";
     NSString *seq_image_id_select = @"SELECT id FROM seq_image_id";
     NSString *seq_image_id_inesrt = @"INSERT OR IGNORE INTO seq_image_id(id) VALUES(?)";
+    NSString *insert_map_def_data = @"INSERT OR IGNORE INTO tags(id, tag_name) values(1, 'smile')";
     
     DA *da = [DA da];
     [da open];
     [da executeUpdate:image_common];
     [da executeUpdate:seq_image_id];
+    [da executeUpdate:tags];
+    [da executeUpdate:tag_map];
+//    [da executeUpdate:create_i1_to_tag_map];
+//    [da executeUpdate:create_i2_to_tag_map];
+    [da executeUpdate:insert_map_def_data];
+//    [da executeUpdate:insert_map_def_data, 2, @"cry"];
+//    [da executeUpdate:insert_map_def_data, 3, @"angry"];
     
     FMResultSet *results = [da executeQuery:seq_image_id_select];
     NSLog(@"%@", results);
