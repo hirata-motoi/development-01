@@ -10,6 +10,7 @@
 #import "Common.h"
 #import "SecondViewController.h"
 
+
 @implementation ScrollView
 
 - (id)initWithFrame:(CGRect)frame
@@ -30,6 +31,11 @@
 }
 */
 
+
+- (void)setViewControllerObject:(SecondViewController*)vc {
+    viewControllerObject = vc;
+}
+
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
     UITouch *touch = [touches anyObject];
@@ -40,13 +46,6 @@
     }
     
     NSNumber *image_id_number = [NSNumber numberWithInt:image_id];
-    
-    Common *cm = [[Common alloc]init];
-    [cm showZoomImage:(NSNumber*)image_id_number withParentView:(UIViewController*)viewControllerObject];
+    [viewControllerObject showZoomImageWrapper:image_id_number];
 }
-
-- (void)setViewControllerObject:(UIView*)vc {
-    viewControllerObject = vc;
-}
-
 @end

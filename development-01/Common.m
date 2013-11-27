@@ -94,36 +94,6 @@
     [queue addOperation:operation1];
 }
 
-- (void)showZoomImage:(NSNumber*)image_id withParentView:(UIViewController*)vc {
-    
-    CGRect rect_org = vc.view.bounds;
-    
-    // view controller
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-    UIViewController *imageViewController = [storyboard instantiateViewControllerWithIdentifier:@"imageViewController"];
-    imageViewControllerObject = imageViewController;
-
-    // view
-    ImageController *view = [[ImageController alloc] initWithImageId:(NSNumber*)image_id withRect:(CGRect)vc.view.bounds];
-    [imageViewController.view addSubview:view];
-    
-    // tools  なんかしらんがこいつは表示されない
-    UIToolbar *toolBar = [[UIToolbar alloc]initWithFrame:CGRectMake(0,0,320,44)];
-    toolBar.barStyle = UIBarStyleBlackOpaque;
-    [toolBar sizeToFit];
-    UIBarButtonItem *spacer = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:self action:nil];
-    UIBarButtonItem *cancel = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(closeImageView:)];
-    
-    NSArray *items =[NSArray arrayWithObjects:cancel, spacer, nil];
-    //[imageViewController setToolbarItems:items animated:YES];
-    [imageViewController.navigationController setToolbarHidden:NO];
-    imageViewController.toolbarItems = items;
-    NSLog(@"%@", imageViewController); 
-    
-    [vc presentModalViewController:imageViewController animated:YES];
-    
-    
-}
 
 - (void)closeImageView:(id*)sender {
     [imageViewControllerObject dismissViewControllerAnimated:YES completion:^{}];

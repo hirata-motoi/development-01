@@ -20,5 +20,4 @@
 -(void)databaseInitializer;
 -(void)filesystemInitializer;
 -(void)kickImageSync;
--(void)showZoomImage:(NSNumber*)image_id withParentView:(UIViewController*)view;
 @end

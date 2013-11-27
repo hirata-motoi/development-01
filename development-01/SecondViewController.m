@@ -11,7 +11,8 @@
 #import "FMDatabase.h"
 #import "Common.h"
 #import "ScrollView.h"
-
+#import "ImageController.h"
+#import "ModalViewController.h"
 @interface SecondViewController ()
 
 @end
@@ -27,8 +28,6 @@
     
     [self showSyncedImageList];
     NSLog(@"SecondViewController : %@", self);
-    
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
 }
 
 - (void)didReceiveMemoryWarning
@@ -43,9 +42,9 @@
     ScrollView *scrollView = [[ScrollView alloc] init];
     scrollView.frame = self.view.bounds;
     
-    NSLog(@"before");
-    [scrollView setViewControllerObject:(UIViewController*)self];
-    NSLog(@"after");
+
+    [scrollView setViewControllerObject:(SecondViewController*)self];
+
     // DBからimage listを取得
     NSMutableArray *imageInfo = [self getImageInfoFromDB];
     
@@ -99,8 +98,25 @@
     return imageInfo;
 }
 
--(UIViewController*)getSecondView {
-    return self;
+- (void)showZoomImageWrapper:(NSNumber *)image_id {
+    [self showZoomImage:image_id];
+}
+
+- (void)showZoomImage:(NSNumber*)image_id {
+    CGRect rect_org = self.view.bounds;
+    
+    ModalViewController *modalViewController = [[ModalViewController alloc] init];
+    Common *cm = [[Common alloc]init];
+    ImageController *view = [[ImageController alloc] initWithImageId:(NSNumber*)image_id withRect:(CGRect)self.view.bounds];
+    [modalViewController.view addSubview:view];
+
+    UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:modalViewController];
+
+    [self presentModalViewController:navigationController animated:YES];
+}
+
+- (void)closeModal {
+
 }
 
 @end
