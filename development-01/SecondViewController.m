@@ -87,6 +87,7 @@
         NSNumber *image_id   = [NSNumber numberWithInt:[results intForColumn:@"id"]];
         NSDate *saved_at     = [results dateForColumn:@"saved_at"];
         NSString *image_path = [cm getImagePathThumbnail:(NSNumber*)image_id];
+        NSLog(@"%@", image_path);
         
         NSArray *key   = [NSArray arrayWithObjects:@"image_id", @"saved_at", @"image_path", nil];
         NSArray *value = [NSArray arrayWithObjects:image_id, saved_at, image_path, nil];
@@ -111,7 +112,10 @@
     [modalViewController.view addSubview:view];
 
     UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:modalViewController];
+    navigationController.navigationBar.translucent = YES;
+    navigationController.navigationBar.tintColor = [UIColor blackColor];
 
+    
     [self presentModalViewController:navigationController animated:YES];
 }
 
