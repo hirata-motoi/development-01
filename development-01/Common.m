@@ -49,7 +49,7 @@
 //    NSString *create_i2_to_tag_map = @"CREATE INDEX i2 ON tag_map(image_id)";
     NSString *seq_image_id_select = @"SELECT id FROM seq_image_id";
     NSString *seq_image_id_inesrt = @"INSERT OR IGNORE INTO seq_image_id(id) VALUES(?)";
-    NSString *insert_map_def_data = @"INSERT OR IGNORE INTO tags(id, tag_name) values(1, 'smile')";
+    NSString *insert_map_def_data = @"INSERT OR IGNORE INTO tags(id, tag_name) values(?, ?)";
     
     DA *da = [DA da];
     [da open];
@@ -59,9 +59,9 @@
     [da executeUpdate:tag_map];
 //    [da executeUpdate:create_i1_to_tag_map];
 //    [da executeUpdate:create_i2_to_tag_map];
-    [da executeUpdate:insert_map_def_data];
-//    [da executeUpdate:insert_map_def_data, 2, @"cry"];
-//    [da executeUpdate:insert_map_def_data, 3, @"angry"];
+    [da executeUpdate:insert_map_def_data, [NSNumber numberWithInt:1], [NSString stringWithFormat:@"smile"]];
+    [da executeUpdate:insert_map_def_data, [NSNumber numberWithInt:2], [NSString stringWithFormat:@"cry"]];
+    [da executeUpdate:insert_map_def_data, [NSNumber numberWithInt:3], [NSString stringWithFormat:@"angry"]];
     
     FMResultSet *results = [da executeQuery:seq_image_id_select];
     if (![results next]) {
