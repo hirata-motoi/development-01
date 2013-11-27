@@ -40,8 +40,8 @@
     
     NSString *image_common = @"CREATE TABLE IF NOT EXISTS image_common(id INTEGER PRIMARY KEY, original_path TEXT, comment TEXT, saved_at INTEGER, created_at INTEGER, updated_at INTEGER)";
     NSString *seq_image_id = @"CREATE TABLE IF NOT EXISTS seq_image_id(id INTEGER PRIMARY KEY)";
-    NSString *tags = @"CREATE TABLE IF NOT EXISTS tags(id INTEGER PRIMARY KEY, tag_name TEXT)";
-    NSString *tag_map = @"CREATE TABLE IF NOT EXISTS tag_map(tag_id INTEGER, image_id INTEGER)";
+    NSString *tags = @"CREATE TABLE IF NOT EXISTS tags(id INTEGER PRIMARY KEY, tag_name TEXT UNIQUE)";
+    NSString *tag_map = @"CREATE TABLE IF NOT EXISTS tag_map(tag_id INTEGER, image_id INTEGER, created_at INTEGER)";
 //    NSString *create_i1_to_tag_map = @"CREATE INDEX i1 ON tag_map(tag_id)";
 //    NSString *create_i2_to_tag_map = @"CREATE INDEX i2 ON tag_map(image_id)";
     NSString *seq_image_id_select = @"SELECT id FROM seq_image_id";
@@ -56,9 +56,11 @@
     [da executeUpdate:tag_map];
 //    [da executeUpdate:create_i1_to_tag_map];
 //    [da executeUpdate:create_i2_to_tag_map];
-    [da executeUpdate:insert_map_def_data, [NSNumber numberWithInt:1], [NSString stringWithFormat:@"smile"]];
-    [da executeUpdate:insert_map_def_data, [NSNumber numberWithInt:2], [NSString stringWithFormat:@"cry"]];
-    [da executeUpdate:insert_map_def_data, [NSNumber numberWithInt:3], [NSString stringWithFormat:@"angry"]];
+    [da executeUpdate:insert_map_def_data, [NSNumber numberWithInt:1], [NSString stringWithFormat:@"favorite"]];
+    [da executeUpdate:insert_map_def_data, [NSNumber numberWithInt:2], [NSString stringWithFormat:@"share"]];
+    [da executeUpdate:insert_map_def_data, [NSNumber numberWithInt:3], [NSString stringWithFormat:@"smile"]];
+    [da executeUpdate:insert_map_def_data, [NSNumber numberWithInt:4], [NSString stringWithFormat:@"cry"]];
+    [da executeUpdate:insert_map_def_data, [NSNumber numberWithInt:5], [NSString stringWithFormat:@"angry"]];
     
     FMResultSet *results = [da executeQuery:seq_image_id_select];
     NSLog(@"%@", results);
