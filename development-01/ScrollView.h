@@ -9,5 +9,8 @@
 #import <UIKit/UIKit.h>
 
 @interface ScrollView : UIScrollView
-
+{
+    UIView *viewControllerObject;
+}
+-(void)setViewControllerObject:(UIViewController*)vc;
 @end

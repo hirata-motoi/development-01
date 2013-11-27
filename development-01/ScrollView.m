@@ -7,6 +7,8 @@
 //
 
 #import "ScrollView.h"
+#import "Common.h"
+#import "SecondViewController.h"
 
 @implementation ScrollView
 
@@ -36,7 +38,15 @@
     if (!image_id) {
         return;
     }
-    // TODO zoom image
+    
+    NSNumber *image_id_number = [NSNumber numberWithInt:image_id];
+    
+    Common *cm = [[Common alloc]init];
+    [cm showZoomImage:(NSNumber*)image_id_number withParentView:(UIViewController*)viewControllerObject];
+}
+
+- (void)setViewControllerObject:(UIView*)vc {
+    viewControllerObject = vc;
 }
 
 @end

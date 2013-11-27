@@ -18,12 +18,17 @@
 
 @implementation SecondViewController
 
+
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     
     [self showSyncedImageList];
+    NSLog(@"SecondViewController : %@", self);
+    
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
 }
 
 - (void)didReceiveMemoryWarning
@@ -32,12 +37,15 @@
     // Dispose of any resources that can be recreated.
 }
 
+
 - (void)showSyncedImageList {
     // scrollViewの作成
     ScrollView *scrollView = [[ScrollView alloc] init];
     scrollView.frame = self.view.bounds;
-
     
+    NSLog(@"before");
+    [scrollView setViewControllerObject:(UIViewController*)self];
+    NSLog(@"after");
     // DBからimage listを取得
     NSMutableArray *imageInfo = [self getImageInfoFromDB];
     
@@ -79,7 +87,7 @@
     while ([results next]) {
         NSNumber *image_id   = [NSNumber numberWithInt:[results intForColumn:@"id"]];
         NSDate *saved_at     = [results dateForColumn:@"saved_at"];
-        NSString *image_path = [cm getImagePath:image_id];
+        NSString *image_path = [cm getImagePathThumbnail:(NSNumber*)image_id];
         
         NSArray *key   = [NSArray arrayWithObjects:@"image_id", @"saved_at", @"image_path", nil];
         NSArray *value = [NSArray arrayWithObjects:image_id, saved_at, image_path, nil];
@@ -91,6 +99,8 @@
     return imageInfo;
 }
 
-
+-(UIViewController*)getSecondView {
+    return self;
+}
 
 @end

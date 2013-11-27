@@ -9,5 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface SecondViewController : UIViewController
-
+-(UIViewController*)getSecondView;
+-(UIViewController*)getSelf;
 @end

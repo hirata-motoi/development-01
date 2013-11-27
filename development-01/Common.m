@@ -9,11 +9,12 @@
 #import "Common.h"
 #import "DA.h"
 #import "ImageSync.h"
+#import "SecondViewController.h"
+#import "ImageController.h"
 
 @implementation Common
 
 -(NSInteger*)getImageSequenceId {
-    NSLog(@"getImageSequenceId");
     DA *da = [DA da];
     NSString *stmt_u = @"UPDATE seq_image_id SET id = id + 1";
     NSString *stmt_s = @"SELECT id FROM seq_image_id";
@@ -21,8 +22,6 @@
     [da executeUpdate:stmt_u];
     
     FMResultSet *results = [da executeQuery:stmt_s];
-    
-    NSLog(@"%@", results);
     
     int image_id;
     while ([results next]) {
@@ -33,7 +32,11 @@
 }
 
 -(NSString*)getImagePath:(NSNumber*)image_id {
-    return [NSString stringWithFormat:@"%@/%@.jpg", [NSHomeDirectory() stringByAppendingPathComponent:@"Documents"], image_id];
+    return [NSString stringWithFormat:@"%@/%@/%@.jpg", [NSHomeDirectory() stringByAppendingPathComponent:@"Documents"], @"fullscreen", image_id];
+}
+
+-(NSString*)getImagePathThumbnail:(NSNumber*)image_id {
+    return [NSString stringWithFormat:@"%@/%@/%@.jpg", [NSHomeDirectory() stringByAppendingPathComponent:@"Documents"], @"thumbnail", image_id];
 }
 
 -(void)databaseInitializer {
@@ -61,11 +64,26 @@
 //    [da executeUpdate:insert_map_def_data, 3, @"angry"];
     
     FMResultSet *results = [da executeQuery:seq_image_id_select];
-    NSLog(@"%@", results);
     if (![results next]) {
         [da executeUpdate:seq_image_id_inesrt, 0];
     }
     [da close];
+}
+
+- (void) filesystemInitializer {
+    NSString *fullscreenDirPath = [NSString stringWithFormat:@"%@/%@/", [NSHomeDirectory() stringByAppendingPathComponent:@"Documents"], @"fullscreen"];
+    NSString *thumbnailDirPath = [NSString stringWithFormat:@"%@/%@/", [NSHomeDirectory() stringByAppendingPathComponent:@"Documents"], @"thumbnail"];
+    NSError *error;
+    
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    BOOL resultFullscreen = [fileManager createDirectoryAtPath:fullscreenDirPath
+                         withIntermediateDirectories:YES
+                                          attributes:nil
+                                               error:&error];
+    BOOL resultThumbnail = [fileManager createDirectoryAtPath:thumbnailDirPath
+                                   withIntermediateDirectories:YES
+                                                    attributes:nil
+                                                         error:&error];
 }
 
 // start to sync image by other processes
@@ -74,6 +92,65 @@
     
     ImageSync * operation1 = [[ImageSync alloc] init];
     [queue addOperation:operation1];
+}
+
+- (void)showZoomImage:(NSNumber*)image_id withParentView:(UIViewController*)vc {
+    
+    CGRect rect_org = vc.view.bounds;
+    
+    // view controller
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    UIViewController *imageViewController = [storyboard instantiateViewControllerWithIdentifier:@"imageViewController"];
+    imageViewControllerObject = imageViewController;
+
+    // view
+    ImageController *view = [[ImageController alloc] initWithImageId:(NSNumber*)image_id withRect:(CGRect)vc.view.bounds];
+    [imageViewController.view addSubview:view];
+    
+    // tools  なんかしらんがこいつは表示されない
+    UIToolbar *toolBar = [[UIToolbar alloc]initWithFrame:CGRectMake(0,0,320,44)];
+    toolBar.barStyle = UIBarStyleBlackOpaque;
+    [toolBar sizeToFit];
+    UIBarButtonItem *spacer = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:self action:nil];
+    UIBarButtonItem *cancel = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(closeImageView:)];
+    
+    NSArray *items =[NSArray arrayWithObjects:cancel, spacer, nil];
+    //[imageViewController setToolbarItems:items animated:YES];
+    [imageViewController.navigationController setToolbarHidden:NO];
+    imageViewController.toolbarItems = items;
+    NSLog(@"%@", imageViewController); 
+    
+    [vc presentModalViewController:imageViewController animated:YES];
+    
+    
+}
+
+- (void)closeImageView:(id*)sender {
+    [imageViewControllerObject dismissViewControllerAnimated:YES completion:^{}];
+}
+
+// 表示用に画面のサイズに合わせて画像をリサイズ
+-(CGRect *)imageFrameInfo:(CGSize)imageSize viewSize:(CGRect*)viewRect{
+    
+    NSInteger imageWidth  = imageSize.width;
+    NSInteger imageHeight = imageSize.height;
+    
+    
+    CGFloat widthRatio  = imageWidth  / viewRect->size.width;
+    CGFloat heightRatio = imageHeight / viewRect->size.height;
+    
+    CGFloat ratio = (widthRatio < heightRatio) ? widthRatio : heightRatio;
+    
+    if (ratio >= 1.0) {
+        ratio = 1.0;
+    }
+    
+    NSInteger width  = viewRect->size.width / ratio;
+    NSInteger height = imageHeight / ratio;
+    
+    NSInteger locationY = (viewRect->size.height - height) / 2;
+    CGRect rect = CGRectMake(0, locationY, width, height);
+    return &rect;
 }
 
 @end

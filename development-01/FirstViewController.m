@@ -22,7 +22,8 @@
     
     Common *cm = [[Common alloc] init];
     [cm databaseInitializer];
-    [cm kickImageSync];
+    [cm filesystemInitializer];
+//    [cm kickImageSync];
 }
 
 - (void)didReceiveMemoryWarning
@@ -32,4 +33,9 @@
 }
 
 
+- (IBAction)testKickButtonTap:(id)sender {
+
+    Common *cm = [[Common alloc] init];
+    [cm kickImageSync];
+}
 @end
