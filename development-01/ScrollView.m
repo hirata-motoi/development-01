@@ -7,6 +7,9 @@
 //
 
 #import "ScrollView.h"
+#import "Common.h"
+#import "SecondViewController.h"
+
 
 @implementation ScrollView
 
@@ -28,6 +31,11 @@
 }
 */
 
+
+- (void)setViewControllerObject:(SecondViewController*)vc {
+    viewControllerObject = vc;
+}
+
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
     UITouch *touch = [touches anyObject];
@@ -36,7 +44,8 @@
     if (!image_id) {
         return;
     }
-    // TODO zoom image
+    
+    NSNumber *image_id_number = [NSNumber numberWithInt:image_id];
+    [viewControllerObject showZoomImageWrapper:image_id_number];
 }
-
 @end

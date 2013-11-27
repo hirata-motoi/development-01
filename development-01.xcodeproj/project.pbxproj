@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		84207BBF18462F5E00B1D6DC /* ImageController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84207BBE18462F5E00B1D6DC /* ImageController.m */; };
+		84207BC51846655B00B1D6DC /* ModalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84207BC41846655B00B1D6DC /* ModalViewController.m */; };
 		8452A8A5183A55370016EA3F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8452A8A4183A55370016EA3F /* Foundation.framework */; };
 		8452A8A7183A55370016EA3F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8452A8A6183A55370016EA3F /* CoreGraphics.framework */; };
 		8452A8A9183A55370016EA3F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8452A8A8183A55370016EA3F /* UIKit.framework */; };
@@ -46,6 +48,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		84207BBD18462F5E00B1D6DC /* ImageController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageController.h; sourceTree = "<group>"; };
+		84207BBE18462F5E00B1D6DC /* ImageController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageController.m; sourceTree = "<group>"; };
+		84207BC31846655A00B1D6DC /* ModalViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModalViewController.h; sourceTree = "<group>"; };
+		84207BC41846655B00B1D6DC /* ModalViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ModalViewController.m; sourceTree = "<group>"; };
 		8452A8A1183A55370016EA3F /* development-01.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "development-01.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8452A8A4183A55370016EA3F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		8452A8A6183A55370016EA3F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -159,8 +165,12 @@
 				8452A8BA183A55370016EA3F /* FirstViewController.m */,
 				8452A8BC183A55370016EA3F /* SecondViewController.h */,
 				8452A8BD183A55370016EA3F /* SecondViewController.m */,
+				84207BBD18462F5E00B1D6DC /* ImageController.h */,
+				84207BBE18462F5E00B1D6DC /* ImageController.m */,
 				8452A8BF183A55370016EA3F /* Images.xcassets */,
 				8452A8AB183A55370016EA3F /* Supporting Files */,
+				84207BC31846655A00B1D6DC /* ModalViewController.h */,
+				84207BC41846655B00B1D6DC /* ModalViewController.m */,
 			);
 			path = "development-01";
 			sourceTree = "<group>";
@@ -335,7 +345,9 @@
 				84D8086718421E1500C63B87 /* FMDatabaseQueue.m in Sources */,
 				8452A8B5183A55370016EA3F /* AppDelegate.m in Sources */,
 				8452A8BB183A55370016EA3F /* FirstViewController.m in Sources */,
+				84207BBF18462F5E00B1D6DC /* ImageController.m in Sources */,
 				84D8086818421E1500C63B87 /* FMResultSet.m in Sources */,
+				84207BC51846655B00B1D6DC /* ModalViewController.m in Sources */,
 				8452A8B1183A55370016EA3F /* main.m in Sources */,
 				84CAB62018427306009D311C /* ScrollView.m in Sources */,
 				84D8086518421E1500C63B87 /* FMDatabaseAdditions.m in Sources */,

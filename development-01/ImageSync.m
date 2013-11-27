@@ -51,7 +51,6 @@
                         FMResultSet *results_org_path = [da executeQuery:stmt_org_path];
                         NSMutableDictionary *org_paths = [NSMutableDictionary dictionary];
                         while ([results_org_path next]) {
-                            NSLog(@"result found");
                             NSString *org_path = [results_org_path stringForColumn:@"original_path"];
                             [org_paths setObject:@"1" forKey:org_path];
                         }
@@ -61,8 +60,8 @@
                         for (int i=0; i<[_AlAssetsArr count]; i++) {
 
                             // 既に保存済の画像の場合はスキップ
-                            __weak ALAssetRepresentation *defaultRepresentation = [[_AlAssetsArr objectAtIndex:i] defaultRepresentation];
-                            __weak NSURL *image_url = [defaultRepresentation url];
+                            ALAssetRepresentation *defaultRepresentation = [[_AlAssetsArr objectAtIndex:i] defaultRepresentation];
+                            NSURL *image_url = [defaultRepresentation url];
                             NSLog(@"image_path string : %@", [image_url absoluteString]);
                             if ( [org_paths objectForKey:[image_url absoluteString]] ) {
                                 NSLog(@"continued");
@@ -70,20 +69,24 @@
                             }
                             
                             // 保存用に画像を取得
-                            //__weak UIImage *aImage = [UIImage imageWithCGImage:[defaultRepresentation fullScreenImage]];
-                            __weak UIImage *aImage = [UIImage imageWithCGImage:[[_AlAssetsArr objectAtIndex:i] thumbnail]];
-                            //__weak NSData *data = UIImageJPEGRepresentation(aImage, 0.5);
-                            __weak NSData *data = UIImageJPEGRepresentation(aImage, 0.9);
+                            //UIImage *aImage = [UIImage imageWithCGImage:[defaultRepresentation fullScreenImage]];
+                            UIImage *tImage = [UIImage imageWithCGImage:[[_AlAssetsArr objectAtIndex:i] thumbnail]];
+                            //NSData *adata = UIImageJPEGRepresentation(aImage, 0.5);
+                            NSData *tdata = UIImageJPEGRepresentation(tImage, 1);
                             
                             //NSLog(@"image resize ended");
                             
                             //NSLog(@"uril instance");
-                            __weak NSNumber *image_id = [NSNumber numberWithInteger:[cm getImageSequenceId]];
+                            NSNumber *image_id = [NSNumber numberWithInteger:[cm getImageSequenceId]];
                             //NSLog(@"image_id:%@", image_id);
-                            __weak NSString *path = [cm getImagePath:image_id];
-                            NSLog(@"image_path:%@", path);
+                            //NSString *apath = [cm getImagePath:image_id];
+                            NSString *tpath = [cm getImagePathThumbnail:image_id];
+                            //NSLog(@"image_path:%@", apath);
                             
-                            if ([data writeToFile:path atomically:YES]) {
+                            if (
+                                //[adata writeToFile:apath atomically:YES] &&
+                                [tdata writeToFile:tpath atomically:YES]
+                            ) {
                                 // image_commonへ登録
                                 //NSLog(@"start DB update");
                                 
@@ -97,6 +100,7 @@
                                 [da executeUpdate:stmt, image_id
                                  , image_url, date, date, date];
                                 [da close];
+                                
                             } else {
                                 // TODO 失敗したよもっかいやってね というダイアログ出す
                             }
@@ -110,5 +114,6 @@
             }
         }
     } failureBlock:nil];
+
 }
 @end

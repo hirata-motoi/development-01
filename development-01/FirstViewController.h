@@ -9,5 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface FirstViewController : UIViewController
+@property (strong, nonatomic) IBOutlet UIButton *testKickButton;
+- (IBAction)testKickButtonTap:(id)sender;
 
 @end

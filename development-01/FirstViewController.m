@@ -25,7 +25,8 @@
     
     Common *cm = [[Common alloc] init];
     [cm databaseInitializer];
-    [cm kickImageSync];
+    [cm filesystemInitializer];
+//    [cm kickImageSync];
 //    [self showTagImageList];
 }
 
@@ -107,4 +108,9 @@
     return imageInfo;
 }
 
+- (IBAction)testKickButtonTap:(id)sender {
+
+    Common *cm = [[Common alloc] init];
+    [cm kickImageSync];
+}
 @end

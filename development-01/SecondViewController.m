@@ -11,12 +11,15 @@
 #import "FMDatabase.h"
 #import "Common.h"
 #import "ScrollView.h"
-
+#import "ImageController.h"
+#import "ModalViewController.h"
 @interface SecondViewController ()
 
 @end
 
 @implementation SecondViewController
+
+
 
 - (void)viewDidLoad
 {
@@ -24,6 +27,7 @@
 	// Do any additional setup after loading the view, typically from a nib.
     
     [self showSyncedImageList];
+    NSLog(@"SecondViewController : %@", self);
 }
 
 - (void)didReceiveMemoryWarning
@@ -32,12 +36,15 @@
     // Dispose of any resources that can be recreated.
 }
 
+
 - (void)showSyncedImageList {
     // scrollViewの作成
     ScrollView *scrollView = [[ScrollView alloc] init];
     scrollView.frame = self.view.bounds;
-
     
+
+    [scrollView setViewControllerObject:(SecondViewController*)self];
+
     // DBからimage listを取得
     NSMutableArray *imageInfo = [self getImageInfoFromDB];
     
@@ -79,7 +86,7 @@
     while ([results next]) {
         NSNumber *image_id   = [NSNumber numberWithInt:[results intForColumn:@"id"]];
         NSDate *saved_at     = [results dateForColumn:@"saved_at"];
-        NSString *image_path = [cm getImagePath:image_id];
+        NSString *image_path = [cm getImagePathThumbnail:(NSNumber*)image_id];
         
         NSArray *key   = [NSArray arrayWithObjects:@"image_id", @"saved_at", @"image_path", nil];
         NSArray *value = [NSArray arrayWithObjects:image_id, saved_at, image_path, nil];
@@ -91,6 +98,25 @@
     return imageInfo;
 }
 
+- (void)showZoomImageWrapper:(NSNumber *)image_id {
+    [self showZoomImage:image_id];
+}
 
+- (void)showZoomImage:(NSNumber*)image_id {
+    CGRect rect_org = self.view.bounds;
+    
+    ModalViewController *modalViewController = [[ModalViewController alloc] init];
+    Common *cm = [[Common alloc]init];
+    ImageController *view = [[ImageController alloc] initWithImageId:(NSNumber*)image_id withRect:(CGRect)self.view.bounds];
+    [modalViewController.view addSubview:view];
+
+    UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:modalViewController];
+
+    [self presentModalViewController:navigationController animated:YES];
+}
+
+- (void)closeModal {
+
+}
 
 @end

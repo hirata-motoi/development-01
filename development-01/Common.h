@@ -7,11 +7,17 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "ImageController.h"
 
 
 @interface Common : NSObject
+{
+    UIViewController *imageViewControllerObject;
+}
 -(NSInteger*)getImageSequenceId;
 -(NSString*)getImagePath:(NSInteger)image_id;
+-(NSString*)getImagePathThumbnail:(NSInteger)image_id;
 -(void)databaseInitializer;
+-(void)filesystemInitializer;
 -(void)kickImageSync;
 @end
