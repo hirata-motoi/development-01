@@ -27,7 +27,7 @@
     [cm databaseInitializer];
     [cm filesystemInitializer];
 //    [cm kickImageSync];
-//    [self showTagImageList];
+    [self showTagImageList];
 }
 
 - (void)didReceiveMemoryWarning
@@ -36,18 +36,25 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    NSLog(@"viewWillAppear");
+    [super viewWillAppear:animated];
+    [self showTagImageList];
+}
+
 - (void)showTagImageList {
     // Create scrollView
     ScrollView *scrollView = [[ScrollView alloc] init];
     scrollView.frame = self.view.bounds;
 
-    // get all kind of tag
-    NSMutableArray *tagNames = [self getAllTagName];
+    // get all kind of taged id
+    NSMutableArray *tagIds = [self getAllTagedIds];
 
     // get newest image of each tag
     NSMutableArray *eachTagImageInfo = [[NSMutableArray alloc] init];
-    for (NSString *tag in tagNames) {
-        NSDictionary *imageInfo = [self getEachTagImageInfo:tag];
+    for (NSNumber *tagId in tagIds) {
+        NSDictionary *imageInfo = [self getEachTagImageInfo:tagId];
         [eachTagImageInfo addObject:imageInfo];
     }
     
@@ -87,22 +94,42 @@
     while ([results next]) {
         NSString *tag = [NSString stringWithString:[results stringForColumn:@"tag_name"]];
         [tagNames addObject:tag];
+        NSLog(@"string:%@", tag);
     }
     [da close];
     return tagNames;
 }
 
-- (NSDictionary*)getEachTagImageInfo:(NSString*)tagName {
-    Common *cm = [[Common alloc] init];
-    NSString *stmt = @"select image_id from tag_map inner join tags on tag_map.tag_id = tags.id and tags.tag_name = '?' order by created_at desc limit 1;";
+- (NSMutableArray*)getAllTagedIds{
+    NSMutableArray *tagId = [[NSMutableArray alloc] init];
+    NSString *stmt = @"select tag_id from tag_map group by tag_id;";
     
     DA *da = [DA da];
     [da open];
-    FMResultSet *results = [da executeQuery:stmt, tagName];
-    NSNumber *image_id = [NSNumber numberWithInt:[results intForColumn:@"image_id"]];
-    NSString *image_path = [cm getImagePath:image_id];
-    NSArray *key   = [NSArray arrayWithObjects:@"image_id", @"image_path", @"tag_name", nil];
-    NSArray *value = [NSArray arrayWithObjects:image_id, image_path, tagName, nil];
+    FMResultSet *results = [da executeQuery:stmt];
+    while ([results next]) {
+        NSNumber *id = [NSNumber numberWithInt:[results intForColumn:@"tag_id"]];
+        [tagId addObject:id];
+    }
+    [da close];
+    return tagId;
+}
+
+- (NSDictionary*)getEachTagImageInfo:(NSNumber*)tagId {
+    Common *cm = [[Common alloc] init];
+    NSString *stmt = @"select image_id from tag_map where tag_id = ? order by created_at desc limit 1;";
+    
+    DA *da = [DA da];
+    [da open];
+    FMResultSet *results = [da executeQuery:stmt, tagId];
+    NSNumber *image_id = [[NSNumber alloc] init];
+    while ([results next]) {
+        image_id = [NSNumber numberWithInt:[results intForColumn:@"image_id"]];
+    }
+    NSString *image_path = [cm getImagePathThumbnail:image_id];
+    NSLog(@"string:%@", image_path);
+    NSArray *key   = [NSArray arrayWithObjects:@"image_id", @"image_path", @"tag_id", nil];
+    NSArray *value = [NSArray arrayWithObjects:image_id, image_path, tagId, nil];
     NSDictionary *imageInfo = [NSDictionary dictionaryWithObjects:value forKeys:key];
     [da close];
     return imageInfo;
