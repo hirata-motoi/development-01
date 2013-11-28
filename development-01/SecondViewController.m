@@ -13,6 +13,8 @@
 #import "ScrollView.h"
 #import "ImageController.h"
 #import "ModalViewController.h"
+#import "SettingView.h"
+#import "AttachedTagsView.h"
 @interface SecondViewController ()
 
 @end
@@ -46,7 +48,7 @@
     [scrollView setViewControllerObject:(SecondViewController*)self];
 
     // DBからimage listを取得
-    NSMutableArray *imageInfo = [self getImageInfoFromDB];
+    imageInfo = [self getImageInfoFromDB];
     
     // imageViewを作ってscrollViewにはりつけ
     int count = 0;
@@ -105,18 +107,72 @@
 - (void)showZoomImage:(NSNumber*)image_id {
     CGRect rect_org = self.view.bounds;
     
+    NSMutableArray * image_ids = [[NSMutableArray alloc] init];
+    
+    int index = 0;
+    for ( int i = 0; i<imageInfo.count; i++) {
+        NSDictionary *unit = [imageInfo objectAtIndex:i];
+        NSNumber *image_id_tmp = [unit objectForKey:@"image_id"];
+        [image_ids addObject:image_id_tmp];
+        
+        if ([image_id_tmp isEqualToNumber:image_id]) {
+            index = i;
+        }
+    }
+    NSLog(@"index @showZoomImage : %d", index);
+    NSNumber * index_number = [NSNumber numberWithInt:index];
+    NSLog(@"index_number : %@", index_number);
     ModalViewController *modalViewController = [[ModalViewController alloc] init];
-    Common *cm = [[Common alloc]init];
-    ImageController *view = [[ImageController alloc] initWithImageId:(NSNumber*)image_id withRect:(CGRect)self.view.bounds];
-    [modalViewController.view addSubview:view];
-
+    [modalViewController setImageInfo:image_id withIndex:index_number withImageIds:image_ids];
+    
+    
+//    ModalViewController *modalViewController = [[ModalViewController alloc] init];
+//    Common *cm = [[Common alloc]init];
+//    ImageController *view = [[ImageController alloc] initWithImageId:(NSNumber*)image_id withRect:(CGRect)self.view.bounds];
+//    
+//    // add GestureRecognizer
+//    NSLog(@"gesture");
+//    UITapGestureRecognizer *tapView = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(manageImageGadgets:)];
+//    [view addGestureRecognizer:tapView];
+//    NSLog(@"gesture finish");
+//    
+//    [modalViewController.view addSubview:view];
+//    //imageの上にのせるものを全部持ってくる
+//    imageGadgets = [self getImageGadgets:(NSNumber*)image_id];
+//
     UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:modalViewController];
-
+    navigationController.navigationBar.translucent = YES;
+    navigationController.navigationBar.tintColor = [UIColor blackColor];
+    
+    
+    
     [self presentModalViewController:navigationController animated:YES];
 }
 
-- (void)closeModal {
-
+// ONかOFFかをインスタンス変数に保持
+// ONの時はインスタンス変数内のオブジェクトを全部setAlpha:1.0にする
+// OFFの時はインスタンス変数内のオブジェクトを全部setAlpha:0.0fにする
+- (void)manageImageGadgets:(id)sender {
+    NSLog(@"%@", sender);
 }
+
+- (NSMutableDictionary*)getImageGadgets:(NSNumber*)image_id {
+    NSMutableDictionary * imageGadgets = [[NSMutableDictionary alloc] init];
+    
+    //settingView
+    SettingView * settingView = [[SettingView alloc]initWithFrame:CGRectMake(0, 430, 320, 50)];
+    
+    //attachedTag
+    //AttachedTagsView *attachedTags = [[AttachedTagsView alloc]initWithImageId:image_id　with];
+    
+    //attachedComment
+    //今回は実装なし
+    
+    [imageGadgets setObject:settingView forKey:@"settingView"];
+    //[imageGadgets setObject:attachedTags forKey:@"attachedTags"];
+
+    return imageGadgets;
+}
+
 
 @end

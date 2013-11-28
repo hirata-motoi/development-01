@@ -81,7 +81,7 @@
                             //NSLog(@"image_id:%@", image_id);
                             //NSString *apath = [cm getImagePath:image_id];
                             NSString *tpath = [cm getImagePathThumbnail:image_id];
-                            //NSLog(@"image_path:%@", apath);
+                            //NSLog(@"image_path:%@", tpath);
                             
                             if (
                                 //[adata writeToFile:apath atomically:YES] &&
