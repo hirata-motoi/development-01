@@ -43,6 +43,17 @@
     [self showTagImageList];
 }
 
+- (void)viewDidDisappear:(BOOL)animated
+{
+    NSLog(@"viewDidDisappear");
+    [super viewDidDisappear:animated];
+    
+    for (UIView *view in [self.view subviews]) {
+        NSLog(@"subviews");
+        [view removeFromSuperview];
+    }
+}
+
 - (void)showTagImageList {
     // Create scrollView
     ScrollView *scrollView = [[ScrollView alloc] init];
@@ -67,16 +78,16 @@
         imageView.tag = [[unit objectForKey:@"image_id"] intValue];
         imageView.userInteractionEnabled = YES;
         
-        
         int x,y;
         x = ((count % 3) * 100) + 10;
         y = ((count / 3) * 100) + 10;
         
         imageView.frame = CGRectMake(x, y, 90, 90);
         
-        
         [scrollView insertSubview:imageView atIndex:[self.view.subviews count]];
         count++;
+        
+        
     }
     // add scrollView
     NSInteger heightCount = floor(count / 3) + 1;
