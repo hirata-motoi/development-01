@@ -9,6 +9,9 @@
 #import <UIKit/UIKit.h>
 
 @interface SecondViewController : UIViewController
+{
+    NSMutableArray * imageInfo;
+}
 -(UIViewController*)getSecondView;
 -(UIViewController*)getSelf;
 -(void)showZoomImageWrapper:(NSNumber*)image_id;

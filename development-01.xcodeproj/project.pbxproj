@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8403B72418479ABE00F2DC24 /* SettingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8403B72318479ABE00F2DC24 /* SettingView.m */; };
+		8403B72718479CE800F2DC24 /* AttachedTagsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8403B72618479CE800F2DC24 /* AttachedTagsView.m */; };
 		84207BBF18462F5E00B1D6DC /* ImageController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84207BBE18462F5E00B1D6DC /* ImageController.m */; };
 		84207BC51846655B00B1D6DC /* ModalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84207BC41846655B00B1D6DC /* ModalViewController.m */; };
 		8452A8A5183A55370016EA3F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8452A8A4183A55370016EA3F /* Foundation.framework */; };
@@ -48,6 +50,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		8403B72218479ABE00F2DC24 /* SettingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingView.h; sourceTree = "<group>"; };
+		8403B72318479ABE00F2DC24 /* SettingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingView.m; sourceTree = "<group>"; };
+		8403B72518479CE800F2DC24 /* AttachedTagsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttachedTagsView.h; sourceTree = "<group>"; };
+		8403B72618479CE800F2DC24 /* AttachedTagsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AttachedTagsView.m; sourceTree = "<group>"; };
 		84207BBD18462F5E00B1D6DC /* ImageController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageController.h; sourceTree = "<group>"; };
 		84207BBE18462F5E00B1D6DC /* ImageController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageController.m; sourceTree = "<group>"; };
 		84207BC31846655A00B1D6DC /* ModalViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModalViewController.h; sourceTree = "<group>"; };
@@ -171,6 +177,10 @@
 				8452A8AB183A55370016EA3F /* Supporting Files */,
 				84207BC31846655A00B1D6DC /* ModalViewController.h */,
 				84207BC41846655B00B1D6DC /* ModalViewController.m */,
+				8403B72218479ABE00F2DC24 /* SettingView.h */,
+				8403B72318479ABE00F2DC24 /* SettingView.m */,
+				8403B72518479CE800F2DC24 /* AttachedTagsView.h */,
+				8403B72618479CE800F2DC24 /* AttachedTagsView.m */,
 			);
 			path = "development-01";
 			sourceTree = "<group>";
@@ -337,11 +347,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				84D8086B18421E5300C63B87 /* ImageSync.m in Sources */,
+				8403B72418479ABE00F2DC24 /* SettingView.m in Sources */,
 				84D8085818421DCB00C63B87 /* Common.m in Sources */,
 				84D8085218421D8B00C63B87 /* DA.m in Sources */,
 				8452A8BE183A55370016EA3F /* SecondViewController.m in Sources */,
 				84D8086418421E1500C63B87 /* FMDatabase.m in Sources */,
 				84D8086618421E1500C63B87 /* FMDatabasePool.m in Sources */,
+				8403B72718479CE800F2DC24 /* AttachedTagsView.m in Sources */,
 				84D8086718421E1500C63B87 /* FMDatabaseQueue.m in Sources */,
 				8452A8B5183A55370016EA3F /* AppDelegate.m in Sources */,
 				8452A8BB183A55370016EA3F /* FirstViewController.m in Sources */,
