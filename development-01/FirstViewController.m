@@ -27,7 +27,7 @@
     [cm databaseInitializer];
     [cm filesystemInitializer];
 //    [cm kickImageSync];
-    [self showTagImageList];
+//    [self showTagImageList];
 }
 
 - (void)didReceiveMemoryWarning
@@ -126,7 +126,61 @@ int sortArray(id item1, id item2, void *context) {
     [scrollView insertSubview:allTagLabel atIndex:[self.view.subviews count]];
     
     count++;
-    // 未分類
+    // 未分類 汚い 直す
+    NSString *allstmt2 = @"select id from image_common;";
+    NSString *tagstmt = @"select image_id from tag_map group by image_id;";
+    [da open];
+    FMResultSet *allresults2 = [da executeQuery:allstmt2];
+    NSMutableArray *allarray = [[NSMutableArray alloc] init];
+    while ([allresults2 next]) {
+        [allarray addObject:[NSNumber numberWithInt:[allresults2 intForColumn:@"id"]]];
+    }
+    FMResultSet *tagresults = [da executeQuery:tagstmt];
+    NSMutableArray *tagarray = [[NSMutableArray alloc] init];
+    while ([tagresults next]) {
+        [tagarray addObject:[NSNumber numberWithInt:[tagresults intForColumn:@"image_id"]]];
+    }
+    [da close];
+    
+    NSMutableSet *allSet = [NSMutableSet setWithArray:allarray];
+    NSMutableSet *tagSet = [NSMutableSet setWithArray:tagarray];
+    [allSet minusSet:tagSet];
+    NSArray *unTagArray = [allSet allObjects];
+    
+    // in (?) でエラーが出たのでこの形で
+    NSString *unTagStmt1 = @"select id from image_common where id in (";
+    NSString *unTagStmt2 = @") order by updated_at desc limit 1;";
+    NSString *joined = [unTagArray componentsJoinedByString:@","];
+    NSString *unTagStmt = [[unTagStmt1 stringByAppendingString:joined]stringByAppendingString:unTagStmt2];
+    
+    [da open];
+    FMResultSet *unSetResults = [da executeQuery:unTagStmt];
+    NSNumber *unTagImageId = [[NSNumber alloc] init];
+    while ([unSetResults next]) {
+        unTagImageId = [NSNumber numberWithInt:[unSetResults intForColumn:@"id"]];
+    }
+    [da close];
+    
+    NSString *unTagImagePath = [cm getImagePathThumbnail:unTagImageId];
+    UIImage *unTagImage = [UIImage imageWithContentsOfFile:unTagImagePath];
+    UIImageView *unTagImageView = [[UIImageView alloc] initWithImage:unTagImage];
+    unTagImageView.tag = [unTagImageId intValue];
+    unTagImageView.userInteractionEnabled = YES;
+    x = ((count % 3) * 100) + 10;
+    y = ((count / 3) * 110) + 10;
+        
+    unTagImageView.frame = CGRectMake(x, y, 90, 90);
+        
+    [scrollView insertSubview:unTagImageView atIndex:[self.view.subviews count]];
+    
+    UILabel *unTagLabel = [[UILabel alloc] initWithFrame:CGRectMake(x, y + 90, 90, 20)];
+    unTagLabel.textColor = [UIColor blueColor];
+    unTagLabel.font = [UIFont fontWithName:@"AppleGothic" size:12];
+    unTagLabel.textAlignment = NSTextAlignmentCenter;
+    unTagLabel.text = @"untagged";
+    [scrollView insertSubview:unTagLabel atIndex:[self.view.subviews count]];
+    
+    
     count++;
     // その他tag
     for ( NSDictionary *unit in eachTagImageInfo) {
