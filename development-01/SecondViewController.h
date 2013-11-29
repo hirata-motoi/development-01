@@ -13,7 +13,4 @@
     NSMutableArray * imageInfo;
 }
 -(UIViewController*)getSecondView;
--(UIViewController*)getSelf;
--(void)showZoomImageWrapper:(NSNumber*)image_id;
-//-(void)showZoomImage:(NSNumber*)image_id;
 @end

@@ -11,8 +11,10 @@
 #import "FMDatabase.h"
 #import "Common.h"
 #import "ScrollView.h"
+#import "ImageListViewController.h"
 
 @interface FirstViewController ()
+- (void) showImageListModal:(UITapGestureRecognizer*)gesture;
 
 @end
 
@@ -123,7 +125,16 @@ int sortArray(id item1, id item2, void *context) {
     allTagLabel.font = [UIFont fontWithName:@"AppleGothic" size:12];
     allTagLabel.textAlignment = NSTextAlignmentCenter;
     allTagLabel.text = @"all";
+    allTagLabel.userInteractionEnabled = YES;
+    [allTagLabel setUserInteractionEnabled:YES];
+    UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showImageListModal:)];
+    singleTap.delegate = self;
+    singleTap.numberOfTapsRequired = 1;
+    singleTap.numberOfTouchesRequired = 1;
+    [allTagLabel addGestureRecognizer:singleTap];
+    [allImageView addGestureRecognizer:singleTap];
     [scrollView insertSubview:allTagLabel atIndex:[self.view.subviews count]];
+    
     
     count++;
     // 未分類 汚い 直す
@@ -278,4 +289,19 @@ int sortArray(id item1, id item2, void *context) {
     Common *cm = [[Common alloc] init];
     [cm kickImageSync];
 }
+
+- (void)showImageListModal:(UITapGestureRecognizer*)gesture {
+    NSLog(@"sender : %@", gesture.view);
+    NSString * text = @"testtext";
+    ImageListViewController *viewController = [[ImageListViewController alloc]init];
+    [viewController setImagesByTag:text];
+    
+    UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:viewController];
+    navigationController.navigationBar.translucent = YES;
+    navigationController.navigationBar.tintColor = [UIColor blackColor];
+    
+    [self presentModalViewController:navigationController animated:YES];
+}
+
+
 @end
