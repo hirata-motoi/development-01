@@ -38,18 +38,15 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    NSLog(@"viewWillAppear");
     [super viewWillAppear:animated];
     [self showTagImageList];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
 {
-    NSLog(@"viewDidDisappear");
     [super viewDidDisappear:animated];
     
     for (UIView *view in [self.view subviews]) {
-        NSLog(@"subviews");
         [view removeFromSuperview];
     }
 }
@@ -72,11 +69,9 @@ int sortArray(id item1, id item2, void *context) {
     
     NSArray *testArray = [tagIds allValues];
     for(NSNumber *test in testArray) {
-        NSLog(@"value:%@", test);
     }
     testArray = [tagIds allKeys];
     for(NSNumber *test in testArray) {
-        NSLog(@"key:%@", test);
     }
     
     NSSortDescriptor *descDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"self" ascending:NO];
@@ -86,13 +81,10 @@ int sortArray(id item1, id item2, void *context) {
     // TODO : created_atが被ってると表示おかしくなる
     NSMutableArray *eachTagImageInfo = [[NSMutableArray alloc] init];
     for (NSNumber *createdAt in sortedCreatedAt) {
-        NSLog(@"createdat:%@", createdAt);
         NSNumber *tagId = [[NSNumber alloc] init];
         for (NSNumber *key in [tagIds allKeys]) {
-            NSLog(@"allkeys:%@", key);
             if(createdAt == [tagIds objectForKey:key]) {
                 tagId = key;
-                NSLog(@"match!:%@", key);
             }
         }
         NSDictionary *imageInfo = [self getEachTagImageInfo:tagId];
@@ -101,6 +93,42 @@ int sortArray(id item1, id item2, void *context) {
     
     // imageViewを作ってscrollViewにはりつけ
     int count = 0;
+    
+    // ALL 汚い 直す
+    NSString *allstmt = @"select id from image_common order by updated_at desc limit 1;";
+    DA *da = [DA da];
+    [da open];
+    FMResultSet *allresults = [da executeQuery:allstmt];
+    NSNumber *allImageId = [[NSNumber alloc] init];
+    while ([allresults next]) {
+        allImageId = [NSNumber numberWithInt:[allresults intForColumn:@"id"]];
+    }
+    [da close];
+    Common *cm = [[Common alloc] init];
+    NSString *allImagePath = [cm getImagePathThumbnail:allImageId];
+    UIImage *allImage = [UIImage imageWithContentsOfFile:allImagePath];
+    UIImageView *allImageView = [[UIImageView alloc] initWithImage:allImage];
+    allImageView.tag = [allImageId intValue];
+    allImageView.userInteractionEnabled = YES;
+    int x,y;
+    x = ((count % 3) * 100) + 10;
+    y = ((count / 3) * 110) + 10;
+        
+    allImageView.frame = CGRectMake(x, y, 90, 90);
+        
+    [scrollView insertSubview:allImageView atIndex:[self.view.subviews count]];
+    
+    UILabel *allTagLabel = [[UILabel alloc] initWithFrame:CGRectMake(x, y + 90, 90, 20)];
+    allTagLabel.textColor = [UIColor blueColor];
+    allTagLabel.font = [UIFont fontWithName:@"AppleGothic" size:12];
+    allTagLabel.textAlignment = NSTextAlignmentCenter;
+    allTagLabel.text = @"all";
+    [scrollView insertSubview:allTagLabel atIndex:[self.view.subviews count]];
+    
+    count++;
+    // 未分類
+    count++;
+    // その他tag
     for ( NSDictionary *unit in eachTagImageInfo) {
         NSString *image_path = [unit objectForKey:@"image_path"];
         UIImage *image = [UIImage imageWithContentsOfFile:image_path];
@@ -146,22 +174,6 @@ int sortArray(id item1, id item2, void *context) {
     return tagName;
 }
 
-- (NSMutableArray*)getAllTagName{
-    NSMutableArray *tagNames = [[NSMutableArray alloc] init];
-    NSString *stmt = @"select tag_name from tags;";
-    
-    DA *da = [DA da];
-    [da open];
-    FMResultSet *results = [da executeQuery:stmt];
-    while ([results next]) {
-        NSString *tag = [NSString stringWithString:[results stringForColumn:@"tag_name"]];
-        [tagNames addObject:tag];
-        NSLog(@"string:%@", tag);
-    }
-    [da close];
-    return tagNames;
-}
-
 - (NSMutableArray*)getAllTagedIds{
     NSMutableArray *tagId = [[NSMutableArray alloc] init];
     // Get all taged ids
@@ -200,7 +212,6 @@ int sortArray(id item1, id item2, void *context) {
         image_id = [NSNumber numberWithInt:[results intForColumn:@"image_id"]];
     }
     NSString *image_path = [cm getImagePathThumbnail:image_id];
-    NSLog(@"string:%@", image_path);
     NSArray *key   = [NSArray arrayWithObjects:@"image_id", @"image_path", @"tag_id", nil];
     NSArray *value = [NSArray arrayWithObjects:image_id, image_path, tagId, nil];
     NSDictionary *imageInfo = [NSDictionary dictionaryWithObjects:value forKeys:key];
