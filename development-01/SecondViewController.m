@@ -174,5 +174,17 @@
     return imageGadgets;
 }
 
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    UITouch *touch = [touches anyObject];
+    int image_id = touch.view.tag;
+    
+    if (!image_id) {
+        return;
+    }
+    
+    NSNumber *image_id_number = [NSNumber numberWithInt:image_id];
+    [self showZoomImage:image_id_number];
+}
 
 @end

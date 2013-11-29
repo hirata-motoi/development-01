@@ -26,7 +26,7 @@
     Common *cm = [[Common alloc] init];
     [cm databaseInitializer];
     [cm filesystemInitializer];
-//    [cm kickImageSync];
+    [cm kickImageSync];
 //    [self showTagImageList];
 }
 

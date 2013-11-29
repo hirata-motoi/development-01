@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		8403B72418479ABE00F2DC24 /* SettingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8403B72318479ABE00F2DC24 /* SettingView.m */; };
 		8403B72718479CE800F2DC24 /* AttachedTagsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8403B72618479CE800F2DC24 /* AttachedTagsView.m */; };
+		8403B72A1847DB6A00F2DC24 /* HorizontalScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8403B7291847DB6A00F2DC24 /* HorizontalScrollView.m */; };
 		84207BBF18462F5E00B1D6DC /* ImageController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84207BBE18462F5E00B1D6DC /* ImageController.m */; };
 		84207BC51846655B00B1D6DC /* ModalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84207BC41846655B00B1D6DC /* ModalViewController.m */; };
 		8452A8A5183A55370016EA3F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8452A8A4183A55370016EA3F /* Foundation.framework */; };
@@ -26,6 +27,7 @@
 		8452A8C9183A55370016EA3F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8452A8A8183A55370016EA3F /* UIKit.framework */; };
 		8452A8D1183A55370016EA3F /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8452A8CF183A55370016EA3F /* InfoPlist.strings */; };
 		8452A8D3183A55370016EA3F /* development_01Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8452A8D2183A55370016EA3F /* development_01Tests.m */; };
+		84B971AB18486B4A0096E286 /* TagScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B971AA18486B4A0096E286 /* TagScrollView.m */; };
 		84CAB62018427306009D311C /* ScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 84CAB61F18427306009D311C /* ScrollView.m */; };
 		84D8084C18421D4A00C63B87 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84D8084B18421D4A00C63B87 /* AssetsLibrary.framework */; };
 		84D8084E18421D5200C63B87 /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 84D8084D18421D5200C63B87 /* libsqlite3.0.dylib */; };
@@ -54,6 +56,8 @@
 		8403B72318479ABE00F2DC24 /* SettingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingView.m; sourceTree = "<group>"; };
 		8403B72518479CE800F2DC24 /* AttachedTagsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttachedTagsView.h; sourceTree = "<group>"; };
 		8403B72618479CE800F2DC24 /* AttachedTagsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AttachedTagsView.m; sourceTree = "<group>"; };
+		8403B7281847DB6A00F2DC24 /* HorizontalScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HorizontalScrollView.h; sourceTree = "<group>"; };
+		8403B7291847DB6A00F2DC24 /* HorizontalScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HorizontalScrollView.m; sourceTree = "<group>"; };
 		84207BBD18462F5E00B1D6DC /* ImageController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageController.h; sourceTree = "<group>"; };
 		84207BBE18462F5E00B1D6DC /* ImageController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageController.m; sourceTree = "<group>"; };
 		84207BC31846655A00B1D6DC /* ModalViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModalViewController.h; sourceTree = "<group>"; };
@@ -79,6 +83,8 @@
 		8452A8CE183A55370016EA3F /* development-01Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "development-01Tests-Info.plist"; sourceTree = "<group>"; };
 		8452A8D0183A55370016EA3F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		8452A8D2183A55370016EA3F /* development_01Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = development_01Tests.m; sourceTree = "<group>"; };
+		84B971A918486B4A0096E286 /* TagScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagScrollView.h; sourceTree = "<group>"; };
+		84B971AA18486B4A0096E286 /* TagScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TagScrollView.m; sourceTree = "<group>"; };
 		84CAB61E18427306009D311C /* ScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScrollView.h; sourceTree = "<group>"; };
 		84CAB61F18427306009D311C /* ScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScrollView.m; sourceTree = "<group>"; };
 		84D8084B18421D4A00C63B87 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
@@ -225,6 +231,10 @@
 				84D8085718421DCB00C63B87 /* Common.m */,
 				84CAB61E18427306009D311C /* ScrollView.h */,
 				84CAB61F18427306009D311C /* ScrollView.m */,
+				8403B7281847DB6A00F2DC24 /* HorizontalScrollView.h */,
+				8403B7291847DB6A00F2DC24 /* HorizontalScrollView.m */,
+				84B971A918486B4A0096E286 /* TagScrollView.h */,
+				84B971AA18486B4A0096E286 /* TagScrollView.m */,
 			);
 			name = Util;
 			sourceTree = "<group>";
@@ -355,10 +365,12 @@
 				84D8086618421E1500C63B87 /* FMDatabasePool.m in Sources */,
 				8403B72718479CE800F2DC24 /* AttachedTagsView.m in Sources */,
 				84D8086718421E1500C63B87 /* FMDatabaseQueue.m in Sources */,
+				8403B72A1847DB6A00F2DC24 /* HorizontalScrollView.m in Sources */,
 				8452A8B5183A55370016EA3F /* AppDelegate.m in Sources */,
 				8452A8BB183A55370016EA3F /* FirstViewController.m in Sources */,
 				84207BBF18462F5E00B1D6DC /* ImageController.m in Sources */,
 				84D8086818421E1500C63B87 /* FMResultSet.m in Sources */,
+				84B971AB18486B4A0096E286 /* TagScrollView.m in Sources */,
 				84207BC51846655B00B1D6DC /* ModalViewController.m in Sources */,
 				8452A8B1183A55370016EA3F /* main.m in Sources */,
 				84CAB62018427306009D311C /* ScrollView.m in Sources */,

@@ -7,14 +7,23 @@
 //
 
 #import <UIKit/UIKit.h>
-
-@interface ModalViewController : UIViewController <UIScrollViewDelegate>
+#import "SettingView.h"
+#import "AttachedTagsView.h"
+@interface ModalViewController : UIViewController
+<
+    UIScrollViewDelegate,
+    UIGestureRecognizerDelegate
+>
 {
     NSNumber *imageId;
     NSNumber *imageIndex;
     NSArray  *imageIds;
     UIScrollView *scrollViewObject;
     NSMutableDictionary *addedImages;
+    SettingView *settingViewObject;
+    AttachedTagsView *attachedTagsViewObject;
+    NSMutableDictionary *addedTagLabels;
 }
 -(void)setImageInfo:(NSNumber*)image_id withIndex:(NSNumber*)index withImageIds:(NSArray*)image_ids;
+-(void)touchesEndedForTag:(NSSet *)touches withEvent:(UIEvent *)event;
 @end

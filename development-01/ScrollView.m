@@ -9,6 +9,7 @@
 #import "ScrollView.h"
 #import "Common.h"
 #import "SecondViewController.h"
+#import "FirstViewController.h"
 
 
 @implementation ScrollView
@@ -46,6 +47,7 @@
     }
     
     NSNumber *image_id_number = [NSNumber numberWithInt:image_id];
-    [viewControllerObject showZoomImageWrapper:image_id_number];
+    //[viewControllerObject showZoomImageWrapper:image_id_number];
+    [self.nextResponder.nextResponder touchesBegan:touches withEvent:event];
 }
 @end
