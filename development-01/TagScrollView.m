@@ -28,20 +28,7 @@
     // Drawing code
 }
 */
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    touchedObjectType = @"tag";
-    
-    NSLog(@"event : %@", event);
-    NSLog(@"touches : %@", touches);
- 
-    NSLog(@"TagScrollView touchesEnded");
-	if (!self.dragging) {
-        NSLog(@"not dragging in TagScrollView tag:%@", self);
-		[self.nextResponder.nextResponder.nextResponder touchesBegan:touches withEvent:event];
-	}
-	[super touchesEnded: touches withEvent: event];
-}
+
 
 
 @end

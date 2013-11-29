@@ -19,11 +19,10 @@
     NSNumber *imageIndex;
     NSArray  *imageIds;
     UIScrollView *scrollViewObject;
-    NSMutableDictionary *addedImages;
     SettingView *settingViewObject;
     AttachedTagsView *attachedTagsViewObject;
     NSMutableDictionary *addedTagLabels;
 }
+@property (nonatomic,retain)NSMutableDictionary *addedImages;
 -(void)setImageInfo:(NSNumber*)image_id withIndex:(NSNumber*)index withImageIds:(NSArray*)image_ids;
--(void)touchesEndedForTag:(NSSet *)touches withEvent:(UIEvent *)event;
 @end
