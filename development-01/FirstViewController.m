@@ -54,29 +54,47 @@
     }
 }
 
+// sort function
+int sortArray(id item1, id item2, void *context) {    
+  int number1 = [item1 intValue];
+  int number2 = [item2 intValue];
+  return number2 - number1;
+}
+
 - (void)showTagImageList {
     // Create scrollView
     ScrollView *scrollView = [[ScrollView alloc] init];
     scrollView.frame = self.view.bounds;
 
-    // get all kind of taged id
-    //NSMutableArray *tagIds = [self getAllTagedIds];
-    
     // get all taged id sorted by saved_id
+    // tagId = [tag_id, created_at]
     NSMutableDictionary *tagIds = [self getAllTagedIds];
     
-    NSArray *testArray = [tagIds allKeys];
+    NSArray *testArray = [tagIds allValues];
     for(NSNumber *test in testArray) {
-        NSLog(@"test:%@", test);
+        NSLog(@"value:%@", test);
+    }
+    testArray = [tagIds allKeys];
+    for(NSNumber *test in testArray) {
+        NSLog(@"key:%@", test);
     }
     
-    NSArray *tagCreatedArray = [[tagIds allKeys] sortedArrayUsingSelector:@selector(compare:)];
+    NSSortDescriptor *descDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"self" ascending:NO];
+    NSArray *sortedCreatedAt = [[tagIds allValues] sortedArrayUsingDescriptors:@[descDescriptor]];
 
-    // get newest image of each tag
+    // get newest image details for each tag
+    // TODO : created_atが被ってると表示おかしくなる
     NSMutableArray *eachTagImageInfo = [[NSMutableArray alloc] init];
-    for (NSNumber *createdAt in tagCreatedArray) {
+    for (NSNumber *createdAt in sortedCreatedAt) {
         NSLog(@"createdat:%@", createdAt);
-        NSNumber *tagId = [tagIds objectForKey:createdAt];
+        NSNumber *tagId = [[NSNumber alloc] init];
+        for (NSNumber *key in [tagIds allKeys]) {
+            NSLog(@"allkeys:%@", key);
+            if(createdAt == [tagIds objectForKey:key]) {
+                tagId = key;
+                NSLog(@"match!:%@", key);
+            }
+        }
         NSDictionary *imageInfo = [self getEachTagImageInfo:tagId];
         [eachTagImageInfo addObject:imageInfo];
     }
@@ -146,21 +164,25 @@
 
 - (NSMutableArray*)getAllTagedIds{
     NSMutableArray *tagId = [[NSMutableArray alloc] init];
+    // Get all taged ids
     NSString *stmt = @"select tag_id from tag_map group by tag_id;";
     
     DA *da = [DA da];
     [da open];
     FMResultSet *results = [da executeQuery:stmt];
     NSMutableDictionary *tagInfo = [[NSMutableDictionary alloc] init];
+    
+    // roop for each taged id
     while ([results next]) {
         NSNumber *tag_id = [NSNumber numberWithInt:[results intForColumn:@"tag_id"]];
         NSString *stmt2 = @"select created_at from tag_map where tag_id = ? order by created_at desc limit 1;";
         FMResultSet *results2 = [da executeQuery:stmt2, tag_id];
         NSNumber *created_at = [[NSNumber alloc] init];
+        NSNumber *image_id = [[NSNumber alloc] init];
         while ([results2 next]) {
             created_at = [NSNumber numberWithInt:[results2 intForColumn:@"created_at"]];
         }
-        [tagInfo setObject:tag_id forKey:created_at];
+        [tagInfo setObject:created_at forKey:tag_id];
     }
     [da close];
     return tagInfo;
