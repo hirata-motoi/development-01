@@ -47,17 +47,15 @@
     [self dismissModalViewControllerAnimated:YES];
 }
 
--(void)setImagesByTag:(NSMutableDictionary*)condition {
+-(void)setImagesByTagId:(NSNumber*)tag_id {
     // scrollViewの作成
     ScrollView *scrollView = [[ScrollView alloc] init];
     
     scrollView.frame = self.view.bounds;
-    
-    
     [scrollView setViewControllerObject:(SecondViewController*)self];
     
     // DBからimage listを取得
-    imageInfo = [self getImageInfoFromDB];
+    imageInfo = [self getImageInfoFromDB:tag_id];
     
     // imageViewを作ってscrollViewにはりつけ
     int count = 0;
@@ -85,28 +83,53 @@
     [self.view addSubview:scrollView];
 }
 
-- (NSMutableArray*)getImageInfoFromDB {
-    Common *cm = [[Common alloc] init];
-    NSMutableArray *imageInfo = [[NSMutableArray alloc] init];
+- (NSMutableArray*)getImageInfoFromDB:(NSNumber*)tag_id {
     
-    NSString *stmt = @"SELECT id, saved_at FROM image_common order by saved_at desc";
+    // tag_id指定 or tag_idがついてないもの or all
+    // tag_id指定 : tag_id = ?
+    // tag_idがついてないもの : 全imageとtag_mapの中身を比較してimage_idを取得
+    // all : where句無し
+    NSLog(@"getImageInfoFromDB tag_id : %@", tag_id);
+    
+    
+    Common *cm = [[Common alloc] init];
+    NSMutableArray *images = [[NSMutableArray alloc] init];
     
     DA *da = [DA da];
     [da open];
-    FMResultSet *results = [da executeQuery:stmt];
+    
+    FMResultSet *results;
+    NSString *stmt = @"";
+    if ([tag_id intValue] == -1) { //all
+        stmt = @"SELECT id, saved_at AS dateFROM image_common order by saved_at desc";
+        results = [da executeQuery:stmt];
+    }
+    else if ([tag_id intValue] == -2) { //untag
+        stmt = @"SELECT i.id, saved_at AS date FROM image_common i LEFT JOIN tag_map t ON i.id = t.tag_id WHERE t.tag_id is NULL";
+        results = [da executeQuery:stmt];
+    }
+    else {
+        stmt = @"SELECT image_id AS id, created_at AS date FROM tag_map WHERE tag_id = ?";
+        results = [da executeQuery:stmt, tag_id];
+    }
+
     while ([results next]) {
+        NSLog(@"result found");
         NSNumber *image_id   = [NSNumber numberWithInt:[results intForColumn:@"id"]];
-        NSDate *saved_at     = [results dateForColumn:@"saved_at"];
+        NSDate *saved_at     = [results dateForColumn:@"date"];
         NSString *image_path = [cm getImagePathThumbnail:(NSNumber*)image_id];
         
         NSArray *key   = [NSArray arrayWithObjects:@"image_id", @"saved_at", @"image_path", nil];
         NSArray *value = [NSArray arrayWithObjects:image_id, saved_at, image_path, nil];
         NSDictionary *unit   = [NSDictionary dictionaryWithObjects:value forKeys:key];
         
-        [imageInfo addObject:unit];
+        [images addObject:unit];
     }
     [da close];
-    return imageInfo;
+    
+    NSLog(@"getImageInfoFromDB : %@", images);
+    return images
+    ;
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event

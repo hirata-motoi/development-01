@@ -93,6 +93,8 @@ int sortArray(id item1, id item2, void *context) {
         [eachTagImageInfo addObject:imageInfo];
     }
     
+
+    
     // imageViewを作ってscrollViewにはりつけ
     int count = 0;
     
@@ -110,7 +112,8 @@ int sortArray(id item1, id item2, void *context) {
     NSString *allImagePath = [cm getImagePathThumbnail:allImageId];
     UIImage *allImage = [UIImage imageWithContentsOfFile:allImagePath];
     UIImageView *allImageView = [[UIImageView alloc] initWithImage:allImage];
-    allImageView.tag = [allImageId intValue];
+    //allImageView.tag = [allImageId intValue];
+    allImageView.tag = -1; // -1:all  -2:untagged
     allImageView.userInteractionEnabled = YES;
     int x,y;
     x = ((count % 3) * 100) + 10;
@@ -125,14 +128,20 @@ int sortArray(id item1, id item2, void *context) {
     allTagLabel.font = [UIFont fontWithName:@"AppleGothic" size:12];
     allTagLabel.textAlignment = NSTextAlignmentCenter;
     allTagLabel.text = @"all";
+    allTagLabel.tag = -1; // -1:all  -2:untagged
     allTagLabel.userInteractionEnabled = YES;
     [allTagLabel setUserInteractionEnabled:YES];
-    UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showImageListModal:)];
-    singleTap.delegate = self;
-    singleTap.numberOfTapsRequired = 1;
-    singleTap.numberOfTouchesRequired = 1;
-    [allTagLabel addGestureRecognizer:singleTap];
-    [allImageView addGestureRecognizer:singleTap];
+    // tap時のgesture
+    UITapGestureRecognizer *singleTapAll = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showImageListModal:)];
+    singleTapAll.delegate = self;
+    singleTapAll.numberOfTapsRequired = 1;
+    singleTapAll.numberOfTouchesRequired = 1;
+    UITapGestureRecognizer *singleTapAll2 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showImageListModal:)];
+    singleTapAll2.delegate = self;
+    singleTapAll2.numberOfTapsRequired = 1;
+    singleTapAll2.numberOfTouchesRequired = 1;
+    [allTagLabel addGestureRecognizer:singleTapAll];
+    [allImageView addGestureRecognizer:singleTapAll2];
     [scrollView insertSubview:allTagLabel atIndex:[self.view.subviews count]];
     
     
@@ -175,7 +184,8 @@ int sortArray(id item1, id item2, void *context) {
     NSString *unTagImagePath = [cm getImagePathThumbnail:unTagImageId];
     UIImage *unTagImage = [UIImage imageWithContentsOfFile:unTagImagePath];
     UIImageView *unTagImageView = [[UIImageView alloc] initWithImage:unTagImage];
-    unTagImageView.tag = [unTagImageId intValue];
+    //unTagImageView.tag = [unTagImageId intValue];
+    unTagImageView.tag = -2;// -1:all  -2:untagged
     unTagImageView.userInteractionEnabled = YES;
     x = ((count % 3) * 100) + 10;
     y = ((count / 3) * 110) + 10;
@@ -189,12 +199,34 @@ int sortArray(id item1, id item2, void *context) {
     unTagLabel.font = [UIFont fontWithName:@"AppleGothic" size:12];
     unTagLabel.textAlignment = NSTextAlignmentCenter;
     unTagLabel.text = @"untagged";
+    unTagLabel.tag = -2;// -1:all  -2:untagged
+    unTagLabel.userInteractionEnabled = YES;
+    // tap時のgesture
+    UITapGestureRecognizer *singleTapUntag = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showImageListModal:)];
+    singleTapUntag.delegate = self;
+    singleTapUntag.numberOfTapsRequired = 1;
+    singleTapUntag.numberOfTouchesRequired = 1;
+    UITapGestureRecognizer *singleTapUntag2 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showImageListModal:)];
+    singleTapUntag2.delegate = self;
+    singleTapUntag2.numberOfTapsRequired = 1;
+    singleTapUntag2.numberOfTouchesRequired = 1;
+    [unTagLabel addGestureRecognizer:singleTapUntag];
+    [unTagImageView addGestureRecognizer:singleTapUntag2];
     [scrollView insertSubview:unTagLabel atIndex:[self.view.subviews count]];
     
     
     count++;
     // その他tag
     for ( NSDictionary *unit in eachTagImageInfo) {
+        UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showImageListModal:)];
+        singleTap.delegate = self;
+        singleTap.numberOfTapsRequired = 1;
+        singleTap.numberOfTouchesRequired = 1;
+        UITapGestureRecognizer *singleTap2 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showImageListModal:)];
+        singleTap2.delegate = self;
+        singleTap2.numberOfTapsRequired = 1;
+        singleTap2.numberOfTouchesRequired = 1;
+        
         NSString *image_path = [unit objectForKey:@"image_path"];
         UIImage *image = [UIImage imageWithContentsOfFile:image_path];
         UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
@@ -207,6 +239,8 @@ int sortArray(id item1, id item2, void *context) {
         y = ((count / 3) * 110) + 10;
         
         imageView.frame = CGRectMake(x, y, 90, 90);
+        imageView.tag = [tag_id intValue];
+        [imageView addGestureRecognizer:singleTap2];
         
         [scrollView insertSubview:imageView atIndex:[self.view.subviews count]];
         
@@ -214,9 +248,14 @@ int sortArray(id item1, id item2, void *context) {
         tagLabel.textColor = [UIColor blueColor];
         tagLabel.font = [UIFont fontWithName:@"AppleGothic" size:12];
         tagLabel.textAlignment = NSTextAlignmentCenter;
+        tagLabel.tag = [tag_id intValue];
+        tagLabel.userInteractionEnabled =YES;
+        
         //TODO: it should be in module, tag name from tag_id;
         tagLabel.text = [self getTagNameById:tag_id];
         [scrollView insertSubview:tagLabel atIndex:[self.view.subviews count]];
+        [tagLabel addGestureRecognizer:singleTap];
+
         count++;
     }
     // add scrollView
@@ -292,9 +331,12 @@ int sortArray(id item1, id item2, void *context) {
 
 - (void)showImageListModal:(UITapGestureRecognizer*)gesture {
     NSLog(@"sender : %@", gesture.view);
-    NSString * text = @"testtext";
+    
+    int tag_id = gesture.view.tag;
+    
     ImageListViewController *viewController = [[ImageListViewController alloc]init];
-    [viewController setImagesByTag:text];
+    NSNumber *tag_id_number = [NSNumber numberWithInt:tag_id];
+    [viewController setImagesByTagId:tag_id_number];
     
     UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:viewController];
     navigationController.navigationBar.translucent = YES;

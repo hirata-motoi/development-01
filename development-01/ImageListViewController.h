@@ -10,7 +10,8 @@
 
 @interface ImageListViewController : UIViewController
 {
-    NSMutableArray *imageInfo;
+    NSMutableArray * imageInfo;
 }
--(void)setImagesByTag:(NSMutableDictionary*)condition;
+
+-(void)setImagesByTagId:(NSNumber*)tag_id;
 @end
