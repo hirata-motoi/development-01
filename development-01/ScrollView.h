@@ -7,11 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "SecondViewController.h"
 
 @interface ScrollView : UIScrollView
-{
-    SecondViewController *viewControllerObject;
-}
--(void)setViewControllerObject:(SecondViewController*)vc;
 @end

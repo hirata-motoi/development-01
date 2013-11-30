@@ -29,7 +29,6 @@
     [cm databaseInitializer];
     [cm filesystemInitializer];
     [cm kickImageSync];
-//    [self showTagImageList];
 }
 
 - (void)didReceiveMemoryWarning
@@ -40,25 +39,13 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    for (UIView *view in [self.view subviews]) {
+        [view removeFromSuperview];
+    }
     [super viewWillAppear:animated];
     [self showTagImageList];
 }
 
-- (void)viewDidDisappear:(BOOL)animated
-{
-    [super viewDidDisappear:animated];
-    
-    for (UIView *view in [self.view subviews]) {
-        [view removeFromSuperview];
-    }
-}
-
-// sort function
-int sortArray(id item1, id item2, void *context) {    
-  int number1 = [item1 intValue];
-  int number2 = [item2 intValue];
-  return number2 - number1;
-}
 
 - (void)showTagImageList {
     // Create scrollView
@@ -82,6 +69,7 @@ int sortArray(id item1, id item2, void *context) {
     // get newest image details for each tag
     // TODO : created_atが被ってると表示おかしくなる
     NSMutableArray *eachTagImageInfo = [[NSMutableArray alloc] init];
+    NSMutableArray *favoriteTagImageInfo = [[NSMutableArray alloc] init];
     for (NSNumber *createdAt in sortedCreatedAt) {
         NSNumber *tagId = [[NSNumber alloc] init];
         for (NSNumber *key in [tagIds allKeys]) {
@@ -90,10 +78,14 @@ int sortArray(id item1, id item2, void *context) {
             }
         }
         NSDictionary *imageInfo = [self getEachTagImageInfo:tagId];
+        if ([tagId intValue] == 1) {
+            [favoriteTagImageInfo addObject:imageInfo];
+            continue;
+        }
         [eachTagImageInfo addObject:imageInfo];
     }
-    
-
+    [favoriteTagImageInfo addObjectsFromArray:eachTagImageInfo];
+    eachTagImageInfo = favoriteTagImageInfo;
     
     // imageViewを作ってscrollViewにはりつけ
     int count = 0;
@@ -321,12 +313,6 @@ int sortArray(id item1, id item2, void *context) {
     NSDictionary *imageInfo = [NSDictionary dictionaryWithObjects:value forKeys:key];
     [da close];
     return imageInfo;
-}
-
-- (IBAction)testKickButtonTap:(id)sender {
-
-    Common *cm = [[Common alloc] init];
-    [cm kickImageSync];
 }
 
 - (void)showImageListModal:(UITapGestureRecognizer*)gesture {

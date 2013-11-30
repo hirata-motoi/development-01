@@ -25,7 +25,7 @@
         //ALAssetsLibraryのすべてのアルバムが列挙される
         if (group) {
             //アルバム名が「_AlbumName」と同一だった時の処理
-            NSLog(@"%@", [group valueForProperty:ALAssetsGroupPropertyName]);
+            //NSLog(@"%@", [group valueForProperty:ALAssetsGroupPropertyName]);
             NSString *group_name = [group valueForProperty:ALAssetsGroupPropertyName];
             if ([_AlbumName objectForKey:group_name]) {
                 //assetsEnumerationBlock
@@ -62,9 +62,9 @@
                             // 既に保存済の画像の場合はスキップ
                             ALAssetRepresentation *defaultRepresentation = [[_AlAssetsArr objectAtIndex:i] defaultRepresentation];
                             NSURL *image_url = [defaultRepresentation url];
-                            NSLog(@"image_path string : %@", [image_url absoluteString]);
+                            //NSLog(@"image_path string : %@", [image_url absoluteString]);
                             if ( [org_paths objectForKey:[image_url absoluteString]] ) {
-                                NSLog(@"continued");
+                                //NSLog(@"continued");
                                 continue;
                             }
                             
