@@ -248,11 +248,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "development-01/ModalViewController.m"
-            timestampString = "407492763.036213"
+            timestampString = "407527074.52972"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "338"
-            endingLineNumber = "338"
+            startingLineNumber = "292"
+            endingLineNumber = "292"
             landmarkName = "-touchesEnded:withEvent:"
             landmarkType = "5">
          </BreakpointContent>
@@ -264,11 +264,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "development-01/ModalViewController.m"
-            timestampString = "407492763.036213"
+            timestampString = "407527074.52972"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "278"
-            endingLineNumber = "278"
+            startingLineNumber = "232"
+            endingLineNumber = "232"
             landmarkName = "-touchesEnded:withEvent:"
             landmarkType = "5">
          </BreakpointContent>
@@ -280,11 +280,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "development-01/ModalViewController.m"
-            timestampString = "407444646.117983"
+            timestampString = "407524528.949666"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "136"
-            endingLineNumber = "136"
+            startingLineNumber = "174"
+            endingLineNumber = "174"
             landmarkName = "-addImagesToScrollViewWithIndexes:"
             landmarkType = "5">
          </BreakpointContent>
@@ -296,11 +296,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "development-01/ModalViewController.m"
-            timestampString = "407444646.117983"
+            timestampString = "407524667.864555"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "146"
-            endingLineNumber = "146"
+            startingLineNumber = "183"
+            endingLineNumber = "183"
             landmarkName = "-addImagesToScrollViewWithIndexes:"
             landmarkType = "5">
          </BreakpointContent>
@@ -312,11 +312,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "development-01/ModalViewController.m"
-            timestampString = "407444646.117983"
+            timestampString = "407524667.864555"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "140"
-            endingLineNumber = "140"
+            startingLineNumber = "177"
+            endingLineNumber = "177"
             landmarkName = "-addImagesToScrollViewWithIndexes:"
             landmarkType = "5">
          </BreakpointContent>
@@ -328,12 +328,28 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "development-01/ModalViewController.m"
-            timestampString = "407444646.117983"
+            timestampString = "407524667.864555"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "141"
-            endingLineNumber = "141"
+            startingLineNumber = "178"
+            endingLineNumber = "178"
             landmarkName = "-addImagesToScrollViewWithIndexes:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "development-01/ModalViewController.m"
+            timestampString = "407527074.52972"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "513"
+            endingLineNumber = "513"
+            landmarkName = "-labelTapped:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

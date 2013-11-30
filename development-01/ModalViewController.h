@@ -21,8 +21,12 @@
     UIScrollView *scrollViewObject;
     SettingView *settingViewObject;
     AttachedTagsView *attachedTagsViewObject;
-    NSMutableDictionary *addedTagLabels;
+
 }
-@property (nonatomic,retain)NSMutableDictionary *addedImages;
+@property (nonatomic,retain)NSMutableDictionary *addedImagesWithIndex;
+@property (nonatomic,retain)NSMutableDictionary *imageIdIndexMap;
+@property (nonatomic,retain)NSMutableDictionary *addedTagLabelsDictionary;
+@property (nonatomic,retain)NSMutableDictionary *attachedTagIdsArrayByImageId;
+@property (nonatomic,retain)NSMutableDictionary *attachedTagLabelsForImageId;
 -(void)setImageInfo:(NSNumber*)image_id withIndex:(NSNumber*)index withImageIds:(NSArray*)image_ids;
 @end

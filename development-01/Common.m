@@ -44,7 +44,7 @@
     NSString *image_common = @"CREATE TABLE IF NOT EXISTS image_common(id INTEGER PRIMARY KEY, original_path TEXT, comment TEXT, saved_at INTEGER, created_at INTEGER, updated_at INTEGER)";
     NSString *seq_image_id = @"CREATE TABLE IF NOT EXISTS seq_image_id(id INTEGER PRIMARY KEY)";
     NSString *tags = @"CREATE TABLE IF NOT EXISTS tags(id INTEGER PRIMARY KEY, tag_name TEXT UNIQUE)";
-    NSString *tag_map = @"CREATE TABLE IF NOT EXISTS  (tag_id INTEGER, image_id INTEGER, created_at INTEGER)";
+    NSString *tag_map = @"CREATE TABLE IF NOT EXISTS (tag_id INTEGER, image_id INTEGER, created_at INTEGER)";
 //    NSString *create_i1_to_tag_map = @"CREATE INDEX i1 ON tag_map(tag_id)";
 //    NSString *create_i2_to_tag_map = @"CREATE INDEX i2 ON tag_map(image_id)";
     NSString *seq_image_id_select = @"SELECT id FROM seq_image_id";
