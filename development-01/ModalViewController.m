@@ -356,7 +356,7 @@
             label.textColor = [UIColor whiteColor];
             label.userInteractionEnabled = YES;
             label.textAlignment = UITextAlignmentCenter;
-            //label.tag = [tag_id integerValue];
+            label.tag = [tag_id integerValue];
             
             UIView * labelBackground = [[UIView alloc]initWithFrame:CGRectMake((10 + (50 + 10)* i), 0, 50, 40)];
             label.backgroundColor = [UIColor clearColor];
@@ -366,12 +366,9 @@
             gradient.endPoint=CGPointMake(1.0, 0.0);
             [labelBackground.layer addSublayer:gradient];
             [labelBackground addSubview:label];
-            labelBackground.tag = [tag_id integerValue];
             label.text = tag_name;
             
             UITapGestureRecognizer * recognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(labelTapped:)];
-            labelBackground.userInteractionEnabled = YES;
-            [labelBackground addGestureRecognizer:recognizer];
             label.userInteractionEnabled = YES;
             [label addGestureRecognizer:recognizer];
 
@@ -523,6 +520,7 @@
             [image_object addSubview:obj];
             NSLog(@"image_object added tags : %@", image_object);
         }
+        
         //DB更新
         [da open];
         NSString *stmt_tag_save = @"INSERT INTO tag_map (tag_id, image_id, created_at) VALUES(?,?,?)";

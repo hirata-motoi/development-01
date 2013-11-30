@@ -101,7 +101,7 @@
     FMResultSet *results;
     NSString *stmt = @"";
     if ([tag_id intValue] == -1) { //all
-        stmt = @"SELECT id, saved_at AS dateFROM image_common order by saved_at desc";
+        stmt = @"SELECT id, saved_at AS date FROM image_common order by saved_at desc";
         results = [da executeQuery:stmt];
     }
     else if ([tag_id intValue] == -2) { //untag
