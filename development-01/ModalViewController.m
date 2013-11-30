@@ -519,10 +519,17 @@
         [tagIdsForImageId removeObjectAtIndex:[image_index integerValue]];
         
         //viewから消す
-        [deleteTargetObject removeFromParentViewController];
+        [deleteTargetObject removeFromSuperview];
 
         // ラベルの位置を調整
         [self arrangeTagLabelLocation:tagsForImageId withIndexes:tagIdsForImageId];
+        
+        //DB更新
+        DA * da = [DA da];
+        [da open];
+        NSString * stmt_delete = @"DELETE FROM tag_map where tag_id = ? AND image_id = ?";
+        [da executeUpdate:stmt_delete, tag_id_number, image_id];
+        [da close];
         
         return;
     }
