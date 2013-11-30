@@ -41,9 +41,7 @@
 		84D8086818421E1500C63B87 /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 84D8086318421E1500C63B87 /* FMResultSet.m */; };
 		84D8086B18421E5300C63B87 /* ImageSync.m in Sources */ = {isa = PBXBuildFile; fileRef = 84D8086A18421E5300C63B87 /* ImageSync.m */; };
 		888DA2731849BC1700AA1D4F /* ShareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 888DA2711849BC1700AA1D4F /* ShareViewController.m */; };
-		888DA2741849BC1700AA1D4F /* ShareViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 888DA2721849BC1700AA1D4F /* ShareViewController.xib */; };
 		888DA2781849BD9E00AA1D4F /* SettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 888DA2761849BD9E00AA1D4F /* SettingViewController.m */; };
-		888DA2791849BD9E00AA1D4F /* SettingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 888DA2771849BD9E00AA1D4F /* SettingViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -114,10 +112,8 @@
 		84D8086A18421E5300C63B87 /* ImageSync.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageSync.m; sourceTree = "<group>"; };
 		888DA2701849BC1700AA1D4F /* ShareViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShareViewController.h; sourceTree = "<group>"; };
 		888DA2711849BC1700AA1D4F /* ShareViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShareViewController.m; sourceTree = "<group>"; };
-		888DA2721849BC1700AA1D4F /* ShareViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ShareViewController.xib; sourceTree = "<group>"; };
 		888DA2751849BD9E00AA1D4F /* SettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingViewController.h; sourceTree = "<group>"; };
 		888DA2761849BD9E00AA1D4F /* SettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingViewController.m; sourceTree = "<group>"; };
-		888DA2771849BD9E00AA1D4F /* SettingViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -188,10 +184,8 @@
 				8452A8B6183A55370016EA3F /* Main.storyboard */,
 				888DA2751849BD9E00AA1D4F /* SettingViewController.h */,
 				888DA2761849BD9E00AA1D4F /* SettingViewController.m */,
-				888DA2771849BD9E00AA1D4F /* SettingViewController.xib */,
 				888DA2701849BC1700AA1D4F /* ShareViewController.h */,
 				888DA2711849BC1700AA1D4F /* ShareViewController.m */,
-				888DA2721849BC1700AA1D4F /* ShareViewController.xib */,
 				8452A8B9183A55370016EA3F /* FirstViewController.h */,
 				8452A8BA183A55370016EA3F /* FirstViewController.m */,
 				8452A8BC183A55370016EA3F /* SecondViewController.h */,
@@ -357,9 +351,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8452A8C0183A55370016EA3F /* Images.xcassets in Resources */,
-				888DA2791849BD9E00AA1D4F /* SettingViewController.xib in Resources */,
 				8452A8AF183A55370016EA3F /* InfoPlist.strings in Resources */,
-				888DA2741849BC1700AA1D4F /* ShareViewController.xib in Resources */,
 				8452A8B8183A55370016EA3F /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
