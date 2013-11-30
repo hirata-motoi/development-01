@@ -242,7 +242,6 @@
         settingViewObject.hidden = _showSettingView;
         //labelの表示/非表示きりかえ
         [self switchTagLabels:image_id_number];
-
     } else {
         _showSettingView = !_showSettingView;
         CGRect rect = self.view.bounds;
@@ -508,18 +507,22 @@
     
     // 既に該当tagがついていた場合は消去
     if (tagsForImageId && [tagsForImageId objectForKey:[tag_id_number stringValue]]) {
-        NSLog(@"delete tag");
         //タグの情報を取得
         id deleteTargetObject = [tagsForImageId objectForKey:[tag_id_number stringValue]];
+        
+        //viewから消す
+        [deleteTargetObject removeFromSuperview];
         
         //tagsForImageIdから消す
         [tagsForImageId removeObjectForKey:[tag_id_number stringValue]];
         
         //tagIdsForImageIdから消す
-        [tagIdsForImageId removeObjectAtIndex:[image_index integerValue]];
-        
-        //viewから消す
-        [deleteTargetObject removeFromSuperview];
+        for (int i = tagIdsForImageId.count - 1; i >= 0; i--) {
+            NSNumber * tid = [tagIdsForImageId objectAtIndex:i];
+            if (tid == tag_id_number) {
+                [tagIdsForImageId removeObject:tid];
+            }
+        }
 
         // ラベルの位置を調整
         [self arrangeTagLabelLocation:tagsForImageId withIndexes:tagIdsForImageId];
@@ -541,7 +544,6 @@
     // 既存タグ情報に追加
     [tagsForImageId setObject:labelBackgroundView forKey:[tag_id_number stringValue]];
     [tagIdsForImageId addObject:tag_id_number];
-    
     // ラベルの位置を調整
     [self arrangeTagLabelLocation:tagsForImageId withIndexes:tagIdsForImageId];
     
