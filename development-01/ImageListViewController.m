@@ -155,7 +155,7 @@
         results = [da executeQuery:stmt];
     }
     else if ([tag_id intValue] == -2) { //untag
-        stmt = @"SELECT i.id, saved_at AS date FROM image_common i LEFT JOIN tag_map t ON i.id = t.tag_id WHERE t.tag_id is NULL order by i.saved_at desc";
+        stmt = @"SELECT i.id, saved_at AS date FROM image_common i LEFT JOIN tag_map t ON i.id = t.image_id WHERE t.tag_id is NULL order by i.saved_at desc";
         results = [da executeQuery:stmt];
     }
     else {

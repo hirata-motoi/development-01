@@ -560,7 +560,17 @@
     //新規のラベルを表示
     UIImageView * targetImageView = [addedImagesWithIndex objectForKey:[image_index stringValue]];
     [targetImageView addSubview:labelBackgroundView];
+    
+    //DB更新
+    DA * da = [DA da];
+    [da open];
+    NSString *stmt_tag_save = @"INSERT INTO tag_map (tag_id, image_id, created_at) VALUES(?,?,?)";
+    NSDate* date = [NSDate date];
+    [da executeUpdate:stmt_tag_save, tag_id_number, image_id, date];
+    [da close];
 }
+
+
 
 //attachされているタグをfor文で回してframe.originを適切に設定
 - (void) arrangeTagLabelLocation:(NSMutableDictionary *)tagsForImageId withIndexes:(NSMutableArray *)tagIdsForIamgeId {
