@@ -70,7 +70,7 @@
         NSNumber *beforeIndexNumber = [NSNumber numberWithInt:beforeIndex];
         [index_list addObject:beforeIndexNumber];
     }
-    if ( [imageIndex intValue] < imageIds.count ) {
+    if ( [imageIndex intValue] < imageIds.count - 1) {
         int afterIndex = [imageIndex intValue] + 1;
         NSNumber *afterIndexNumber = [NSNumber numberWithInt:afterIndex];
         [index_list addObject:afterIndexNumber];
