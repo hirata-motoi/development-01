@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ScrollView.h"
 
 @interface ImageListViewController : UIViewController
 {
@@ -14,4 +15,7 @@
 }
 
 -(void)setImagesByTagId:(NSNumber*)tag_id;
+@property(readwrite,nonatomic) float scrollPosition;
+@property(readwrite,nonatomic) int scrolledPage;
+@property ScrollView *scrollView;
 @end

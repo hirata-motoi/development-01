@@ -53,13 +53,6 @@
     }
 }
 
-// sort function
-int sortArray(id item1, id item2, void *context) {    
-  int number1 = [item1 intValue];
-  int number2 = [item2 intValue];
-  return number2 - number1;
-}
-
 - (void)showTagImageList {
     // Create scrollView
     ScrollView *scrollView = [[ScrollView alloc] init];

@@ -9,7 +9,6 @@
 #import "Common.h"
 #import "DA.h"
 #import "ImageSync.h"
-#import "SecondViewController.h"
 #import "ImageController.h"
 
 @implementation Common

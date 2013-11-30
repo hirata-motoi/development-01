@@ -8,9 +8,6 @@
 
 #import "ScrollView.h"
 #import "Common.h"
-#import "SecondViewController.h"
-#import "FirstViewController.h"
-
 
 @implementation ScrollView
 
@@ -31,11 +28,6 @@
     // Drawing code
 }
 */
-
-
-- (void)setViewControllerObject:(SecondViewController*)vc {
-    viewControllerObject = vc;
-}
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {

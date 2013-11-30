@@ -19,6 +19,10 @@
 
 @implementation ImageListViewController
 
+@synthesize scrollPosition;
+@synthesize scrolledPage;
+@synthesize scrollView;
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -43,44 +47,90 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)scrollViewDidScroll:(UIScrollView *)sender {
+    scrollPosition = sender.contentOffset.y;
+    if (scrollPosition > (1000 * scrolledPage - self.view.bounds.size.height)) {
+        [self addImagesByScroll];
+    }
+}
+    
 - (void)closeView{
     [self dismissModalViewControllerAnimated:YES];
 }
 
 -(void)setImagesByTagId:(NSNumber*)tag_id {
-    // scrollViewの作成
-    ScrollView *scrollView = [[ScrollView alloc] init];
+    //scrollviewのデリゲート設定
+    scrollView = [[ScrollView alloc]init];
+    scrollView.delegate = self;
+    
+    scrollPosition = 0;
+    scrolledPage = 0;
     
     scrollView.frame = self.view.bounds;
-    [scrollView setViewControllerObject:(SecondViewController*)self];
+//    [scrollView setViewControllerObject:(SecondViewController*)self];
     
     // DBからimage listを取得
     imageInfo = [self getImageInfoFromDB:tag_id];
     
     // imageViewを作ってscrollViewにはりつけ
     int count = 0;
+    // Should be global params
+    int HORIZONTAL_ROWS = 3;
     for ( NSDictionary *unit in imageInfo) {
+        if (count > (HORIZONTAL_ROWS*10 - 1)) {
+            count++;
+            continue;
+        }
         NSString *image_path = [unit objectForKey:@"image_path"];
         UIImage *image = [UIImage imageWithContentsOfFile:image_path];
         UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
         imageView.tag = [[unit objectForKey:@"image_id"] intValue];
         imageView.userInteractionEnabled = YES;
         
-        
         int x,y;
-        x = ((count % 3) * 100) + 10;
-        y = ((count / 3) * 100) + 10;
+        x = ((count % HORIZONTAL_ROWS) * 100) + 10;
+        y = ((count / HORIZONTAL_ROWS) * 100) + 10;
         
         imageView.frame = CGRectMake(x, y, 90, 90);
-        
         
         [scrollView insertSubview:imageView atIndex:[self.view.subviews count]];
         count++;
     }
+    scrolledPage++;
     // viewにscrollViewをaddする
     NSInteger heightCount = floor(count / 3) + 1;
-    scrollView.contentSize = CGSizeMake(320, (120 * heightCount));
+    scrollView.contentSize = CGSizeMake(320, (100 * heightCount + 20));
     [self.view addSubview:scrollView];
+}
+
+-(void)addImagesByScroll{
+    int HORIZONTAL_ROWS = 3;
+    int count = 0;
+    for ( NSDictionary *unit in imageInfo) {
+        if (count <= (HORIZONTAL_ROWS*10*scrolledPage - 1) || count > (HORIZONTAL_ROWS*10*(scrolledPage+1) - 1)) {
+            count++;
+            continue;
+        }
+        NSString *image_path = [unit objectForKey:@"image_path"];
+        UIImage *image = [UIImage imageWithContentsOfFile:image_path];
+        UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
+        imageView.tag = [[unit objectForKey:@"image_id"] intValue];
+        imageView.userInteractionEnabled = YES;
+        
+        int x,y;
+        x = ((count % HORIZONTAL_ROWS) * 100) + 10;
+        y = ((count / HORIZONTAL_ROWS) * 100) + 10;
+        
+        imageView.frame = CGRectMake(x, y, 90, 90);
+        
+        [scrollView insertSubview:imageView atIndex:[self.view.subviews count]];
+        count++;
+    }
+    scrolledPage++;
+    // viewにscrollViewをaddする
+//    NSInteger heightCount = floor(count / 3);
+//    scrollView.contentSize = CGSizeMake(320, (100 * heightCount + 20));
+//    [self.view addSubview:scrollView];
 }
 
 - (NSMutableArray*)getImageInfoFromDB:(NSNumber*)tag_id {
@@ -105,16 +155,16 @@
         results = [da executeQuery:stmt];
     }
     else if ([tag_id intValue] == -2) { //untag
-        stmt = @"SELECT i.id, saved_at AS date FROM image_common i LEFT JOIN tag_map t ON i.id = t.tag_id WHERE t.tag_id is NULL";
+        stmt = @"SELECT i.id, saved_at AS date FROM image_common i LEFT JOIN tag_map t ON i.id = t.tag_id WHERE t.tag_id is NULL order by i.saved_at desc";
         results = [da executeQuery:stmt];
     }
     else {
-        stmt = @"SELECT image_id AS id, created_at AS date FROM tag_map WHERE tag_id = ?";
+        stmt = @"SELECT image_id AS id, created_at AS date FROM tag_map WHERE tag_id = ? order by created_at desc";
         results = [da executeQuery:stmt, tag_id];
     }
 
     while ([results next]) {
-        NSLog(@"result found");
+//        NSLog(@"result found");
         NSNumber *image_id   = [NSNumber numberWithInt:[results intForColumn:@"id"]];
         NSDate *saved_at     = [results dateForColumn:@"date"];
         NSString *image_path = [cm getImagePathThumbnail:(NSNumber*)image_id];
@@ -127,9 +177,8 @@
     }
     [da close];
     
-    NSLog(@"getImageInfoFromDB : %@", images);
-    return images
-    ;
+//    NSLog(@"getImageInfoFromDB : %@", images);
+    return images;
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
