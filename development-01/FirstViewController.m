@@ -29,7 +29,6 @@
     [cm databaseInitializer];
     [cm filesystemInitializer];
     [cm kickImageSync];
-//    [self showTagImageList];
 }
 
 - (void)didReceiveMemoryWarning
@@ -40,18 +39,13 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    for (UIView *view in [self.view subviews]) {
+        [view removeFromSuperview];
+    }
     [super viewWillAppear:animated];
     [self showTagImageList];
 }
 
-- (void)viewDidDisappear:(BOOL)animated
-{
-    [super viewDidDisappear:animated];
-    
-    for (UIView *view in [self.view subviews]) {
-        [view removeFromSuperview];
-    }
-}
 
 - (void)showTagImageList {
     // Create scrollView
@@ -314,12 +308,6 @@
     NSDictionary *imageInfo = [NSDictionary dictionaryWithObjects:value forKeys:key];
     [da close];
     return imageInfo;
-}
-
-- (IBAction)testKickButtonTap:(id)sender {
-
-    Common *cm = [[Common alloc] init];
-    [cm kickImageSync];
 }
 
 - (void)showImageListModal:(UITapGestureRecognizer*)gesture {

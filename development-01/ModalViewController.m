@@ -37,7 +37,7 @@
     
     self.addedImages = [[NSMutableDictionary alloc]init];
 	// Do any additional setup after loading the view.
-    UIBarButtonItem *bbDone = [[UIBarButtonItem alloc]  initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(closeView)];
+    UIBarButtonItem *bbDone = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(closeView)];
     
     self.navigationItem.rightBarButtonItem = bbDone;
     
@@ -92,7 +92,7 @@
 }
 
 - (void)closeView{
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:NULL];
 }
 
 - (void)didReceiveMemoryWarning
