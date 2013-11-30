@@ -58,6 +58,7 @@
     [da executeUpdate:tag_map];
 //    [da executeUpdate:create_i1_to_tag_map];
 //    [da executeUpdate:create_i2_to_tag_map];
+    // Do NOT change favorit id (id = 1, favorite)!!!!!!!
     [da executeUpdate:insert_map_def_data, [NSNumber numberWithInt:1], [NSString stringWithFormat:@"favorite"]];
     [da executeUpdate:insert_map_def_data, [NSNumber numberWithInt:2], [NSString stringWithFormat:@"share"]];
     [da executeUpdate:insert_map_def_data, [NSNumber numberWithInt:3], [NSString stringWithFormat:@"smile"]];

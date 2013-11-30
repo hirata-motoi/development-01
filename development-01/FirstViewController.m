@@ -69,6 +69,7 @@
     // get newest image details for each tag
     // TODO : created_atが被ってると表示おかしくなる
     NSMutableArray *eachTagImageInfo = [[NSMutableArray alloc] init];
+    NSMutableArray *favoriteTagImageInfo = [[NSMutableArray alloc] init];
     for (NSNumber *createdAt in sortedCreatedAt) {
         NSNumber *tagId = [[NSNumber alloc] init];
         for (NSNumber *key in [tagIds allKeys]) {
@@ -77,10 +78,14 @@
             }
         }
         NSDictionary *imageInfo = [self getEachTagImageInfo:tagId];
+        if ([tagId intValue] == 1) {
+            [favoriteTagImageInfo addObject:imageInfo];
+            continue;
+        }
         [eachTagImageInfo addObject:imageInfo];
     }
-    
-
+    [favoriteTagImageInfo addObjectsFromArray:eachTagImageInfo];
+    eachTagImageInfo = favoriteTagImageInfo;
     
     // imageViewを作ってscrollViewにはりつけ
     int count = 0;
