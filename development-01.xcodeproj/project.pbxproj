@@ -38,7 +38,7 @@
 		84D8086618421E1500C63B87 /* FMDatabasePool.m in Sources */ = {isa = PBXBuildFile; fileRef = 84D8085F18421E1500C63B87 /* FMDatabasePool.m */; };
 		84D8086718421E1500C63B87 /* FMDatabaseQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 84D8086118421E1500C63B87 /* FMDatabaseQueue.m */; };
 		84D8086818421E1500C63B87 /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 84D8086318421E1500C63B87 /* FMResultSet.m */; };
-		84D8086B18421E5300C63B87 /* ImageSync.m in Sources */ = {isa = PBXBuildFile; fileRef = 84D8086A18421E5300C63B87 /* ImageSync.m */; };
+		84D8086B18421E5300C63B87 /* ImageSync.m in Sources */ = {isa = PBXBuildFile; fileRef = 84D8086A18421E5300C63B87 /* ImageSync.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		888DA2731849BC1700AA1D4F /* ShareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 888DA2711849BC1700AA1D4F /* ShareViewController.m */; };
 		888DA2781849BD9E00AA1D4F /* SettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 888DA2761849BD9E00AA1D4F /* SettingViewController.m */; };
 /* End PBXBuildFile section */
