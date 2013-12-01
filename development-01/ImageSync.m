@@ -57,75 +57,57 @@
                         [da close];
                         //NSLog(@"org_paths : %@", org_paths);
                         
-                        ALAssetRepresentation *defaultRepresentation = [[ALAssetRepresentation alloc] init];
-                        ALAsset *thumbnailRepresentation = [[ALAsset alloc] init];
-                        CGImageRef aImageRef;
-                        CGImageRef tImageRef;
-                        NSURL *image_url = [[NSURL alloc] init];
-                        UIImage *aImage = [[UIImage alloc] init];
-                        UIImage *tImage = [[UIImage alloc] init];
-                        NSData *adata = [[NSData alloc] init];
-                        NSData *tdata = [[NSData alloc] init];
-                        NSNumber *image_id = [[NSNumber alloc] init];
-                        NSString *apath = [[NSString alloc] init];
-                        NSString *tpath = [[NSString alloc] init];
-                        NSString *stmt = [[NSString alloc] init];
-                        NSDate* date = [[NSDate alloc] init];
-                        
                         for (int i=0; i<[_AlAssetsArr count]; i++) {
+                            @autoreleasepool {
                             NSLog(@"i:%d", i);
-                            // 既に保存済の画像の場合はスキップ
-                            defaultRepresentation = [[_AlAssetsArr objectAtIndex:i] defaultRepresentation];
-                            thumbnailRepresentation = [_AlAssetsArr objectAtIndex:i];
-                            image_url = [defaultRepresentation url];
-                            //NSLog(@"image_path string : %@", [image_url absoluteString]);
-                            if ( [org_paths objectForKey:[image_url absoluteString]] ) {
-                                //NSLog(@"continued");
-                                continue;
-                            }
+                                // 既に保存済の画像の場合はスキップ
+                                ALAssetRepresentation *defaultRepresentation = [[_AlAssetsArr objectAtIndex:i] defaultRepresentation];
+                                ALAsset *thumbnailRepresentation = [_AlAssetsArr objectAtIndex:i];
+                                NSURL *image_url = [defaultRepresentation url];
+                                //NSLog(@"image_path string : %@", [image_url absoluteString]);
+                                if ( [org_paths objectForKey:[image_url absoluteString]] ) {
+                                    //NSLog(@"continued");
+                                    continue;
+                                }
                             
-                            // 保存用に画像を取得
-                            aImageRef = [defaultRepresentation fullScreenImage];
-                            aImage = [UIImage imageWithCGImage:aImageRef];
+                                // 保存用に画像を取得
+                                CGImageRef aImageRef = [defaultRepresentation fullScreenImage];
+                                UIImage *aImage = [UIImage imageWithCGImage:aImageRef];
                             
-                            tImageRef = [thumbnailRepresentation thumbnail];
-                            tImage = [UIImage imageWithCGImage:tImageRef];
+                                CGImageRef tImageRef = [thumbnailRepresentation thumbnail];
+                                UIImage *tImage = [UIImage imageWithCGImage:tImageRef];
                             
-                            adata = UIImageJPEGRepresentation(aImage, 0.1);
-                            tdata = UIImageJPEGRepresentation(tImage, 1);
+                                NSData *adata = UIImageJPEGRepresentation(aImage, 0.1);
+                                NSData *tdata = UIImageJPEGRepresentation(tImage, 1);
                             
-                            CGImageRelease(aImageRef);
-                            //CGImageRelease(tImageRef);
+                                //NSLog(@"uril instance");
+                                NSNumber *image_id = [NSNumber numberWithInteger:[cm getImageSequenceId]];
+                                //NSLog(@"image_id:%@", image_id);
+                                NSString *apath = [cm getImagePath:image_id];
+                                NSString *tpath = [cm getImagePathThumbnail:image_id];
+                                //NSLog(@"image_path:%@", tpath);
                             
-                            //NSLog(@"image resize ended");
-                            
-                            //NSLog(@"uril instance");
-                            image_id = [NSNumber numberWithInteger:[cm getImageSequenceId]];
-                            //NSLog(@"image_id:%@", image_id);
-                            apath = [cm getImagePath:image_id];
-                            tpath = [cm getImagePathThumbnail:image_id];
-                            //NSLog(@"image_path:%@", tpath);
-                            
-                            if (
-                                [adata writeToFile:apath atomically:YES] &&
-                                [tdata writeToFile:tpath atomically:YES]
-                            ) {
-                                // image_commonへ登録
-                                //NSLog(@"start DB update");
+                                if (
+                                    [adata writeToFile:apath atomically:YES] &&
+                                    [tdata writeToFile:tpath atomically:YES]
+                                ) {
+                                    // image_commonへ登録
+                                    //NSLog(@"start DB update");
                                 
-                                stmt = @"INSERT INTO image_common (id, original_path, saved_at, created_at, updated_at) VALUES(?,?,?,?,?)";
-                                date = [NSDate date];
+                                    NSString *stmt = @"INSERT INTO image_common (id, original_path, saved_at, created_at, updated_at) VALUES(?,?,?,?,?)";
+                                    NSDate*date = [NSDate date];
                                 
-                                //NSLog(@"image_url : %@", image_url);
-                                //NSLog(@"%@", date);
+                                    //NSLog(@"image_url : %@", image_url);
+                                    //NSLog(@"%@", date);
                                 
-                                [da open];
-                                [da executeUpdate:stmt, image_id
-                                 , image_url, date, date, date];
-                                [da close];
+                                    [da open];
+                                    [da executeUpdate:stmt, image_id
+                                        , image_url, date, date, date];
+                                    [da close];
                                 
-                            } else {
-                                // TODO 失敗したよもっかいやってね というダイアログ出す
+                                } else {
+                                    // TODO 失敗したよもっかいやってね というダイアログ出す
+                                }
                             }
                         }
                     }
@@ -137,6 +119,5 @@
             }
         }
     } failureBlock:nil];
-
 }
 @end
