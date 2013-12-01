@@ -29,5 +29,7 @@
 @property (nonatomic,retain)NSMutableDictionary *attachedTagIdsArrayByImageId;
 @property (nonatomic,retain)NSMutableDictionary *attachedTagLabelsForImageId;
 @property BOOL showSettingView;
+@property (nonatomic,retain)NSMutableArray *existTagsArray;
+@property (nonatomic,retain)NSMutableDictionary *existTagsDictionary;
 -(void)setImageInfo:(NSNumber*)image_id withIndex:(NSNumber*)index withImageIds:(NSArray*)image_ids;
 @end
