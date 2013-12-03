@@ -21,7 +21,6 @@
 @implementation ModalViewController
 @synthesize addedImagesWithIndex;
 @synthesize imageIdIndexMap;
-@synthesize addedTagLabelsDictionary;
 @synthesize attachedTagIdsArrayByImageId;
 @synthesize attachedTagLabelsForImageId;
 @synthesize existTagsDictionary;
@@ -42,9 +41,8 @@
     
     self.addedImagesWithIndex = [[NSMutableDictionary alloc]init];
     self.imageIdIndexMap      = [[NSMutableDictionary alloc]init];
-    self.addedTagLabelsDictionary = [[NSMutableDictionary alloc]init];
-    self.attachedTagIdsArrayByImageId = [[NSMutableDictionary alloc]init];
     self.attachedTagLabelsForImageId = [[NSMutableDictionary alloc]init];
+    self.attachedTagIdsArrayByImageId = [[NSMutableDictionary alloc]init];
     _showSettingView = NO; // default非表示
     self.existTagsDictionary = [[NSMutableDictionary alloc]init];
     self.existTagsArray = [[NSMutableArray alloc]init];
@@ -57,7 +55,7 @@
     }
     
     // 全tagの情報を取得してセット
-    NSString *stmt = @"SELECT id, tag_name FROM tags";
+    NSString *stmt = @"SELECT id, tag_name FROM tags"; // only normal tag
     DA *da = [DA da];
     [da open];
     FMResultSet *results = [da executeQuery:stmt];
@@ -68,7 +66,9 @@
                                @"id":tag_id,
                                @"tag_name": tag_name,
                                };
-        [existTagsArray addObject:unit];
+        if ([tag_id intValue] < 1000) {
+            [existTagsArray addObject:unit];
+        }
         [existTagsDictionary setObject:tag_name forKey:[tag_id stringValue]];
     }
     [da close];
@@ -252,22 +252,22 @@
     UITouch *touch = [touches anyObject];
     int image_id = touch.view.tag;
     NSNumber * image_id_number = [NSNumber numberWithInt:image_id];
-    id tt = touch.view;
     
     if (settingViewObject != nil ) {
         _showSettingView = !_showSettingView;
         settingViewObject.hidden = !_showSettingView;
+        self.navigationController.toolbarHidden = !_showSettingView;
         //labelの表示/非表示きりかえ
         [self switchTagLabels:image_id_number];
     } else {
         _showSettingView = !_showSettingView;
         CGRect rect = self.view.bounds;
         rect.origin.x = 0;
-        rect.origin.y = rect.size.height - 50;
+        rect.origin.y = rect.size.height - 50 - 44; // tool barの上 44:toolbarの高さ
         rect.size.height = 50;
         
         SettingView *settingView = [[SettingView alloc]initWithFrame:rect];
-        settingView.backgroundColor = [UIColor blueColor];
+        settingView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.4];
         
         TagScrollView *tagScrollView = [[TagScrollView alloc]init];
         tagScrollView.delegate = self;
@@ -276,7 +276,7 @@
         tagScrollView.pagingEnabled = YES;
         tagScrollView.showsHorizontalScrollIndicator = NO;
         tagScrollView.showsVerticalScrollIndicator = NO;
-        tagScrollView.backgroundColor = [UIColor colorWithRed:0.95 green:0.95 blue:0.7 alpha:1.0];
+        tagScrollView.backgroundColor = [UIColor clearColor];
         tagScrollView.userInteractionEnabled = YES;
         
         //1ページのフレームサイズ
@@ -324,120 +324,14 @@
         // attach済tagのlabelを表示
         [self showAttachedTagLabels:image_id_number];
         
+        // settingSubViewの作成
+        [self createSettingSubView:settingView.frame];
+        
         [settingView addSubview:tagScrollView];
         [self.view addSubview:settingView];
         settingViewObject = settingView;
+
     }
-}
-
-- (void)labelTapped2:(UITapGestureRecognizer*)recognizer {
-
-    //タップされたタグのid
-    NSInteger tag_id = recognizer.view.tag;
-    NSLog(@"tag_id : %d", (long)tag_id);
-    NSNumber * tag_id_number = [NSNumber numberWithInteger:tag_id];
-    NSNumber * image_id = [NSNumber numberWithInt:[self getCurrentImageIndex]];
-    
-    DA * da = [DA da];
-    [da open];
-    NSMutableDictionary *tags_dictionary = [[NSMutableDictionary alloc]init];
-    NSString *stmt = @"SELECT id, tag_name FROM tags";
-    [da open];
-    FMResultSet *results = [da executeQuery:stmt];
-    while ([results next]) {
-        NSNumber * tag_id   = [NSNumber numberWithInt:[results intForColumn:@"id"]];
-        NSString * tag_name = [results stringForColumn:@"tag_name"];
-        NSDictionary *unit = @{
-                               @"id":tag_id, @"tag_name": tag_name,
-                               };
-        [tags_dictionary setObject:unit forKey:[tag_id stringValue]];
-    }
-    [da close];
-    
-    NSMutableDictionary * tagsForImageId = [addedTagLabelsDictionary objectForKey:[image_id stringValue]];
-    if (tagsForImageId && [tagsForImageId objectForKey:[tag_id_number stringValue]]) {
-        //DB更新
-        //object消す
-        //座標を整える
-        //再度表示
-    } else {
-        //tagを作る
-        NSString *tag_name = [[tags_dictionary objectForKey:[tag_id_number stringValue]] objectForKey:@"tag_name" ];
-        
-        //幅 : 25
-        //高さ : 15
-        //余白 : 5
-        int extra = 5;
-        int labelHeight = 15;
-        int labelWidth  = 25;
-        int labelOriginX = self.view.bounds.size.width - labelWidth - extra;
-        
-
-        UILabel *label = [[UILabel alloc]init];
-        label.text = tag_name;
-        label.adjustsFontSizeToFitWidth = YES;
-        label.textColor = [UIColor whiteColor];
-        label.userInteractionEnabled = YES;
-        label.textAlignment = UITextAlignmentCenter;
-        label.tag = tag_id;
-
-
-        NSArray * attachedTagIds = [tagsForImageId allKeys];
-        int initialOriginY = extra + (labelHeight + extra) * attachedTagIds.count;
-        
-        UIView * labelBackground = [[UIView alloc]initWithFrame:CGRectMake(labelOriginX, initialOriginY, labelWidth, labelHeight)];
-        label.frame = CGRectMake(0, 0, labelWidth, labelHeight);
-        label.backgroundColor = [UIColor clearColor];
-        
-        CAGradientLayer *gradient = [CAGradientLayer layer];
-        gradient.frame = label.frame;
-        [gradient setColors:[NSArray arrayWithObjects:(id)([UIColor blackColor].CGColor), (id)([UIColor grayColor].CGColor),nil]];
-        gradient.endPoint=CGPointMake(1.0, 0.0);
-        [labelBackground.layer addSublayer:gradient];
-        [labelBackground addSubview:label];
-        label.text = tag_name;
-
-        
-        NSString *image_index = [[NSNumber numberWithInt:[self getCurrentImageIndex]] stringValue];
-        id image_object = [addedImagesWithIndex objectForKey:image_index];
-        [image_object addSubview:labelBackground];
-        
-        
-        // ハッシュでlabelのポインタを管理
-        [tagsForImageId setObject:label forKey:[tag_id_number stringValue]];
-        
-        // 配列でlabelの並び順を管理
-        NSMutableArray *tagsArrayForImageId = [attachedTagIdsArrayByImageId objectForKey:[image_id stringValue]];
-        [tagsArrayForImageId addObject:tag_id_number];
-        
-        
-        // labelの位置を整えつつ表示する
-        for (int i = 0; i<tagsArrayForImageId.count; i++) {
-            
-            NSNumber * tag_id_number = [tagsArrayForImageId objectAtIndex:i];
-            NSString *tag_name = [[tags_dictionary objectForKey:[tag_id_number stringValue]] objectForKey:@"tag_name"];
-            UILabel * obj = [[UILabel alloc]init];
-            obj.text = tag_name;
-            //obj.tag = [key intValue];
-            obj.backgroundColor  = [UIColor blueColor];
-            
-            int labelOriginY = extra + (labelHeight + extra) * i;
-            obj.frame = CGRectMake(labelOriginX, labelOriginY, labelWidth, labelHeight);
-            
-            [image_object addSubview:obj];
-            //NSLog(@"image_object added tags : %@", image_object);
-        }
-        
-        //DB更新
-        [da open];
-        NSString *stmt_tag_save = @"INSERT INTO tag_map (tag_id, image_id, created_at) VALUES(?,?,?)";
-        NSNumber *tag_id_number = [NSNumber numberWithInt:tag_id];
-        
-        NSDate* date = [NSDate date];
-        [da executeUpdate:stmt_tag_save, tag_id_number, imageId, date];
-        [da close];
-    }
-
 }
 
 
@@ -457,10 +351,13 @@
         [attachedTagLabelsForImageId setObject:tagsForImageId forKey:[image_id stringValue]];
     }
     NSMutableArray * tagIdsForImageId = [attachedTagIdsArrayByImageId objectForKey:[image_id stringValue]];
+    NSLog(@"tagIdssForImageId2 : %@", tagIdsForImageId);
+    NSLog(@"attachedTagIdsArrayByImageId : %@   image_id:%@", attachedTagIdsArrayByImageId, image_id);
     if (!tagIdsForImageId) {
         tagIdsForImageId = [[NSMutableArray alloc]init];
         [attachedTagIdsArrayByImageId setObject:tagIdsForImageId forKey:[image_id stringValue]];
     }
+    NSLog(@"tagIdssForImageId : %@", tagIdsForImageId);
     
     //全tagの情報
     NSMutableDictionary * tagsDictionary = [self getTagsInfo];
@@ -504,6 +401,7 @@
     // 既存タグ情報に追加
     [tagsForImageId setObject:labelBackgroundView forKey:[tag_id_number stringValue]];
     [tagIdsForImageId addObject:tag_id_number];
+    
     // ラベルの位置を調整
     [self arrangeTagLabelLocation:tagsForImageId withIndexes:tagIdsForImageId];
     
@@ -540,11 +438,13 @@
         CGRect rect = labelBackground.frame;
         rect.origin.x = labelOriginX;
         rect.origin.y = labelOriginY;
+        NSLog(@"origin.x:%d origin.y:%d", rect.origin.x, rect.origin.y);
         
         labelBackground.frame = rect;
     }
 }
 
+// normal/special含め全tagの情報を持つ。tag_idを元にtag_nameを引くためにしか使わないこと！！
 -(NSMutableDictionary*) getTagsInfo {
     DA * da = [DA da];
     [da open];
@@ -610,9 +510,8 @@
         [attachedTagIdsArrayByImageId setObject:tagIdsForImageId forKey:[image_id stringValue]];
         //tag_mapをselect
         DA * da = [DA da];
-        NSString * stmt = @"SELECT tag_id FROM tag_map where image_id = ?";
+        NSString * stmt = @"SELECT tag_id FROM tag_map WHERE image_id = ? AND tag_id < 1000";
         [da open];
-        NSLog(@"select image_id : %@", image_id);
         FMResultSet * results = [da executeQuery:stmt, image_id];
         while ([results next]) {
             int tag_id_int = [results intForColumn:@"tag_id"];
@@ -663,6 +562,191 @@
         UIView * labelView = [tagsForImageId objectForKey:tag_id_str];
         [targetImageView addSubview:labelView];
     }
+    
+    // share tagのラベルを表示
+    // TODO magic number
+    NSNumber * tag_id_number_share = [NSNumber numberWithInt:1000];
+    DA * da = [DA da];
+    [da open];
+    NSString * stmt_share_tag = @"SELECT 1 FROM tag_map WHERE image_id = ? AND tag_id = 1000";
+    FMResultSet * results = [da executeQuery:stmt_share_tag, image_id_number];
+    
+    if ([results next]) {
+        UIView * labelBackgroundView = [self createAttachedTagLabelView:tag_id_number_share withTagName:[existTagsDictionary objectForKey:[tag_id_number_share stringValue]]];
+        int extra = 5;
+        int labelOriginX = extra;
+        int labelOriginY = extra;
+        
+        CGRect rect = labelBackgroundView.frame;
+        rect.origin.x = labelOriginX;
+        rect.origin.y = labelOriginY;
+        labelBackgroundView.frame = rect;
+        labelBackgroundView.hidden = !_showSettingView;
+        [tagsForImageId setObject:labelBackgroundView forKey:[tag_id_number_share stringValue]];
+        [targetImageView addSubview:labelBackgroundView];
+    }
+    [da close];
+}
+
+- (void)createSettingSubView:(CGRect)subViewFrame {
+    
+    int height  = 44;
+    int width   = subViewFrame.size.width;
+    int originY = subViewFrame.size.height - height;
+    int originX = 0;
+    CGRect settingSubViewFrame = CGRectMake(originX, originY, height, width);
+
+    UIView * settingSubView = [[UIView alloc]initWithFrame:settingSubViewFrame];
+
+    // toolbarの表示をONにする
+    [self.navigationController setToolbarHidden:NO animated:NO];
+    
+    // toolbarの文字白にする
+    self.navigationController.toolbar.tintColor = [UIColor whiteColor];
+    
+    // toolbarのbackground
+    self.navigationController.toolbar.translucent = YES;
+    self.navigationController.toolbar.barStyle = UIBarStyleBlack;
+
+    
+    // スペーサを生成する
+    UIBarButtonItem *spacer = [[UIBarButtonItem alloc]
+                               initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
+                               target:nil action:nil];
+    
+    // ボタン「Share」を生成する
+//    UIBarButtonItem *button = [[UIBarButtonItem alloc]
+//                               initWithTitle:@"Share" style:UIBarButtonItemStyleBordered
+//                               target:self action:@selector(switchShareLabel:)];
+    UIBarButtonItem * shareButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(switchShareLabel:)];
+    
+    // ラベル「delete」を生成する
+    UIBarButtonItem * deleteButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(deleteImage:)];
+    
+    // ラベル「edit」を生成する
+    UIBarButtonItem * editButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemCompose target:self action:@selector(editImage:)];
+    
+//    UILabel *lbl = [[UILabel alloc] initWithFrame:CGRectMake(0,0,100,30)];
+//    lbl.backgroundColor = [UIColor clearColor];
+//    lbl.textColor = [UIColor yellowColor];
+//    lbl.text = @"delete";
+//    UIBarButtonItem *lblbtn = [[UIBarButtonItem alloc] initWithCustomView:lbl];
+//    lblbtn.width = 100.0;
+    
+    // toolbarにボタンとラベルをセットする
+    NSArray *items =
+    [NSArray arrayWithObjects:editButton, spacer, shareButton, spacer, deleteButton, nil];
+    self.toolbarItems = items;
+
+}
+
+- (void)switchShareLabel:(id)sender {
+    //tag_id
+    int tag_id = 1000; // TODO magic number
+    NSNumber * tag_id_number = [NSNumber numberWithInt:tag_id];
+    
+    //image_id
+    NSNumber * image_index = [NSNumber numberWithInt:[self getCurrentImageIndex]];
+    NSNumber * image_id = [imageIds objectAtIndex:[image_index integerValue]];
+    
+    NSLog(@"switchShareLabel tag_id:%@ image_id:%@", tag_id_number, image_id);
+    
+    
+    // 以下はlabelTappedとほぼ同じ処理。冗長だが今の手間を省いてコピペする
+    // TODO ラベル作成用classを継承した2つのclass(classify(写真整理用)とaction(何らかのアクションを引き起こす用))とかかな
+    // 既存のタグ情報
+    NSMutableDictionary * tagsForImageId = [attachedTagLabelsForImageId objectForKey:[image_id stringValue]];
+    if (!tagsForImageId) {
+        tagsForImageId = [[NSMutableDictionary alloc]init];
+        [attachedTagLabelsForImageId setObject:tagsForImageId forKey:[image_id stringValue]];
+    }
+    NSMutableArray * tagIdsForImageId = [attachedTagIdsArrayByImageId objectForKey:[image_id stringValue]];
+    if (!tagIdsForImageId) {
+        tagIdsForImageId = [[NSMutableArray alloc]init];
+        [attachedTagIdsArrayByImageId setObject:tagIdsForImageId forKey:[image_id stringValue]];
+    }
+    
+    //全tagの情報
+    NSMutableDictionary * tagsDictionary = [self getTagsInfo];
+    
+    // 既に該当tagがついていた場合は消去
+    if (tagsForImageId && [tagsForImageId objectForKey:[tag_id_number stringValue]]) {
+        //タグの情報を取得
+        id deleteTargetObject = [tagsForImageId objectForKey:[tag_id_number stringValue]];
+        
+        //viewから消す
+        [deleteTargetObject removeFromSuperview];
+        
+        //tagsForImageIdから消す
+        [tagsForImageId removeObjectForKey:[tag_id_number stringValue]];
+
+        //action用tagはtagIdsForImageIdには含めないのだ！
+        //tagIdsForImageIdから消す
+//        for (int i = tagIdsForImageId.count - 1; i >= 0; i--) {
+//            NSNumber * tid = [tagIdsForImageId objectAtIndex:i];
+//            if (tid == tag_id_number) {
+//                [tagIdsForImageId removeObject:tid];
+//            }
+//        }
+        
+        // ラベルの位置を調整
+        //[self arrangeTagLabelLocation:tagsForImageId withIndexes:tagIdsForImageId];
+        
+        //DB更新
+        DA * da = [DA da];
+        [da open];
+        NSString * stmt_delete = @"DELETE FROM tag_map where tag_id = ? AND image_id = ?";
+        [da executeUpdate:stmt_delete, tag_id_number, image_id];
+        [da close];
+        
+        return;
+    }
+    
+    //labelを作成
+    //TODO ここも子class作って処理を移譲したい
+    //TODO shareは特別な画像とかにしたい
+    NSString *tag_name = [[tagsDictionary objectForKey:[tag_id_number stringValue]] objectForKey:@"tag_name" ];
+    NSLog(@"tag_name : %@", tag_name);
+    UIView * labelBackgroundView = [self createAttachedTagLabelView:tag_id_number withTagName:tag_name];
+    
+    // 既存タグ情報に追加
+    [tagsForImageId setObject:labelBackgroundView forKey:[tag_id_number stringValue]];
+    //[tagIdsForImageId addObject:tag_id_number];
+    
+    // ラベルの位置を調整
+    //[self arrangeTagLabelLocation:tagsForImageId withIndexes:tagIdsForImageId];
+    //今は調整する必要ない ベタで指定
+    int extra = 5;
+    int labelHeight = 15;
+    int labelWidth = 25;
+    int labelOriginX = extra;
+    int labelOriginY = extra;
+
+    UIView * labelBackground = [tagsForImageId objectForKey:[tag_id_number stringValue]];
+        
+    CGRect rect = labelBackground.frame;
+    rect.origin.x = labelOriginX;
+    rect.origin.y = labelOriginY;
+    labelBackground.frame = rect;
+    
+    //新規のラベルを表示
+    UIImageView * targetImageView = [addedImagesWithIndex objectForKey:[image_index stringValue]];
+    [targetImageView addSubview:labelBackgroundView];
+    
+    //DB更新
+    DA * da = [DA da];
+    [da open];
+    NSString *stmt_tag_save = @"INSERT INTO tag_map (tag_id, image_id, created_at) VALUES(?,?,?)";
+    NSDate* date = [NSDate date];
+    [da executeUpdate:stmt_tag_save, tag_id_number, image_id, date];
+    [da close];
+}
+
+
+- (void) deleteImage:(id)sender {
+}
+
+- (void) editImage:(id)sender {
 }
 
 @end

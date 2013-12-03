@@ -60,10 +60,10 @@
 //    [da executeUpdate:create_i2_to_tag_map];
     // Do NOT change favorit id (id = 1, favorite)!!!!!!!
     [da executeUpdate:insert_map_def_data, [NSNumber numberWithInt:1], [NSString stringWithFormat:@"favorite"]];
-    [da executeUpdate:insert_map_def_data, [NSNumber numberWithInt:2], [NSString stringWithFormat:@"share"]];
-    [da executeUpdate:insert_map_def_data, [NSNumber numberWithInt:3], [NSString stringWithFormat:@"smile"]];
-    [da executeUpdate:insert_map_def_data, [NSNumber numberWithInt:4], [NSString stringWithFormat:@"cry"]];
-    [da executeUpdate:insert_map_def_data, [NSNumber numberWithInt:5], [NSString stringWithFormat:@"angry"]];
+    [da executeUpdate:insert_map_def_data, [NSNumber numberWithInt:2], [NSString stringWithFormat:@"smile"]];
+    [da executeUpdate:insert_map_def_data, [NSNumber numberWithInt:3], [NSString stringWithFormat:@"cry"]];
+    [da executeUpdate:insert_map_def_data, [NSNumber numberWithInt:4], [NSString stringWithFormat:@"angry"]];
+    [da executeUpdate:insert_map_def_data, [NSNumber numberWithInt:1000], [NSString stringWithFormat:@"share"]];
     
     FMResultSet *results = [da executeQuery:seq_image_id_select];
     if (![results next]) {

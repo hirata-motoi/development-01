@@ -140,7 +140,7 @@
     count++;
     // 未分類 汚い 直す
     NSString *allstmt2 = @"select id from image_common;";
-    NSString *tagstmt = @"select image_id from tag_map group by image_id;";
+    NSString *tagstmt = @"select image_id from tag_map where tag_id < 1000 group by image_id;"; // only normal tag
     [da open];
     FMResultSet *allresults2 = [da executeQuery:allstmt2];
     NSMutableArray *allarray = [[NSMutableArray alloc] init];
@@ -210,6 +210,10 @@
     count++;
     // その他tag
     for ( NSDictionary *unit in eachTagImageInfo) {
+        // actionタグはskipする
+        if ([[unit objectForKey:@"tag_id"]intValue]>= 1000) {
+            continue;
+        }
         UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showImageListModal:)];
         singleTap.delegate = self;
         singleTap.numberOfTapsRequired = 1;

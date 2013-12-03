@@ -25,7 +25,6 @@
 }
 @property (nonatomic,retain)NSMutableDictionary *addedImagesWithIndex;
 @property (nonatomic,retain)NSMutableDictionary *imageIdIndexMap;
-@property (nonatomic,retain)NSMutableDictionary *addedTagLabelsDictionary;
 @property (nonatomic,retain)NSMutableDictionary *attachedTagIdsArrayByImageId;
 @property (nonatomic,retain)NSMutableDictionary *attachedTagLabelsForImageId;
 @property BOOL showSettingView;
