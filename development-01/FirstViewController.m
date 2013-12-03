@@ -20,6 +20,8 @@
 
 @implementation FirstViewController
 
+@synthesize progressView;
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -29,6 +31,12 @@
     [cm databaseInitializer];
     [cm filesystemInitializer];
     [cm kickImageSync];
+    //通知受信
+    [[NSNotificationCenter defaultCenter]
+            addObserver:self
+               selector:@selector(respondTest:)
+                   name:@"barProgress"
+                 object:nil];
 }
 
 - (void)didReceiveMemoryWarning
@@ -44,6 +52,16 @@
     }
     [super viewWillAppear:animated];
     [self showTagImageList];
+    //bar表示
+    progressView = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleBar];
+    CGSize pSize = progressView.frame.size;
+    CGSize vSize = self.view.frame.size;
+    progressView.frame = CGRectMake(10, 10, vSize.width - 20, pSize.height);
+    progressView.trackTintColor = [UIColor blackColor];
+    progressView.progressTintColor = [UIColor redColor];
+    progressView.progress = 0.0f;
+    progressView.hidden = YES;
+    [self.view addSubview:progressView];
 }
 
 
@@ -325,11 +343,26 @@
     [viewController setImagesByTagId:tag_id_number];
     
     UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:viewController];
-    navigationController.navigationBar.translucent = YES;
+    //navigationController.navigationBar.translucent = YES;
     navigationController.navigationBar.tintColor = [UIColor blackColor];
     
     [self presentModalViewController:navigationController animated:YES];
 }
 
+- (void)respondTest:(NSNotification *)aNotification
+{
+    NSString *barProgress = [[aNotification userInfo] objectForKey:@"progress"];
+    float progress = barProgress.floatValue;
+    [self performSelectorOnMainThread:@selector(setLoaderProgress:) withObject:[NSNumber numberWithFloat:progress] waitUntilDone:NO];
+}
+
+- (void)setLoaderProgress:(NSNumber *)number
+{
+    progressView.hidden = NO;
+    if(number.floatValue == 1.0f) {
+        progressView.hidden = YES;
+    }
+    [progressView setProgress:number.floatValue animated:YES];
+}
 
 @end
