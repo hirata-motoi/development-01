@@ -58,6 +58,7 @@
                         //NSLog(@"org_paths : %@", org_paths);
                         
                         for (int i=0; i<[_AlAssetsArr count]; i++) {
+                            [self pushProgress:(float)i all:(float)[_AlAssetsArr count]];
                             @autoreleasepool {
                             NSLog(@"i:%d", i);
                                 // 既に保存済の画像の場合はスキップ
@@ -120,4 +121,15 @@
         }
     } failureBlock:nil];
 }
+
+- (void)pushProgress:(float)i all:(float)all
+{
+    float progress = (float)((i + 1)/ all);
+    NSDictionary *info = [NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%f", progress], @"progress", nil];
+    [[NSNotificationCenter defaultCenter]
+        postNotificationName:@"barProgress"
+                      object:self
+                        userInfo:info];
+}
+
 @end

@@ -7,8 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ImageSync.h"
 
-@interface FirstViewController : UIViewController
+@interface FirstViewController : UIViewController{
+}
 @property (strong, nonatomic) IBOutlet UIButton *testKickButton;
+@property (strong, nonatomic) UIProgressView *progressView;
 - (IBAction)testKickButtonTap:(id)sender;
 @end
