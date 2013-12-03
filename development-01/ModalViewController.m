@@ -602,11 +602,11 @@
     [self.navigationController setToolbarHidden:NO animated:NO];
     
     // toolbarの文字白にする
-    self.navigationController.toolbar.tintColor = [UIColor whiteColor];
+    //self.navigationController.toolbar.tintColor = [UIColor whiteColor];
     
     // toolbarのbackground
-    self.navigationController.toolbar.translucent = YES;
-    self.navigationController.toolbar.barStyle = UIBarStyleBlack;
+    //self.navigationController.toolbar.translucent = YES;
+    self.navigationController.toolbar.barStyle = UIBarStyleBlackTranslucent;
 
     
     // スペーサを生成する
