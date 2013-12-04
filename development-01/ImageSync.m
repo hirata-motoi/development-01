@@ -78,7 +78,7 @@
                                 CGImageRef tImageRef = [thumbnailRepresentation thumbnail];
                                 UIImage *tImage = [UIImage imageWithCGImage:tImageRef];
                             
-                                NSData *adata = UIImageJPEGRepresentation(aImage, 0.1);
+                                NSData *adata = UIImageJPEGRepresentation(aImage, 1);
                                 NSData *tdata = UIImageJPEGRepresentation(tImage, 1);
                             
                                 //NSLog(@"uril instance");
