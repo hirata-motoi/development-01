@@ -181,6 +181,9 @@
         
         //attach済のtag labelを表示
         [self switchTagLabels:image_id_number];
+        
+        //非表示のimageのメモリ解放
+        [self releaseRedundantImage:index_list withSelfIndex:[NSNumber numberWithInt:pageNo]];
     }
 }
 
@@ -210,7 +213,7 @@
         Common *cm = [[Common alloc]init];
         
         NSNumber *image_id = [imageIds objectAtIndex:[index intValue]];
-        NSString *image_path = [cm getImagePathThumbnail:image_id];
+        NSString *image_path = [cm getImagePath:image_id];
         UIImage *image = [UIImage imageWithContentsOfFile:image_path];
         
         
@@ -264,6 +267,7 @@
         _showSettingView = !_showSettingView;
         settingViewObject.hidden = !_showSettingView;
         self.navigationController.toolbarHidden = !_showSettingView;
+        self.navigationController.navigationBar.hidden = !_showSettingView;
         //labelの表示/非表示きりかえ
         [self switchTagLabels:image_id_number];
     } else {
@@ -755,6 +759,25 @@
     [settingView addSubview:tagScrollView];
     [self.view addSubview:settingView];
     settingViewObject = settingView;
+}
+
+- (void) releaseRedundantImage:(NSMutableArray *)index_list withSelfIndex:selfIndex {
+    NSMutableDictionary * index_dictionary = [[NSMutableDictionary alloc]init];
+    for (NSNumber * index in index_list) {
+        [index_dictionary setObject:@"1" forKey:[index stringValue]];
+    }
+    [index_dictionary setObject:@"1" forKey:[selfIndex stringValue]];
+    
+    NSMutableArray * keys = [addedImagesWithIndex allKeys];
+    for (NSString * key in keys) {
+        if ([index_dictionary objectForKey:key]) {
+            continue;
+        }
+        //オブジェクトを破棄
+        UIView * obj = [addedImagesWithIndex objectForKey:key];
+        [obj removeFromSuperview];
+        [addedImagesWithIndex removeObjectForKey:key];
+    }
 }
 
 @end
