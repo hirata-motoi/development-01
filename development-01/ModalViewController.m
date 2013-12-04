@@ -34,10 +34,16 @@
     return self;
 }
 
+- (void) viewDidDisappear:(BOOL)animated {
+    [UIApplication sharedApplication].statusBarHidden = NO;
+}
+
 - (void)viewDidLoad
 {
     NSLog(@"viewDidLoad");
     [super viewDidLoad];
+    
+    [UIApplication sharedApplication].statusBarHidden = YES;
     
     self.addedImagesWithIndex = [[NSMutableDictionary alloc]init];
     self.imageIdIndexMap      = [[NSMutableDictionary alloc]init];
@@ -73,10 +79,10 @@
     }
     [da close];
 	// Do any additional setup after loading the view.
-    UIBarButtonItem *bbDone = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(closeView)];
-    
-    self.navigationItem.rightBarButtonItem = bbDone;
-    
+//    UIBarButtonItem *bbDone = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(closeView)];
+//    
+//    self.navigationItem.rightBarButtonItem = bbDone;
+//    
     //scrollviewのデリゲート設定
     HorizontalScrollView *scrollView = [[HorizontalScrollView alloc]init];
     scrollView.delegate = self;
@@ -267,7 +273,7 @@
         _showSettingView = !_showSettingView;
         settingViewObject.hidden = !_showSettingView;
         self.navigationController.toolbarHidden = !_showSettingView;
-        self.navigationController.navigationBar.hidden = !_showSettingView;
+
         //labelの表示/非表示きりかえ
         [self switchTagLabels:image_id_number];
     } else {
@@ -565,6 +571,9 @@
     // ラベル「delete」を生成する
     UIBarButtonItem * deleteButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(deleteImage:)];
     
+    // ラベル「close」を作成する
+        UIBarButtonItem * closeButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(closeView)];
+    
     // ラベル「edit」を生成する
     UIBarButtonItem * editButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemCompose target:self action:@selector(editImage:)];
     
@@ -577,7 +586,7 @@
     
     // toolbarにボタンとラベルをセットする
     NSArray *items =
-    [NSArray arrayWithObjects:editButton, spacer, shareButton, spacer, deleteButton, nil];
+    [NSArray arrayWithObjects:closeButton, spacer, shareButton, spacer, deleteButton, nil];
     self.toolbarItems = items;
 
 }

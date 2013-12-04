@@ -41,6 +41,10 @@
     self.navigationItem.rightBarButtonItem = bbDone;
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    self.navigationController.navigationBar.hidden = NO;
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -219,6 +223,7 @@
     UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:modalViewController];
     navigationController.navigationBar.translucent = YES;
     navigationController.navigationBar.tintColor = [UIColor blackColor];
+    navigationController.navigationBar.hidden = YES;
     
     [self presentModalViewController:navigationController animated:YES];
 }
