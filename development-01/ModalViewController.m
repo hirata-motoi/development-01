@@ -34,16 +34,22 @@
     return self;
 }
 
+- (void) viewDidDisappear:(BOOL)animated {
+    [UIApplication sharedApplication].statusBarHidden = NO;
+}
+
 - (void)viewDidLoad
 {
     NSLog(@"viewDidLoad");
     [super viewDidLoad];
     
+    [UIApplication sharedApplication].statusBarHidden = YES;
+    
     self.addedImagesWithIndex = [[NSMutableDictionary alloc]init];
     self.imageIdIndexMap      = [[NSMutableDictionary alloc]init];
     self.attachedTagLabelsForImageId = [[NSMutableDictionary alloc]init];
     self.attachedTagIdsArrayByImageId = [[NSMutableDictionary alloc]init];
-    _showSettingView = NO; // default非表示
+    _showSettingView = YES; // default表示
     self.existTagsDictionary = [[NSMutableDictionary alloc]init];
     self.existTagsArray = [[NSMutableArray alloc]init];
     
@@ -73,10 +79,10 @@
     }
     [da close];
 	// Do any additional setup after loading the view.
-    UIBarButtonItem *bbDone = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(closeView)];
-    
-    self.navigationItem.rightBarButtonItem = bbDone;
-    
+//    UIBarButtonItem *bbDone = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(closeView)];
+//    
+//    self.navigationItem.rightBarButtonItem = bbDone;
+//    
     //scrollviewのデリゲート設定
     HorizontalScrollView *scrollView = [[HorizontalScrollView alloc]init];
     scrollView.delegate = self;
@@ -112,6 +118,10 @@
         [index_list addObject:afterIndexNumber];
     }
     [self addImagesToScrollViewWithIndexes:index_list];
+    
+    
+    // attach済tagのlabelを表示
+    [self showAttachedTagLabels:imageId];
 
     //タップした時の処理を定義
 
@@ -125,6 +135,9 @@
     //attachedTagsをインスタンス変数にadd
     //タップ時の処理をここで定義
     [self.view addSubview:scrollView];
+    
+    // settingViewを表示
+    [self createSettingView];
 }
 
 - (void)closeView{
@@ -174,6 +187,9 @@
         
         //attach済のtag labelを表示
         [self switchTagLabels:image_id_number];
+        
+        //非表示のimageのメモリ解放
+        [self releaseRedundantImage:index_list withSelfIndex:[NSNumber numberWithInt:pageNo]];
     }
 }
 
@@ -203,7 +219,7 @@
         Common *cm = [[Common alloc]init];
         
         NSNumber *image_id = [imageIds objectAtIndex:[index intValue]];
-        NSString *image_path = [cm getImagePathThumbnail:image_id];
+        NSString *image_path = [cm getImagePath:image_id];
         UIImage *image = [UIImage imageWithContentsOfFile:image_path];
         
         
@@ -257,80 +273,12 @@
         _showSettingView = !_showSettingView;
         settingViewObject.hidden = !_showSettingView;
         self.navigationController.toolbarHidden = !_showSettingView;
+
         //labelの表示/非表示きりかえ
         [self switchTagLabels:image_id_number];
     } else {
-        _showSettingView = !_showSettingView;
-        CGRect rect = self.view.bounds;
-        rect.origin.x = 0;
-        rect.origin.y = rect.size.height - 50 - 44; // tool barの上 44:toolbarの高さ
-        rect.size.height = 50;
-        
-        SettingView *settingView = [[SettingView alloc]initWithFrame:rect];
-        settingView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.4];
-        
-        TagScrollView *tagScrollView = [[TagScrollView alloc]init];
-        tagScrollView.delegate = self;
-        //scrollviewの各種設定
-        tagScrollView.scrollEnabled = NO;
-        tagScrollView.pagingEnabled = YES;
-        tagScrollView.showsHorizontalScrollIndicator = NO;
-        tagScrollView.showsVerticalScrollIndicator = NO;
-        tagScrollView.backgroundColor = [UIColor clearColor];
-        tagScrollView.userInteractionEnabled = YES;
-        
-        //1ページのフレームサイズ
-        int scrollViewWidth = ((50 + 10) * existTagsArray.count + 10) < self.view.bounds.size.width ? self.view.bounds.size.width : ((50 + 10) *  existTagsArray.count + 10);
-        int scrollViewHeight = 40;
-        int scrollViewOriginX = 0;
-        int scrollViewOriginY = 5;
-        
-        CGRect screenRect = self.view.bounds;
-        tagScrollView.frame = CGRectMake(0, 15, screenRect.size.width, 30);
-        
-        //スクロールするコンテンツの縦横サイズ
-        tagScrollView.contentSize = CGSizeMake(scrollViewWidth, scrollViewHeight);
-        
-        //ラベルを作る
-        for (int i = 0; i<existTagsArray.count; i++) {
-            NSDictionary * unit = [existTagsArray objectAtIndex:i];
-            NSNumber * tag_id   = [unit objectForKey:@"id"];
-            NSString * tag_name = [unit objectForKey:@"tag_name"];
-            UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 50, 40)];
-            label.text = tag_name;
-            label.adjustsFontSizeToFitWidth = YES;
-            label.textColor = [UIColor whiteColor];
-            label.userInteractionEnabled = YES;
-            label.textAlignment = UITextAlignmentCenter;
-            label.tag = [tag_id integerValue];
-            
-            UIView * labelBackground = [[UIView alloc]initWithFrame:CGRectMake((10 + (50 + 10)* i), 0, 50, 40)];
-            label.backgroundColor = [UIColor clearColor];
-            CAGradientLayer *gradient = [CAGradientLayer layer];
-            [gradient setColors:[NSArray arrayWithObjects:(id)([UIColor blackColor].CGColor), (id)([UIColor grayColor].CGColor),nil]];
-            gradient.frame = CGRectMake(0, 0, 50, 40);
-            gradient.endPoint=CGPointMake(1.0, 0.0);
-            [labelBackground.layer addSublayer:gradient];
-            [labelBackground addSubview:label];
-            label.text = tag_name;
-            
-            UITapGestureRecognizer * recognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(labelTapped:)];
-            label.userInteractionEnabled = YES;
-            [label addGestureRecognizer:recognizer];
-
-            [tagScrollView addSubview:labelBackground];
-        }
-        
-        // attach済tagのlabelを表示
-        [self showAttachedTagLabels:image_id_number];
-        
-        // settingSubViewの作成
-        [self createSettingSubView:settingView.frame];
-        
-        [settingView addSubview:tagScrollView];
-        [self.view addSubview:settingView];
-        settingViewObject = settingView;
-
+        // viewDidLoadでsettingViewを作るのでこのif文に入ることはないはず
+        [self createSettingView];
     }
 }
 
@@ -588,7 +536,7 @@
     [da close];
 }
 
-- (void)createSettingSubView:(CGRect)subViewFrame {
+- (void)createSettingToolbar:(CGRect)subViewFrame {
     
     int height  = 44;
     int width   = subViewFrame.size.width;
@@ -623,6 +571,9 @@
     // ラベル「delete」を生成する
     UIBarButtonItem * deleteButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(deleteImage:)];
     
+    // ラベル「close」を作成する
+        UIBarButtonItem * closeButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(closeView)];
+    
     // ラベル「edit」を生成する
     UIBarButtonItem * editButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemCompose target:self action:@selector(editImage:)];
     
@@ -635,7 +586,7 @@
     
     // toolbarにボタンとラベルをセットする
     NSArray *items =
-    [NSArray arrayWithObjects:editButton, spacer, shareButton, spacer, deleteButton, nil];
+    [NSArray arrayWithObjects:closeButton, spacer, shareButton, spacer, deleteButton, nil];
     self.toolbarItems = items;
 
 }
@@ -747,6 +698,95 @@
 }
 
 - (void) editImage:(id)sender {
+}
+
+- (void) createSettingView {
+
+    CGRect rect = self.view.bounds;
+    rect.origin.x = 0;
+    rect.origin.y = rect.size.height - 50 - 44; // tool barの上 44:toolbarの高さ
+    rect.size.height = 50;
+    
+    SettingView *settingView = [[SettingView alloc]initWithFrame:rect];
+    settingView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.4];
+    
+    TagScrollView *tagScrollView = [[TagScrollView alloc]init];
+    tagScrollView.delegate = self;
+    //scrollviewの各種設定
+    tagScrollView.scrollEnabled = NO;
+    tagScrollView.pagingEnabled = YES;
+    tagScrollView.showsHorizontalScrollIndicator = NO;
+    tagScrollView.showsVerticalScrollIndicator = NO;
+    tagScrollView.backgroundColor = [UIColor clearColor];
+    tagScrollView.userInteractionEnabled = YES;
+    
+    //1ページのフレームサイズ
+    int scrollViewWidth = ((50 + 10) * existTagsArray.count + 10) < self.view.bounds.size.width ? self.view.bounds.size.width : ((50 + 10) *  existTagsArray.count + 10);
+    int scrollViewHeight = 40;
+    int scrollViewOriginX = 0;
+    int scrollViewOriginY = 5;
+    
+    CGRect screenRect = self.view.bounds;
+    tagScrollView.frame = CGRectMake(0, 15, screenRect.size.width, 30);
+    
+    //スクロールするコンテンツの縦横サイズ
+    tagScrollView.contentSize = CGSizeMake(scrollViewWidth, scrollViewHeight);
+    
+    //ラベルを作る
+    for (int i = 0; i<existTagsArray.count; i++) {
+        NSDictionary * unit = [existTagsArray objectAtIndex:i];
+        NSNumber * tag_id   = [unit objectForKey:@"id"];
+        NSString * tag_name = [unit objectForKey:@"tag_name"];
+        UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 50, 40)];
+        label.text = tag_name;
+        label.adjustsFontSizeToFitWidth = YES;
+        label.textColor = [UIColor whiteColor];
+        label.userInteractionEnabled = YES;
+        label.textAlignment = UITextAlignmentCenter;
+        label.tag = [tag_id integerValue];
+        
+        UIView * labelBackground = [[UIView alloc]initWithFrame:CGRectMake((10 + (50 + 10)* i), 0, 50, 40)];
+        label.backgroundColor = [UIColor clearColor];
+        CAGradientLayer *gradient = [CAGradientLayer layer];
+        [gradient setColors:[NSArray arrayWithObjects:(id)([UIColor blackColor].CGColor), (id)([UIColor grayColor].CGColor),nil]];
+        gradient.frame = CGRectMake(0, 0, 50, 40);
+        gradient.endPoint=CGPointMake(1.0, 0.0);
+        [labelBackground.layer addSublayer:gradient];
+        [labelBackground addSubview:label];
+        label.text = tag_name;
+        
+        UITapGestureRecognizer * recognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(labelTapped:)];
+        label.userInteractionEnabled = YES;
+        [label addGestureRecognizer:recognizer];
+        
+        [tagScrollView addSubview:labelBackground];
+    }
+    
+    // settingSubViewの作成
+    [self createSettingToolbar:settingView.frame];
+    
+    [settingView addSubview:tagScrollView];
+    [self.view addSubview:settingView];
+    settingViewObject = settingView;
+}
+
+- (void) releaseRedundantImage:(NSMutableArray *)index_list withSelfIndex:selfIndex {
+    NSMutableDictionary * index_dictionary = [[NSMutableDictionary alloc]init];
+    for (NSNumber * index in index_list) {
+        [index_dictionary setObject:@"1" forKey:[index stringValue]];
+    }
+    [index_dictionary setObject:@"1" forKey:[selfIndex stringValue]];
+    
+    NSMutableArray * keys = [addedImagesWithIndex allKeys];
+    for (NSString * key in keys) {
+        if ([index_dictionary objectForKey:key]) {
+            continue;
+        }
+        //オブジェクトを破棄
+        UIView * obj = [addedImagesWithIndex objectForKey:key];
+        [obj removeFromSuperview];
+        [addedImagesWithIndex removeObjectForKey:key];
+    }
 }
 
 @end
