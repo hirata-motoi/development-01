@@ -74,9 +74,9 @@
 {
     static NSString * identifier = @"basis-cell";
     UITableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:identifier];
-    if (nil == cell) {
+//    if (nil == cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
-    }
+//    }
     cell.backgroundColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
 //    NSLog(@"index %d", indexPath.row);
