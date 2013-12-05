@@ -10,4 +10,7 @@
 
 @interface ShareViewController : UIViewController
 
+@property UITableView *tableView;
+@property NSMutableArray *shareImageViewArray;
+
 @end

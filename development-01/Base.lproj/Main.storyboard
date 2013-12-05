@@ -27,29 +27,10 @@
         <!--Share View Controller - Share-->
         <scene sceneID="ifn-00-uiP">
             <objects>
-                <viewController title="Share" id="kPO-wt-oo6" customClass="ShareViewController" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="b1R-RO-4rn"/>
-                        <viewControllerLayoutGuide type="bottom" id="d7B-12-fJV"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="5zF-fx-X8B">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <subviews>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LdS-SY-CKU">
-                                <rect key="frame" x="32" y="28" width="256" height="468"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                            </textView>
-                        </subviews>
-                        <color key="backgroundColor" red="0.99770035282258063" green="0.95139238911290325" blue="0.8179498487903224" alpha="1" colorSpace="calibratedRGB"/>
-                    </view>
-                    <tabBarItem key="tabBarItem" title="Share" image="second" badgeValue="1" id="fVP-8F-fo1"/>
-                </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3o1-t6-xlF" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <viewController title="Share" id="kPO-wt-oo6" customClass="ShareViewController" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Share" image="second" id="fVP-8F-fo1"/>
+                </viewController>
             </objects>
             <point key="canvasLocation" x="566" y="152"/>
         </scene>
