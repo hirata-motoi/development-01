@@ -26,6 +26,7 @@
 		8452A8C9183A55370016EA3F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8452A8A8183A55370016EA3F /* UIKit.framework */; };
 		8452A8D1183A55370016EA3F /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8452A8CF183A55370016EA3F /* InfoPlist.strings */; };
 		8452A8D3183A55370016EA3F /* development_01Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8452A8D2183A55370016EA3F /* development_01Tests.m */; };
+		849E61F5185335390079ED13 /* CommentEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 849E61F4185335390079ED13 /* CommentEditViewController.m */; };
 		84B971AB18486B4A0096E286 /* TagScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B971AA18486B4A0096E286 /* TagScrollView.m */; };
 		84B971AE1848991B0096E286 /* ImageListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B971AD1848991B0096E286 /* ImageListViewController.m */; };
 		84CAB62018427306009D311C /* ScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 84CAB61F18427306009D311C /* ScrollView.m */; };
@@ -84,6 +85,8 @@
 		8452A8CE183A55370016EA3F /* development-01Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "development-01Tests-Info.plist"; sourceTree = "<group>"; };
 		8452A8D0183A55370016EA3F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		8452A8D2183A55370016EA3F /* development_01Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = development_01Tests.m; sourceTree = "<group>"; };
+		849E61F3185335390079ED13 /* CommentEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommentEditViewController.h; sourceTree = "<group>"; };
+		849E61F4185335390079ED13 /* CommentEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommentEditViewController.m; sourceTree = "<group>"; };
 		84B971A918486B4A0096E286 /* TagScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagScrollView.h; sourceTree = "<group>"; };
 		84B971AA18486B4A0096E286 /* TagScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TagScrollView.m; sourceTree = "<group>"; };
 		84B971AC1848991B0096E286 /* ImageListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageListViewController.h; sourceTree = "<group>"; };
@@ -200,6 +203,8 @@
 				8403B72318479ABE00F2DC24 /* SettingView.m */,
 				8403B72518479CE800F2DC24 /* AttachedTagsView.h */,
 				8403B72618479CE800F2DC24 /* AttachedTagsView.m */,
+				849E61F3185335390079ED13 /* CommentEditViewController.h */,
+				849E61F4185335390079ED13 /* CommentEditViewController.m */,
 			);
 			path = "development-01";
 			sourceTree = "<group>";
@@ -390,6 +395,7 @@
 				84D8086718421E1500C63B87 /* FMDatabaseQueue.m in Sources */,
 				8403B72A1847DB6A00F2DC24 /* HorizontalScrollView.m in Sources */,
 				8452A8B5183A55370016EA3F /* AppDelegate.m in Sources */,
+				849E61F5185335390079ED13 /* CommentEditViewController.m in Sources */,
 				8452A8BB183A55370016EA3F /* FirstViewController.m in Sources */,
 				84207BBF18462F5E00B1D6DC /* ImageController.m in Sources */,
 				84D8086818421E1500C63B87 /* FMResultSet.m in Sources */,

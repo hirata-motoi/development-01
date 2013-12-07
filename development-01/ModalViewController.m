@@ -13,6 +13,7 @@
 #import "DA.h"
 #import "FMDatabase.h"
 #import "TagScrollView.h"
+#import "CommentEditViewController.h"
 @interface ModalViewController ()
 
 
@@ -137,7 +138,7 @@
     [self.view addSubview:scrollView];
     
     // settingViewを表示
-    [self createSettingView];
+    [self createSettingView:imageId];
 }
 
 - (void)closeView{
@@ -278,7 +279,7 @@
         [self switchTagLabels:image_id_number];
     } else {
         // viewDidLoadでsettingViewを作るのでこのif文に入ることはないはず
-        [self createSettingView];
+        [self createSettingView:image_id_number];
     }
 }
 
@@ -700,12 +701,12 @@
 - (void) editImage:(id)sender {
 }
 
-- (void) createSettingView {
+- (void) createSettingView:(NSNumber *)image_id {
 
     CGRect rect = self.view.bounds;
     rect.origin.x = 0;
-    rect.origin.y = rect.size.height - 50 - 44; // tool barの上 44:toolbarの高さ
-    rect.size.height = 50;
+    rect.origin.y = rect.size.height - 100 - 44; // tool barの上 44:toolbarの高さ
+    rect.size.height = 100;
     
     SettingView *settingView = [[SettingView alloc]initWithFrame:rect];
     settingView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.4];
@@ -723,11 +724,11 @@
     //1ページのフレームサイズ
     int scrollViewWidth = ((50 + 10) * existTagsArray.count + 10) < self.view.bounds.size.width ? self.view.bounds.size.width : ((50 + 10) *  existTagsArray.count + 10);
     int scrollViewHeight = 40;
-    int scrollViewOriginX = 0;
-    int scrollViewOriginY = 5;
+    int scrollViewOriginX = 5;
+    int scrollViewOriginY = 55;
     
     CGRect screenRect = self.view.bounds;
-    tagScrollView.frame = CGRectMake(0, 15, screenRect.size.width, 30);
+    tagScrollView.frame = CGRectMake(scrollViewOriginX, scrollViewOriginY, screenRect.size.width, scrollViewHeight);
     
     //スクロールするコンテンツの縦横サイズ
     tagScrollView.contentSize = CGSizeMake(scrollViewWidth, scrollViewHeight);
@@ -762,10 +763,14 @@
         [tagScrollView addSubview:labelBackground];
     }
     
-    // settingSubViewの作成
+    // settingToolbarの作成
     [self createSettingToolbar:settingView.frame];
+
+    // commentViewの作成
+    UIView * commentView = [self createCommentView:image_id];
     
     [settingView addSubview:tagScrollView];
+    [settingView addSubview:commentView];
     [self.view addSubview:settingView];
     settingViewObject = settingView;
 }
@@ -787,6 +792,82 @@
         [obj removeFromSuperview];
         [addedImagesWithIndex removeObjectForKey:key];
     }
+}
+
+- (UIView *)createCommentView:(NSNumber *)image_id {
+    CGRect rect = CGRectMake(5, 5, self.view.bounds.size.width, 50);
+    UITextView * textView = [[UITextView alloc]initWithFrame:rect];
+
+    DA * da = [DA da];
+    [da open];
+    NSString * stmt = @"SELECT comment FROM image_common WHERE id = ?";
+    FMResultSet * results = [da executeQuery:stmt, image_id];
+    NSString * comment = [[NSString alloc]init];
+    while ([results next]) {
+        comment = [results stringForColumn:@"comment"];
+    }
+    [da close];
+
+    textView.text = comment;
+    if (![textView hasText]) {
+        textView.text = @"タップしてコメントを編集";
+    }
+    textView.editable = NO;
+    textView.backgroundColor = [UIColor clearColor];
+    textView.textColor = [UIColor whiteColor];
+    textView.textAlignment = UITextAlignmentLeft;
+    textView.userInteractionEnabled = YES;
+
+    UITapGestureRecognizer * recognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(commentTapped:)];
+    [textView addGestureRecognizer:recognizer];
+
+    return textView;
+}
+
+- (void)commentTapped_old:(UITapGestureRecognizer *) recognizer{
+    UITextView * view = recognizer.view;
+    NSLog(@"comentTapped comment:%@", view.text);
+
+    CGRect rect = self.view.bounds;
+    UIScrollView * commentEditScrollView = [[UIScrollView alloc]initWithFrame:rect];
+    commentEditScrollView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.4];
+
+    CGRect textRect = rect;
+    textRect.size.width  = rect.size.width / 1.5;
+    textRect.size.height = rect.size.width / 2;
+    textRect.origin.y = (rect.size.height - textRect.size.height) / 2;
+    UITextView * textView = [[UITextView alloc]initWithFrame:textRect];
+    textView.text = view.text;
+    textView.editable = YES;
+    textView.textAlignment = UITextAlignmentLeft;
+    [textView becomeFirstResponder];
+
+    [commentEditScrollView addSubview:textView];
+    NSLog(@"attache commentEditScrollView %@", commentEditScrollView);
+   
+    [self.view addSubview:commentEditScrollView];
+}
+
+- (void)commentTapped:(UITapGestureRecognizer *) recognizer {
+    UITextView * view = recognizer.view;
+
+    NSString * text = view.text;
+    CommentEditViewController * commentEditViewController = [[CommentEditViewController alloc] init];
+    [commentEditViewController setComment:text];
+    
+    // image_id
+    NSNumber * image_index = [NSNumber numberWithInt:[self getCurrentImageIndex]];
+    NSNumber * image_id = [imageIds objectAtIndex:[image_index integerValue]];
+    
+    [commentEditViewController setImageId:image_id];
+    
+    [UIApplication sharedApplication].statusBarHidden = NO;
+    
+    UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:commentEditViewController];
+    navigationController.navigationBar.translucent = YES;
+    navigationController.navigationBar.tintColor = [UIColor blackColor];
+    
+    [self presentModalViewController:navigationController animated:YES];
 }
 
 @end
