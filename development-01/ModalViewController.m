@@ -185,6 +185,9 @@
         NSNumber * image_id_number = [imageIds objectAtIndex:pageNo];
         
         [self addImagesToScrollViewWithIndexes:index_list];
+
+        //commentViewのcommentを切り替え
+        [self replaceComment:image_id_number];
         
         //attach済のtag labelを表示
         [self switchTagLabels:image_id_number];
@@ -768,6 +771,7 @@
 
     // commentViewの作成
     UIView * commentView = [self createCommentView:image_id];
+    commentViewObject = commentView;
     
     [settingView addSubview:tagScrollView];
     [settingView addSubview:commentView];
@@ -868,6 +872,19 @@
     navigationController.navigationBar.tintColor = [UIColor blackColor];
     
     [self presentModalViewController:navigationController animated:YES];
+}
+
+- (void)replaceComment:(NSNumber *)image_id_number {
+    DA * da = [DA da];
+    NSString * stmt = @"SELECT comment FROM image_common WHERE id = ?";
+    [da open];
+    FMResultSet * results = [da executeQuery:stmt, image_id_number];
+    NSString * comment = [[NSString alloc]init];
+    while ([results next]) {
+        comment   = [results stringForColumn:@"comment"];
+    }
+    [da close];
+    commentViewObject.text = comment;
 }
 
 @end

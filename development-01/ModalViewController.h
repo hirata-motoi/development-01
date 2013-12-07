@@ -20,6 +20,7 @@
     NSArray  *imageIds;
     UIScrollView *scrollViewObject;
     SettingView *settingViewObject;
+    UITextView *commentViewObject;
     AttachedTagsView *attachedTagsViewObject;
 
 }
