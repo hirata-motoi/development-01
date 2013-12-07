@@ -39,6 +39,10 @@
     [UIApplication sharedApplication].statusBarHidden = NO;
 }
 
+- (void) viewDidAppear:(BOOL)animated {
+    [self refreshCommentView];
+}
+
 - (void)viewDidLoad
 {
     NSLog(@"viewDidLoad");
@@ -826,6 +830,12 @@
     [textView addGestureRecognizer:recognizer];
 
     return textView;
+}
+
+- (void)refreshCommentView {
+    NSNumber * image_index = [NSNumber numberWithInt:[self getCurrentImageIndex]];
+    NSNumber * image_id = [imageIds objectAtIndex:[image_index integerValue]];
+    [self replaceComment:image_id];
 }
 
 - (void)commentTapped_old:(UITapGestureRecognizer *) recognizer{
