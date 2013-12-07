@@ -894,6 +894,9 @@
         comment   = [results stringForColumn:@"comment"];
     }
     [da close];
+    if (comment.length < 1) {
+        comment = @"タップしてコメントを編集";
+    }
     commentViewObject.text = comment;
 }
 
