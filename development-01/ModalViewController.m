@@ -26,6 +26,7 @@
 @synthesize attachedTagLabelsForImageId;
 @synthesize existTagsDictionary;
 @synthesize existTagsArray;
+@synthesize currentPageNo;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -165,13 +166,19 @@
          
     if (scrollViewObject != nil) {
         //現在のページ番号を調べる
-        CGFloat pageWidth = scrollViewObject.frame.size.width;
-        int pageNo = floor((scrollViewObject.contentOffset.x + pageWidth/2)/pageWidth);
+        int pageNo = [self getCurrentImageIndex]; 
         
         if (pageNo < 0 || pageNo > imageIds.count - 1) {
             return;
         }
-    
+
+        //ページが変わってなかったら何もしない
+        if (pageNo == currentPageNo) {
+            return;
+        }
+
+        currentPageNo = pageNo;
+
         //前後の写真を読み込む
         int beforeNo = pageNo - 1;
         int afterNo  = pageNo + 1;
@@ -297,7 +304,7 @@
     NSNumber * tag_id_number = [NSNumber numberWithInt:tag_id];
     
     // image_id
-    NSNumber * image_index = [NSNumber numberWithInt:[self getCurrentImageIndex]];
+    NSNumber * image_index = [NSNumber numberWithInt:currentPageNo];
     NSNumber * image_id = [imageIds objectAtIndex:[image_index integerValue]];
     
     // 既存のタグ情報
@@ -605,7 +612,7 @@
     NSNumber * tag_id_number = [NSNumber numberWithInt:tag_id];
     
     //image_id
-    NSNumber * image_index = [NSNumber numberWithInt:[self getCurrentImageIndex]];
+    NSNumber * image_index = [NSNumber numberWithInt:currentPageNo];
     NSNumber * image_id = [imageIds objectAtIndex:[image_index integerValue]];
     
     NSLog(@"switchShareLabel tag_id:%@ image_id:%@", tag_id_number, image_id);
@@ -833,7 +840,7 @@
 }
 
 - (void)refreshCommentView {
-    NSNumber * image_index = [NSNumber numberWithInt:[self getCurrentImageIndex]];
+    NSNumber * image_index = [NSNumber numberWithInt:currentPageNo];
     NSNumber * image_id = [imageIds objectAtIndex:[image_index integerValue]];
     [self replaceComment:image_id];
 }
@@ -870,7 +877,7 @@
     [commentEditViewController setComment:text];
     
     // image_id
-    NSNumber * image_index = [NSNumber numberWithInt:[self getCurrentImageIndex]];
+    NSNumber * image_index = [NSNumber numberWithInt:currentPageNo];
     NSNumber * image_id = [imageIds objectAtIndex:[image_index integerValue]];
     
     [commentEditViewController setImageId:image_id];
