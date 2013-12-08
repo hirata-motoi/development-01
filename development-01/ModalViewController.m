@@ -38,14 +38,17 @@
 
 - (void) viewDidAppear:(BOOL)animated {
     [self refreshCommentView];
+    [UIApplication sharedApplication].statusBarHidden = !_showSettingView;
 }
+
 
 - (void)viewDidLoad
 {
     NSLog(@"viewDidLoad");
     [super viewDidLoad];
-
-    [UIApplication sharedApplication].statusBarHidden = YES;
+    self.wantsFullScreenLayout = YES;
+    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleBlackTranslucent;
+    [UIApplication sharedApplication].statusBarHidden = NO;
     
     self.addedImagesWithIndex = [[NSMutableDictionary alloc]init];
     self.imageIdIndexMap      = [[NSMutableDictionary alloc]init];
@@ -283,6 +286,7 @@
 
         //labelの表示/非表示きりかえ
         [self switchTagLabels:image_id_number];
+        [UIApplication sharedApplication].statusBarHidden = !_showSettingView;
     } else {
         // viewDidLoadでsettingViewを作るのでこのif文に入ることはないはず
         [self createSettingView:image_id_number];
@@ -711,7 +715,7 @@
 
     CGRect rect = self.view.bounds;
     rect.origin.x = 0;
-    rect.origin.y = rect.size.height - 100 - 44; // tool barの上 44:toolbarの高さ
+    rect.origin.y = rect.size.height - 100 - 44 + 22; // tool barの上 44:toolbarの高さ 22:toolbarを隠してる分
     rect.size.height = 100;
     
     SettingView *settingView = [[SettingView alloc]initWithFrame:rect];
@@ -873,8 +877,6 @@
     NSNumber * image_id = [imageIds objectAtIndex:[image_index integerValue]];
     
     [commentEditViewController setImageId:image_id];
-    
-    [UIApplication sharedApplication].statusBarHidden = NO;
     
     UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:commentEditViewController];
     navigationController.navigationBar.translucent = YES;

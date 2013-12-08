@@ -32,6 +32,8 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
+    
+    [UIApplication sharedApplication].statusBarHidden = NO;
 
     // 保存ボタンを作成
     UIBarButtonItem * saveButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(saveComment)];
@@ -61,8 +63,6 @@
     //ポインタを保存
     textViewObject = textView;
 
-    
-
     [commentEditScrollView addSubview:textView];
     NSLog(@"attache commentEditScrollView %@", commentEditScrollView);
    
@@ -85,6 +85,8 @@
 
 - (void)cancelComment{
     [self dismissViewControllerAnimated:YES completion:NULL];
+
+    [UIApplication sharedApplication].statusBarHidden = YES;
 }
 
 - (void)saveComment{
@@ -99,6 +101,7 @@
     
     //close
     [self dismissViewControllerAnimated:YES completion:NULL];
+    [UIApplication sharedApplication].statusBarHidden = YES;
 }
 
 @end
