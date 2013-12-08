@@ -245,10 +245,10 @@
     // ナビゲーションアイテムを生成
     UINavigationItem* title = [[UINavigationItem alloc] initWithTitle:@""];
     
-    // closeボタンを生成
-    UIBarButtonItem *closeButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(closeView)];
+    // backボタンを生成
+    UIBarButtonItem * button = [[UIBarButtonItem alloc]initWithTitle:@"HOME" style:UIBarButtonItemStyleBordered target:self action:@selector(closeView)];
     // ナビゲーションアイテムの右側に戻るボタンを設置
-    title.rightBarButtonItem = closeButton;
+    title.leftBarButtonItem = button;
     
     [navigationBar pushNavigationItem:title animated:YES];
 

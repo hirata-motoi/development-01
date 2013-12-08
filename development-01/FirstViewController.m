@@ -349,6 +349,7 @@
     int tag_id = gesture.view.tag;
     
     ImageListViewController *viewController = [[ImageListViewController alloc]init];
+    viewController.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
     NSNumber *tag_id_number = [NSNumber numberWithInt:tag_id];
     [viewController setTagId:tag_id_number];
     
