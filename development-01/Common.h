@@ -20,4 +20,5 @@
 -(void)databaseInitializer;
 -(void)filesystemInitializer;
 -(void)kickImageSync;
+-(NSMutableArray*)getImagesByTag:(NSNumber*)tag_id;
 @end

@@ -80,18 +80,11 @@
     // tagId = [tag_id, created_at]
     NSMutableDictionary *tagIds = [self getAllTagedIds];
     
-    NSArray *testArray = [tagIds allValues];
-    for(NSNumber *test in testArray) {
-    }
-    testArray = [tagIds allKeys];
-    for(NSNumber *test in testArray) {
-    }
-    
     NSSortDescriptor *descDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"self" ascending:NO];
     NSArray *sortedCreatedAt = [[tagIds allValues] sortedArrayUsingDescriptors:@[descDescriptor]];
 
     // get newest image details for each tag
-    // TODO : created_atが被ってると表示おかしくなる
+    // TODO : created_atが被ってると表示おかしくなる けどmicro secで記録されてるから多分大丈夫
     NSMutableArray *eachTagImageInfo = [[NSMutableArray alloc] init];
     NSMutableArray *favoriteTagImageInfo = [[NSMutableArray alloc] init];
     for (NSNumber *createdAt in sortedCreatedAt) {
@@ -113,31 +106,30 @@
     
     // imageViewを作ってscrollViewにはりつけ
     int count = 0;
-    
-    // ALL 汚い 直す
-    NSString *allstmt = @"select id from image_common order by updated_at desc limit 1;";
-    DA *da = [DA da];
-    [da open];
-    FMResultSet *allresults = [da executeQuery:allstmt];
-    NSNumber *allImageId = [[NSNumber alloc] init];
-    while ([allresults next]) {
-        allImageId = [NSNumber numberWithInt:[allresults intForColumn:@"id"]];
-    }
-    [da close];
     Common *cm = [[Common alloc] init];
-    NSString *allImagePath = [cm getImagePathThumbnail:allImageId];
-    UIImage *allImage = [UIImage imageWithContentsOfFile:allImagePath];
-    UIImageView *allImageView = [[UIImageView alloc] initWithImage:allImage];
-    //allImageView.tag = [allImageId intValue];
-    allImageView.tag = -1; // -1:all  -2:untagged
-    allImageView.userInteractionEnabled = YES;
     int x,y;
-    x = ((count % 3) * 100) + 10;
-    y = ((count / 3) * 110) + 10;
-        
-    allImageView.frame = CGRectMake(x, y, 90, 90);
-        
-    [scrollView insertSubview:allImageView atIndex:[self.view.subviews count]];
+    DA *da = [DA da];
+    
+    // ALL
+    NSArray *allImages = [cm getImagesByTag:[NSNumber numberWithInt:-1]];
+    UIImageView *allImageView;
+    int slice;
+    if ([allImages count] < 3) {
+        slice = [allImages count]-1;
+    } else {
+        slice = 2;
+    }
+    for (int i = slice; i >= 0; i--) {
+        NSString *allImagePath = [[allImages objectAtIndex:i] objectForKey:@"image_path"];
+        UIImage *allImage = [UIImage imageWithContentsOfFile:allImagePath];
+        allImageView = [[UIImageView alloc] initWithImage:allImage];
+        allImageView.tag = -1; // -1:all  -2:untagged
+        allImageView.userInteractionEnabled = YES;
+        x = ((count % 3) * 105) + i*5 + 5;
+        y = ((count / 3) * 115) + i*5 + 5;
+        allImageView.frame = CGRectMake(x, y, 90, 90);
+        [scrollView insertSubview:allImageView atIndex:2-i];
+    }
     
     UILabel *allTagLabel = [[UILabel alloc] initWithFrame:CGRectMake(x, y + 90, 90, 20)];
     allTagLabel.textColor = [UIColor blueColor];
@@ -159,57 +151,28 @@
     [allTagLabel addGestureRecognizer:singleTapAll];
     [allImageView addGestureRecognizer:singleTapAll2];
     [scrollView insertSubview:allTagLabel atIndex:[self.view.subviews count]];
-    
-    
     count++;
+    
     // 未分類 汚い 直す
-    NSString *allstmt2 = @"select id from image_common;";
-    NSString *tagstmt = @"select image_id from tag_map where tag_id < 1000 group by image_id;"; // only normal tag
-    [da open];
-    FMResultSet *allresults2 = [da executeQuery:allstmt2];
-    NSMutableArray *allarray = [[NSMutableArray alloc] init];
-    while ([allresults2 next]) {
-        [allarray addObject:[NSNumber numberWithInt:[allresults2 intForColumn:@"id"]]];
+    NSArray *unTagImages = [cm getImagesByTag:[NSNumber numberWithInt:-2]];
+    UIImageView *unTagImageView;
+    if ([unTagImages count] < 3) {
+        slice = [unTagImages count]-1;
+    } else {
+        slice = 2;
     }
-    FMResultSet *tagresults = [da executeQuery:tagstmt];
-    NSMutableArray *tagarray = [[NSMutableArray alloc] init];
-    while ([tagresults next]) {
-        [tagarray addObject:[NSNumber numberWithInt:[tagresults intForColumn:@"image_id"]]];
+    for (int i = slice; i >= 0; i--) {
+        NSString *unTagImagePath = [[unTagImages objectAtIndex:i] objectForKey:@"image_path"];
+        UIImage *unTagImage = [UIImage imageWithContentsOfFile:unTagImagePath];
+        unTagImageView = [[UIImageView alloc] initWithImage:unTagImage];
+        unTagImageView.tag = -2;// -1:all  -2:untagged
+        unTagImageView.userInteractionEnabled = YES;
+        x = ((count % 3) * 105) + i*5 + 5;
+        y = ((count / 3) * 115) + i*5 + 5;
+        unTagImageView.frame = CGRectMake(x, y, 90, 90);
+        [scrollView insertSubview:unTagImageView atIndex:2-i];
     }
-    [da close];
-    
-    NSMutableSet *allSet = [NSMutableSet setWithArray:allarray];
-    NSMutableSet *tagSet = [NSMutableSet setWithArray:tagarray];
-    [allSet minusSet:tagSet];
-    NSArray *unTagArray = [allSet allObjects];
-    
-    // in (?) でエラーが出たのでこの形で
-    NSString *unTagStmt1 = @"select id from image_common where id in (";
-    NSString *unTagStmt2 = @") order by updated_at desc limit 1;";
-    NSString *joined = [unTagArray componentsJoinedByString:@","];
-    NSString *unTagStmt = [[unTagStmt1 stringByAppendingString:joined]stringByAppendingString:unTagStmt2];
-    
-    [da open];
-    FMResultSet *unSetResults = [da executeQuery:unTagStmt];
-    NSNumber *unTagImageId = [[NSNumber alloc] init];
-    while ([unSetResults next]) {
-        unTagImageId = [NSNumber numberWithInt:[unSetResults intForColumn:@"id"]];
-    }
-    [da close];
-    
-    NSString *unTagImagePath = [cm getImagePathThumbnail:unTagImageId];
-    UIImage *unTagImage = [UIImage imageWithContentsOfFile:unTagImagePath];
-    UIImageView *unTagImageView = [[UIImageView alloc] initWithImage:unTagImage];
-    //unTagImageView.tag = [unTagImageId intValue];
-    unTagImageView.tag = -2;// -1:all  -2:untagged
-    unTagImageView.userInteractionEnabled = YES;
-    x = ((count % 3) * 100) + 10;
-    y = ((count / 3) * 110) + 10;
         
-    unTagImageView.frame = CGRectMake(x, y, 90, 90);
-        
-    [scrollView insertSubview:unTagImageView atIndex:[self.view.subviews count]];
-    
     UILabel *unTagLabel = [[UILabel alloc] initWithFrame:CGRectMake(x, y + 90, 90, 20)];
     unTagLabel.textColor = [UIColor blueColor];
     unTagLabel.font = [UIFont fontWithName:@"AppleGothic" size:12];
@@ -230,8 +193,8 @@
     [unTagImageView addGestureRecognizer:singleTapUntag2];
     [scrollView insertSubview:unTagLabel atIndex:[self.view.subviews count]];
     
-    
     count++;
+    
     // その他tag
     for ( NSDictionary *unit in eachTagImageInfo) {
         // actionタグはskipする
@@ -247,22 +210,28 @@
         singleTap2.numberOfTapsRequired = 1;
         singleTap2.numberOfTouchesRequired = 1;
         
-        NSString *image_path = [unit objectForKey:@"image_path"];
-        UIImage *image = [UIImage imageWithContentsOfFile:image_path];
-        UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
-        imageView.tag = [[unit objectForKey:@"image_id"] intValue];
-        imageView.userInteractionEnabled = YES;
         NSNumber *tag_id = [unit objectForKey:@"tag_id"];
+        NSArray *tagImages = [cm getImagesByTag:tag_id];
+        UIImageView *imageView;
+        if ([tagImages count] < 3) {
+            slice = [tagImages count]-1;
+        } else {
+            slice = 2;
+        }
+        for (int i = slice; i >= 0; i--) {
+            NSString *image_path = [[tagImages objectAtIndex:i] objectForKey:@"image_path"];
+            UIImage *image = [UIImage imageWithContentsOfFile:image_path];
+            imageView = [[UIImageView alloc] initWithImage:image];
+            imageView.tag = [[unit objectForKey:@"image_id"] intValue];
+            imageView.userInteractionEnabled = YES;
+            x = ((count % 3) * 105) + 5*i + 5;
+            y = ((count / 3) * 115) + 5*i + 5;
+            imageView.frame = CGRectMake(x, y, 90, 90);
+            imageView.tag = [tag_id intValue];
         
-        int x,y;
-        x = ((count % 3) * 100) + 10;
-        y = ((count / 3) * 110) + 10;
-        
-        imageView.frame = CGRectMake(x, y, 90, 90);
-        imageView.tag = [tag_id intValue];
+            [scrollView insertSubview:imageView atIndex:2-i];
+        }
         [imageView addGestureRecognizer:singleTap2];
-        
-        [scrollView insertSubview:imageView atIndex:[self.view.subviews count]];
         
         UILabel *tagLabel = [[UILabel alloc] initWithFrame:CGRectMake(x, y + 90, 90, 20)];
         tagLabel.textColor = [UIColor blueColor];

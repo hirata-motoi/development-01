@@ -127,4 +127,50 @@
     return &rect;
 }
 
+- (NSMutableArray*)getImagesByTag:(NSNumber*)tag_id {
+    
+    // all : -1
+    // untag : -2
+    // tag : n
+    NSLog(@"getImageInfoFromDB tag_id : %@", tag_id);
+    
+    
+    NSMutableArray *images = [[NSMutableArray alloc] init];
+    
+    DA *da = [DA da];
+    [da open];
+    
+    FMResultSet *results;
+    NSString *stmt = @"";
+    if ([tag_id intValue] == -1) { //all
+        stmt = @"SELECT id, saved_at AS date FROM image_common order by saved_at desc";
+        results = [da executeQuery:stmt];
+    }
+    else if ([tag_id intValue] == -2) { //untag
+        stmt = @"SELECT i.id, saved_at AS date FROM image_common i LEFT JOIN tag_map t ON i.id = t.image_id WHERE t.tag_id is NULL order by i.saved_at desc";
+        results = [da executeQuery:stmt];
+    }
+    else {
+        stmt = @"SELECT image_id AS id, created_at AS date FROM tag_map WHERE tag_id = ? order by created_at desc";
+        results = [da executeQuery:stmt, tag_id];
+    }
+
+    while ([results next]) {
+//        NSLog(@"result found");
+        NSNumber *image_id   = [NSNumber numberWithInt:[results intForColumn:@"id"]];
+        NSDate *saved_at     = [results dateForColumn:@"date"];
+        NSString *image_path = [self getImagePathThumbnail:(NSNumber*)image_id];
+        
+        NSArray *key   = [NSArray arrayWithObjects:@"image_id", @"saved_at", @"image_path", nil];
+        NSArray *value = [NSArray arrayWithObjects:image_id, saved_at, image_path, nil];
+        NSDictionary *unit   = [NSDictionary dictionaryWithObjects:value forKeys:key];
+        
+        [images addObject:unit];
+    }
+    [da close];
+    
+//    NSLog(@"getImageInfoFromDB : %@", images);
+    return images;
+}
+
 @end
