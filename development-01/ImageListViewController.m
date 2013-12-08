@@ -71,6 +71,7 @@
     //scrollviewのデリゲート設定
     scrollView = [[ScrollView alloc]init];
     scrollView.delegate = self;
+    scrollView.backgroundColor = [UIColor whiteColor];
     
     scrollPosition = 0;
     scrolledPage = 0;
@@ -251,8 +252,8 @@
     
     [navigationBar pushNavigationItem:title animated:YES];
 
-    navigationBar.tintColor = [UIColor blackColor];
-    navigationBar.alpha = 0.4f;
+    navigationBar.tintColor = [UIColor orangeColor];
+    //navigationBar.alpha = 0.4f;
     navigationBar.translucent = YES;
 
     [self.view addSubview:navigationBar];
