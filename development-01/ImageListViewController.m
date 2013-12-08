@@ -54,7 +54,7 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)sender {
     scrollPosition = sender.contentOffset.y;
-    if (scrollPosition > (1000 * scrolledPage - self.view.bounds.size.height)) {
+    if (scrollPosition > (70 * 10 * scrolledPage - self.view.bounds.size.height)) {
         [self addImagesByScroll];
     }
 }
@@ -84,7 +84,7 @@
     // imageViewを作ってscrollViewにはりつけ
     int count = 0;
     // Should be global params
-    int HORIZONTAL_ROWS = 3;
+    int HORIZONTAL_ROWS = 4;
     for ( NSDictionary *unit in imageInfo) {
         if (count > (HORIZONTAL_ROWS*10 - 1)) {
             count++;
@@ -97,23 +97,23 @@
         imageView.userInteractionEnabled = YES;
         
         int x,y;
-        x = ((count % HORIZONTAL_ROWS) * 100) + 10;
-        y = ((count / HORIZONTAL_ROWS) * 100) + 10 + 44;
+        x = ((count % HORIZONTAL_ROWS) * 78) + 4;
+        y = ((count / HORIZONTAL_ROWS) * 78) + 4 + 44;
         
-        imageView.frame = CGRectMake(x, y, 90, 90);
+        imageView.frame = CGRectMake(x, y, 74, 74);
         
         [scrollView insertSubview:imageView atIndex:[self.view.subviews count]];
         count++;
     }
     scrolledPage++;
     // viewにscrollViewをaddする
-    NSInteger heightCount = floor(count / 3) + 1;
-    scrollView.contentSize = CGSizeMake(320, (100 * heightCount + 20));
+    NSInteger heightCount = floor(count / 4) + 1;
+    scrollView.contentSize = CGSizeMake(320, (78 * heightCount + 44));
     [self.view addSubview:scrollView];
 }
 
 -(void)addImagesByScroll{
-    int HORIZONTAL_ROWS = 3;
+    int HORIZONTAL_ROWS = 4;
     int count = 0;
     for ( NSDictionary *unit in imageInfo) {
         if (count <= (HORIZONTAL_ROWS*10*scrolledPage - 1) || count > (HORIZONTAL_ROWS*10*(scrolledPage+1) - 1)) {
@@ -122,15 +122,21 @@
         }
         NSString *image_path = [unit objectForKey:@"image_path"];
         UIImage *image = [UIImage imageWithContentsOfFile:image_path];
+        CGImageRef imageRef = [image CGImage];
+        UIGraphicsBeginImageContext(CGSizeMake(CGImageGetWidth(imageRef), CGImageGetHeight(imageRef)));
+        [image drawAtPoint:CGPointMake(0,0)];
+        image = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+
         UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
         imageView.tag = [[unit objectForKey:@"image_id"] intValue];
         imageView.userInteractionEnabled = YES;
         
         int x,y;
-        x = ((count % HORIZONTAL_ROWS) * 100) + 10;
-        y = ((count / HORIZONTAL_ROWS) * 100) + 10;
+        x = ((count % HORIZONTAL_ROWS) * 78) + 4;
+        y = ((count / HORIZONTAL_ROWS) * 78) + 4 + 44;
         
-        imageView.frame = CGRectMake(x, y, 90, 90);
+        imageView.frame = CGRectMake(x, y, 74, 74);
         
         [scrollView insertSubview:imageView atIndex:[self.view.subviews count]];
         count++;
