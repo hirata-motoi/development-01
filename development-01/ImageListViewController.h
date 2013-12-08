@@ -15,7 +15,9 @@
 }
 
 -(void)setImagesByTagId:(NSNumber*)tag_id;
+-(void)setTagId:(NSNumber*)tag_id;
 @property(readwrite,nonatomic) float scrollPosition;
 @property(readwrite,nonatomic) int scrolledPage;
 @property ScrollView *scrollView;
+@property NSNumber *tagId;
 @end

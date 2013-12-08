@@ -281,7 +281,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "220"
             endingLineNumber = "220"
-            landmarkName = "-getCurrentImageIndex"
+            landmarkName = "-addImagesToScrollViewWithIndexes:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -329,7 +329,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "408"
             endingLineNumber = "408"
-            landmarkName = "-arrangeTagLabelLocation:withIndexes:"
+            landmarkName = "-getTagsInfo"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
