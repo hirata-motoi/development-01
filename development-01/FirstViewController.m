@@ -375,13 +375,22 @@
     AppDelegate *app =  [[UIApplication sharedApplication] delegate];
     UINavigationBar * navigationBar = [[UINavigationBar alloc] initWithFrame: CGRectMake(0, 0, self.view.bounds.size.width, app.naviBarHeight)];
 
-
     // ナビゲーションアイテムを生成
     UINavigationItem* title = [[UINavigationItem alloc] initWithTitle:@"Babyry"];
     [navigationBar pushNavigationItem:title animated:YES];
 
-    navigationBar.barTintColor = app.naviBarColor;
     [UINavigationBar appearance].titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
+
+    NSString *ver = [[UIDevice currentDevice] systemVersion];
+    int ver_int = [ver intValue];
+
+    if (ver_int < 7) {
+        [navigationBar setTintColor:app.naviBarColor];
+    } else {
+        navigationBar.barTintColor = app.naviBarColor;
+    }
+
+
 
     UIImage *naviImage = [[UIImage imageNamed:@"appicon.png"] stretchableImageWithLeftCapWidth:0 topCapHeight:1];
     UIImageView *naviImageView = [[UIImageView alloc] initWithImage:naviImage];
