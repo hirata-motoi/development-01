@@ -25,14 +25,25 @@
     [baseView addSubview:loginView];
     
     int offset_button = loginView.frame.size.height / 5;
+    
+    UITextField *name = [[UITextField alloc] init];
+    name.frame = CGRectMake(0, offset_button*2, loginView.frame.size.width/2, 30);
+    name.borderStyle = UITextBorderStyleRoundedRect;
+
+    UITextField *password = [[UITextField alloc] init];
+    password.frame = CGRectMake(0, offset_button*3, loginView.frame.size.width/2, 30);
+    password.borderStyle = UITextBorderStyleRoundedRect;
+    
     UIButton *loginButtonNo = [[UIButton alloc] init];
     [loginButtonNo.titleLabel setFont:[UIFont systemFontOfSize:24]];
-    loginButtonNo.frame = CGRectMake(0, offset_button*4, baseView.frame.size.width, 30);
+    loginButtonNo.frame = CGRectMake(0, offset_button*4, loginView.frame.size.width, 30);
     [loginButtonNo setTitleColor:[UIColor colorWithRed:0.95 green:0.8 blue:0.5 alpha:1.0] forState:UIControlStateNormal];
     [loginButtonNo setTitle:@"キャンセル" forState:UIControlStateNormal];
     [loginButtonNo addTarget:self action:@selector(logoutNo:) forControlEvents:UIControlEventTouchUpInside];
 
     loginView.tag = 999;
+    [loginView addSubview:name];
+    [loginView addSubview:password];
     [loginView addSubview:loginButtonNo];
 }
 
@@ -51,18 +62,18 @@
     logoutLabel.text = @"ログアウトしますか？";
     logoutLabel.textAlignment = NSTextAlignmentCenter;
     int offset_button = logoutView.frame.size.height / 4;
-    logoutLabel.frame = CGRectMake(0, offset_button, baseView.frame.size.width, 30);
+    logoutLabel.frame = CGRectMake(0, offset_button, logoutView.frame.size.width, 30);
 
     UIButton *logoutButtonYes = [[UIButton alloc] init];
     [logoutButtonYes.titleLabel setFont:[UIFont systemFontOfSize:24]];
-    logoutButtonYes.frame = CGRectMake(0, offset_button*2, baseView.frame.size.width, 30);
+    logoutButtonYes.frame = CGRectMake(0, offset_button*2, logoutView.frame.size.width, 30);
     [logoutButtonYes setTitleColor:[UIColor colorWithRed:0.95 green:0.8 blue:0.5 alpha:1.0] forState:UIControlStateNormal];
     [logoutButtonYes setTitle:@"はい" forState:UIControlStateNormal];
     [logoutButtonYes addTarget:self action:@selector(logoutYes:) forControlEvents:UIControlEventTouchUpInside];
 
     UIButton *logoutButtonNo = [[UIButton alloc] init];
     [logoutButtonNo.titleLabel setFont:[UIFont systemFontOfSize:24]];
-    logoutButtonNo.frame = CGRectMake(0, offset_button*3, baseView.frame.size.width, 30);
+    logoutButtonNo.frame = CGRectMake(0, offset_button*3, logoutView.frame.size.width, 30);
     [logoutButtonNo setTitleColor:[UIColor colorWithRed:0.95 green:0.8 blue:0.5 alpha:1.0] forState:UIControlStateNormal];
     [logoutButtonNo setTitle:@"いいえ" forState:UIControlStateNormal];
     [logoutButtonNo addTarget:self action:@selector(logoutNo:) forControlEvents:UIControlEventTouchUpInside];

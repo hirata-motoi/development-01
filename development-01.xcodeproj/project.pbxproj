@@ -199,6 +199,8 @@
 				84207BBD18462F5E00B1D6DC /* ImageController.h */,
 				84207BBE18462F5E00B1D6DC /* ImageController.m */,
 				8452A8BF183A55370016EA3F /* Images.xcassets */,
+				887124A4185417CC00550DEF /* Session.h */,
+				887124A5185417CC00550DEF /* Session.m */,
 				8452A8AB183A55370016EA3F /* Supporting Files */,
 				84207BC31846655A00B1D6DC /* ModalViewController.h */,
 				84207BC41846655B00B1D6DC /* ModalViewController.m */,
@@ -244,8 +246,6 @@
 		84D8084F18421D6C00C63B87 /* Util */ = {
 			isa = PBXGroup;
 			children = (
-				887124A4185417CC00550DEF /* Session.h */,
-				887124A5185417CC00550DEF /* Session.m */,
 				84D8086918421E5300C63B87 /* ImageSync.h */,
 				84D8086A18421E5300C63B87 /* ImageSync.m */,
 				84D8085018421D8B00C63B87 /* DA.h */,
