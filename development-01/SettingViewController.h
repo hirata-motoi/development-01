@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Session.h"
 
 @interface SettingViewController : UIViewController
+
+@property Session *session;
 
 @end
