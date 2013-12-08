@@ -130,6 +130,17 @@
         allImageView.frame = CGRectMake(x, y, 90, 90);
         [scrollView insertSubview:allImageView atIndex:2-i];
     }
+    //モジュール化したいですね
+    UIView *allBudge = [[UIView alloc] init];
+    allBudge.frame = CGRectMake(x, y, 40, 15);
+    UILabel *allBudgeLabel = [[UILabel alloc] init];
+    allBudgeLabel.text = [NSString stringWithFormat:@"%d", [allImages count]];
+    allBudgeLabel.textColor = [UIColor whiteColor];
+    allBudgeLabel.frame = CGRectMake(0, 0, 40, 15);
+    allBudgeLabel.backgroundColor = app.naviBarColor;
+    allBudgeLabel.textAlignment = NSTextAlignmentCenter;
+    [allBudge addSubview:allBudgeLabel];
+    [scrollView insertSubview:allBudge atIndex:3];
     
     UILabel *allTagLabel = [[UILabel alloc] initWithFrame:CGRectMake(x, y + 90, 90, 20)];
     allTagLabel.textColor = [UIColor blueColor];
@@ -172,6 +183,16 @@
         unTagImageView.frame = CGRectMake(x, y, 90, 90);
         [scrollView insertSubview:unTagImageView atIndex:2-i];
     }
+    UIView *unTagBudge = [[UIView alloc] init];
+    unTagBudge.frame = CGRectMake(x, y, 40, 15);
+    UILabel *unTagBudgeLabel = [[UILabel alloc] init];
+    unTagBudgeLabel.text = [NSString stringWithFormat:@"%d", [unTagImages count]];
+    unTagBudgeLabel.textColor = [UIColor whiteColor];
+    unTagBudgeLabel.frame = CGRectMake(0, 0, 40, 15);
+    unTagBudgeLabel.backgroundColor = app.naviBarColor;
+    unTagBudgeLabel.textAlignment = NSTextAlignmentCenter;
+    [unTagBudge addSubview:unTagBudgeLabel];
+    [scrollView insertSubview:unTagBudge atIndex:3];
         
     UILabel *unTagLabel = [[UILabel alloc] initWithFrame:CGRectMake(x, y + 90, 90, 20)];
     unTagLabel.textColor = [UIColor blueColor];
@@ -231,6 +252,17 @@
         
             [scrollView insertSubview:imageView atIndex:2-i];
         }
+        UIView *tagBudge = [[UIView alloc] init];
+        tagBudge.frame = CGRectMake(x, y, 40, 15);
+        UILabel *tagBudgeLabel = [[UILabel alloc] init];
+        tagBudgeLabel.text = [NSString stringWithFormat:@"%d", [tagImages count]];
+        tagBudgeLabel.textColor = [UIColor whiteColor];
+        tagBudgeLabel.frame = CGRectMake(0, 0, 40, 15);
+        tagBudgeLabel.backgroundColor = app.naviBarColor;
+        tagBudgeLabel.textAlignment = NSTextAlignmentCenter;
+        [tagBudge addSubview:tagBudgeLabel];
+        [scrollView insertSubview:tagBudge atIndex:3];
+        
         [imageView addGestureRecognizer:singleTap2];
         
         UILabel *tagLabel = [[UILabel alloc] initWithFrame:CGRectMake(x, y + 90, 90, 20)];
