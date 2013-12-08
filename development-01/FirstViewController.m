@@ -12,6 +12,7 @@
 #import "Common.h"
 #import "ScrollView.h"
 #import "ImageListViewController.h"
+#import "AppDelegate.h"
 
 @interface FirstViewController ()
 - (void) showImageListModal:(UITapGestureRecognizer*)gesture;
@@ -26,7 +27,7 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
-    
+ 
     Common *cm = [[Common alloc] init];
     [cm databaseInitializer];
     [cm filesystemInitializer];
@@ -51,6 +52,7 @@
         [view removeFromSuperview];
     }
     [super viewWillAppear:animated];
+    [self setNavigationBar];
     [self showTagImageList];
     //bar表示
     progressView = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleBar];
@@ -66,9 +68,13 @@
 
 
 - (void)showTagImageList {
+    AppDelegate *app =  [[UIApplication sharedApplication] delegate];
     // Create scrollView
     ScrollView *scrollView = [[ScrollView alloc] init];
-    scrollView.frame = self.view.bounds;
+    CGRect srect = self.view.frame;
+    srect.origin.y = app.naviBarHeight;
+    scrollView.frame = srect;
+    
 
     // get all taged id sorted by saved_id
     // tagId = [tag_id, created_at]
@@ -363,6 +369,26 @@
         progressView.hidden = YES;
     }
     [progressView setProgress:number.floatValue animated:YES];
+}
+
+- (void)setNavigationBar {
+    AppDelegate *app =  [[UIApplication sharedApplication] delegate];
+    UINavigationBar * navigationBar = [[UINavigationBar alloc] initWithFrame: CGRectMake(0, 0, self.view.bounds.size.width, app.naviBarHeight)];
+
+
+    // ナビゲーションアイテムを生成
+    UINavigationItem* title = [[UINavigationItem alloc] initWithTitle:@"Babyry"];
+    [navigationBar pushNavigationItem:title animated:YES];
+
+    navigationBar.barTintColor = app.naviBarColor;
+    [UINavigationBar appearance].titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
+
+    UIImage *naviImage = [[UIImage imageNamed:@"appicon.png"] stretchableImageWithLeftCapWidth:0 topCapHeight:1];
+    UIImageView *naviImageView = [[UIImageView alloc] initWithImage:naviImage];
+    naviImageView.frame = CGRectMake(80, 5, app.naviBarHeight*0.8, app.naviBarHeight*0.8);
+    [navigationBar insertSubview:naviImageView atIndex:10];
+
+    [self.view addSubview:navigationBar];
 }
 
 @end

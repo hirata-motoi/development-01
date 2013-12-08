@@ -42,6 +42,7 @@
 		84D8086B18421E5300C63B87 /* ImageSync.m in Sources */ = {isa = PBXBuildFile; fileRef = 84D8086A18421E5300C63B87 /* ImageSync.m */; };
 		8871249D1850EC0C00550DEF /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 8871249C1850EC0C00550DEF /* icon.png */; };
 		887124A6185417CC00550DEF /* Session.m in Sources */ = {isa = PBXBuildFile; fileRef = 887124A5185417CC00550DEF /* Session.m */; };
+		887124A81854D56E00550DEF /* appicon.png in Resources */ = {isa = PBXBuildFile; fileRef = 887124A71854D56E00550DEF /* appicon.png */; };
 		888DA2731849BC1700AA1D4F /* ShareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 888DA2711849BC1700AA1D4F /* ShareViewController.m */; };
 		888DA2781849BD9E00AA1D4F /* SettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 888DA2761849BD9E00AA1D4F /* SettingViewController.m */; };
 /* End PBXBuildFile section */
@@ -115,6 +116,7 @@
 		8871249C1850EC0C00550DEF /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		887124A4185417CC00550DEF /* Session.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Session.h; sourceTree = "<group>"; };
 		887124A5185417CC00550DEF /* Session.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Session.m; sourceTree = "<group>"; };
+		887124A71854D56E00550DEF /* appicon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = appicon.png; sourceTree = "<group>"; };
 		888DA2701849BC1700AA1D4F /* ShareViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShareViewController.h; sourceTree = "<group>"; };
 		888DA2711849BC1700AA1D4F /* ShareViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShareViewController.m; sourceTree = "<group>"; };
 		888DA2751849BD9E00AA1D4F /* SettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingViewController.h; sourceTree = "<group>"; };
@@ -282,6 +284,7 @@
 		8871249B1850EBF900550DEF /* image */ = {
 			isa = PBXGroup;
 			children = (
+				887124A71854D56E00550DEF /* appicon.png */,
 				8871249C1850EC0C00550DEF /* icon.png */,
 			);
 			name = image;
@@ -366,6 +369,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				887124A81854D56E00550DEF /* appicon.png in Resources */,
 				8871249D1850EC0C00550DEF /* icon.png in Resources */,
 				8452A8C0183A55370016EA3F /* Images.xcassets in Resources */,
 				8452A8AF183A55370016EA3F /* InfoPlist.strings in Resources */,

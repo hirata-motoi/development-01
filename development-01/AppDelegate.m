@@ -10,8 +10,13 @@
 
 @implementation AppDelegate
 
+@synthesize naviBarHeight;
+@synthesize naviBarColor;
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    naviBarHeight = 44;
+    naviBarColor = [UIColor orangeColor];
     // Override point for customization after application launch.
     return YES;
 }
