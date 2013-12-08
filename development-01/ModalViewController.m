@@ -26,6 +26,7 @@
 @synthesize attachedTagLabelsForImageId;
 @synthesize existTagsDictionary;
 @synthesize existTagsArray;
+@synthesize currentPageNo;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -35,15 +36,15 @@
     return self;
 }
 
-- (void) viewDidDisappear:(BOOL)animated {
-    [UIApplication sharedApplication].statusBarHidden = NO;
+- (void) viewDidAppear:(BOOL)animated {
+    [self refreshCommentView];
 }
 
 - (void)viewDidLoad
 {
     NSLog(@"viewDidLoad");
     [super viewDidLoad];
-    
+
     [UIApplication sharedApplication].statusBarHidden = YES;
     
     self.addedImagesWithIndex = [[NSMutableDictionary alloc]init];
@@ -79,11 +80,7 @@
         [existTagsDictionary setObject:tag_name forKey:[tag_id stringValue]];
     }
     [da close];
-	// Do any additional setup after loading the view.
-//    UIBarButtonItem *bbDone = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(closeView)];
-//    
-//    self.navigationItem.rightBarButtonItem = bbDone;
-//    
+
     //scrollviewのデリゲート設定
     HorizontalScrollView *scrollView = [[HorizontalScrollView alloc]init];
     scrollView.delegate = self;
@@ -161,13 +158,19 @@
          
     if (scrollViewObject != nil) {
         //現在のページ番号を調べる
-        CGFloat pageWidth = scrollViewObject.frame.size.width;
-        int pageNo = floor((scrollViewObject.contentOffset.x + pageWidth/2)/pageWidth);
+        int pageNo = [self getCurrentImageIndex]; 
         
         if (pageNo < 0 || pageNo > imageIds.count - 1) {
             return;
         }
-    
+
+        //ページが変わってなかったら何もしない
+        if (pageNo == currentPageNo) {
+            return;
+        }
+
+        currentPageNo = pageNo;
+
         //前後の写真を読み込む
         int beforeNo = pageNo - 1;
         int afterNo  = pageNo + 1;
@@ -293,7 +296,7 @@
     NSNumber * tag_id_number = [NSNumber numberWithInt:tag_id];
     
     // image_id
-    NSNumber * image_index = [NSNumber numberWithInt:[self getCurrentImageIndex]];
+    NSNumber * image_index = [NSNumber numberWithInt:currentPageNo];
     NSNumber * image_id = [imageIds objectAtIndex:[image_index integerValue]];
     
     // 既存のタグ情報
@@ -601,7 +604,7 @@
     NSNumber * tag_id_number = [NSNumber numberWithInt:tag_id];
     
     //image_id
-    NSNumber * image_index = [NSNumber numberWithInt:[self getCurrentImageIndex]];
+    NSNumber * image_index = [NSNumber numberWithInt:currentPageNo];
     NSNumber * image_id = [imageIds objectAtIndex:[image_index integerValue]];
     
     NSLog(@"switchShareLabel tag_id:%@ image_id:%@", tag_id_number, image_id);
@@ -828,6 +831,12 @@
     return textView;
 }
 
+- (void)refreshCommentView {
+    NSNumber * image_index = [NSNumber numberWithInt:currentPageNo];
+    NSNumber * image_id = [imageIds objectAtIndex:[image_index integerValue]];
+    [self replaceComment:image_id];
+}
+
 - (void)commentTapped_old:(UITapGestureRecognizer *) recognizer{
     UITextView * view = recognizer.view;
     NSLog(@"comentTapped comment:%@", view.text);
@@ -860,7 +869,7 @@
     [commentEditViewController setComment:text];
     
     // image_id
-    NSNumber * image_index = [NSNumber numberWithInt:[self getCurrentImageIndex]];
+    NSNumber * image_index = [NSNumber numberWithInt:currentPageNo];
     NSNumber * image_id = [imageIds objectAtIndex:[image_index integerValue]];
     
     [commentEditViewController setImageId:image_id];
@@ -884,6 +893,9 @@
         comment   = [results stringForColumn:@"comment"];
     }
     [da close];
+    if (comment.length < 1) {
+        comment = @"タップしてコメントを編集";
+    }
     commentViewObject.text = comment;
 }
 

@@ -344,13 +344,9 @@
     
     ImageListViewController *viewController = [[ImageListViewController alloc]init];
     NSNumber *tag_id_number = [NSNumber numberWithInt:tag_id];
-    [viewController setImagesByTagId:tag_id_number];
+    [viewController setTagId:tag_id_number];
     
-    UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:viewController];
-    //navigationController.navigationBar.translucent = YES;
-    navigationController.navigationBar.tintColor = [UIColor blackColor];
-    
-    [self presentModalViewController:navigationController animated:YES];
+    [self presentModalViewController:viewController animated:YES];
 }
 
 - (void)respondTest:(NSNotification *)aNotification

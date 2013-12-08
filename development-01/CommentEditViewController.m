@@ -8,6 +8,7 @@
 
 #import "CommentEditViewController.h"
 #import "DA.h"
+#import <QuartzCore/QuartzCore.h>
 @interface CommentEditViewController ()
 
 @end
@@ -45,18 +46,22 @@
     commentEditScrollView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.4];
 
     CGRect textRect = rect;
-    textRect.size.width  = rect.size.width / 1.5;
-    textRect.size.height = rect.size.width / 2;
-    textRect.origin.y = (rect.size.height - textRect.size.height) / 2;
+    textRect.size.width  = rect.size.width / 1.2;
+    textRect.size.height = rect.size.width / 2.3;
+    textRect.origin.x = (rect.size.width - textRect.size.width) / 2;
+    textRect.origin.y = 10 + 44; // 44 is the height of navigation bar
     UITextView * textView = [[UITextView alloc]initWithFrame:textRect];
     textView.text = preservedComment;
     textView.editable = YES;
     textView.textAlignment = UITextAlignmentLeft;
     [textView becomeFirstResponder];
+    textView.layer.cornerRadius = 5;
+    textView.clipsToBounds = true;
 
     //ポインタを保存
     textViewObject = textView;
 
+    
 
     [commentEditScrollView addSubview:textView];
     NSLog(@"attache commentEditScrollView %@", commentEditScrollView);

@@ -22,6 +22,7 @@
 @synthesize scrollPosition;
 @synthesize scrolledPage;
 @synthesize scrollView;
+@synthesize tagId;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -36,13 +37,13 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
-    UIBarButtonItem *bbDone = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(closeView)];
-    
-    self.navigationItem.rightBarButtonItem = bbDone;
+    [self setImagesByTagId:tagId];
+    [self setNavigationBar]; 
 }
 
+
 - (void)viewWillAppear:(BOOL)animated {
-    self.navigationController.navigationBar.hidden = NO;
+     [UIApplication sharedApplication].statusBarHidden = NO;
 }
 
 - (void)didReceiveMemoryWarning
@@ -60,6 +61,10 @@
     
 - (void)closeView{
     [self dismissViewControllerAnimated:YES completion:NULL];
+}
+
+- (void)setTagId:(NSNumber *) tag_id {
+    tagId = tag_id;
 }
 
 -(void)setImagesByTagId:(NSNumber*)tag_id {
@@ -93,7 +98,7 @@
         
         int x,y;
         x = ((count % HORIZONTAL_ROWS) * 100) + 10;
-        y = ((count / HORIZONTAL_ROWS) * 100) + 10;
+        y = ((count / HORIZONTAL_ROWS) * 100) + 10 + 44;
         
         imageView.frame = CGRectMake(x, y, 90, 90);
         
@@ -213,9 +218,7 @@
             index = i;
         }
     }
-    NSLog(@"index @showZoomImage : %d", index);
     NSNumber * index_number = [NSNumber numberWithInt:index];
-    NSLog(@"index_number : %@", index_number);
     ModalViewController *modalViewController = [[ModalViewController alloc] init];
     [modalViewController setImageInfo:image_id withIndex:index_number withImageIds:image_ids];
     
@@ -228,5 +231,25 @@
     [self presentModalViewController:navigationController animated:YES];
 }
 
+- (void)setNavigationBar {
+    UINavigationBar * navigationBar = [[UINavigationBar alloc] initWithFrame: CGRectMake(0, 0, self.view.bounds.size.width, 44)];
+
+
+    // ナビゲーションアイテムを生成
+    UINavigationItem* title = [[UINavigationItem alloc] initWithTitle:@""];
+    
+    // closeボタンを生成
+    UIBarButtonItem *closeButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(closeView)];
+    // ナビゲーションアイテムの右側に戻るボタンを設置
+    title.rightBarButtonItem = closeButton;
+    
+    [navigationBar pushNavigationItem:title animated:YES];
+
+    navigationBar.tintColor = [UIColor blackColor];
+    navigationBar.alpha = 0.4f;
+    navigationBar.translucent = YES;
+
+    [self.view addSubview:navigationBar];
+}
 
 @end
