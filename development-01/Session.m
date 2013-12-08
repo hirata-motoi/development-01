@@ -26,25 +26,47 @@
     
     int offset_button = loginView.frame.size.height / 5;
     
+    // username
+    UILabel *nameLabel = [[UILabel alloc] init];
+    nameLabel.text = @"ユーザー名";
+    nameLabel.textAlignment = NSTextAlignmentCenter;
+    nameLabel.frame = CGRectMake(10, offset_button*1, loginView.frame.size.width/2 - 10, 30);
     UITextField *name = [[UITextField alloc] init];
-    name.frame = CGRectMake(0, offset_button*2, loginView.frame.size.width/2, 30);
+    name.frame = CGRectMake(loginView.frame.size.width/2, offset_button*1, loginView.frame.size.width/2 - 10, 30);
     name.borderStyle = UITextBorderStyleRoundedRect;
 
+    //password
+    UILabel *passwordLabel = [[UILabel alloc] init];
+    passwordLabel.text = @"パスワード";
+    passwordLabel.textAlignment = NSTextAlignmentCenter;
+    passwordLabel.frame = CGRectMake(10, offset_button*2, loginView.frame.size.width/2 - 10, 30);
     UITextField *password = [[UITextField alloc] init];
-    password.frame = CGRectMake(0, offset_button*3, loginView.frame.size.width/2, 30);
+    password.frame = CGRectMake(loginView.frame.size.width/2, offset_button*2, loginView.frame.size.width/2 - 10, 30);
     password.borderStyle = UITextBorderStyleRoundedRect;
     
+    //login button
+    UIButton *loginButtonYes = [[UIButton alloc] init];
+    [loginButtonYes.titleLabel setFont:[UIFont systemFontOfSize:24]];
+    loginButtonYes.frame = CGRectMake(0, offset_button*3, loginView.frame.size.width, 30);
+    [loginButtonYes setTitleColor:[UIColor colorWithRed:0.95 green:0.8 blue:0.5 alpha:1.0] forState:UIControlStateNormal];
+    [loginButtonYes setTitle:@"ログインする" forState:UIControlStateNormal];
+    [loginButtonYes addTarget:self action:@selector(loginYes:) forControlEvents:UIControlEventTouchUpInside];
+    
+    //cancel button
     UIButton *loginButtonNo = [[UIButton alloc] init];
     [loginButtonNo.titleLabel setFont:[UIFont systemFontOfSize:24]];
     loginButtonNo.frame = CGRectMake(0, offset_button*4, loginView.frame.size.width, 30);
     [loginButtonNo setTitleColor:[UIColor colorWithRed:0.95 green:0.8 blue:0.5 alpha:1.0] forState:UIControlStateNormal];
     [loginButtonNo setTitle:@"キャンセル" forState:UIControlStateNormal];
-    [loginButtonNo addTarget:self action:@selector(logoutNo:) forControlEvents:UIControlEventTouchUpInside];
+    [loginButtonNo addTarget:self action:@selector(loginNo:) forControlEvents:UIControlEventTouchUpInside];
 
     loginView.tag = 999;
     [loginView addSubview:name];
     [loginView addSubview:password];
+    [loginView addSubview:loginButtonYes];
     [loginView addSubview:loginButtonNo];
+    [loginView addSubview:nameLabel];
+    [loginView addSubview:passwordLabel];
 }
 
 -(void)showLogoutView:(UIView*)view
