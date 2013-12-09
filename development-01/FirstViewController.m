@@ -117,7 +117,7 @@
     UIImage *topImage = [[UIImage alloc] init];
     while ([results next]) {
         NSNumber *topImageId = [NSNumber numberWithInt:[results intForColumn:@"image_id"]];
-        NSString *topImagePath = [cm getImagePathThumbnail:(NSNumber*)topImageId];
+        NSString *topImagePath = [cm getImagePath:(NSNumber*)topImageId];
         topImage = [UIImage imageWithContentsOfFile:topImagePath];
     }
     [da close];
