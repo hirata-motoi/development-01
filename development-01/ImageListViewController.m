@@ -53,9 +53,11 @@
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)sender {
+    return;
     scrollPosition = sender.contentOffset.y;
-    if (scrollPosition > (70 * 10 * scrolledPage - self.view.bounds.size.height)) {
-        [self addImagesByScroll];
+    if (scrollPosition > (74 * 10 * scrolledPage - self.view.bounds.size.height)) {
+        //[self addImagesByScroll];
+        [NSThread detachNewThreadSelector:@selector(afterViewDidAppear:) toTarget:self withObject:nil];
     }
 }
     
@@ -84,33 +86,35 @@
     
     // imageViewを作ってscrollViewにはりつけ
     int count = 0;
-    // Should be global params
-    int HORIZONTAL_ROWS = 4;
-    for ( NSDictionary *unit in imageInfo) {
-        if (count > (HORIZONTAL_ROWS*10 - 1)) {
-            count++;
-            continue;
-        }
-        NSString *image_path = [unit objectForKey:@"image_path"];
-        UIImage *image = [UIImage imageWithContentsOfFile:image_path];
-        UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
-        imageView.tag = [[unit objectForKey:@"image_id"] intValue];
-        imageView.userInteractionEnabled = YES;
-        
-        int x,y;
-        x = ((count % HORIZONTAL_ROWS) * 78) + 4;
-        y = ((count / HORIZONTAL_ROWS) * 78) + 4 + 44;
-        
-        imageView.frame = CGRectMake(x, y, 74, 74);
-        
-        [scrollView insertSubview:imageView atIndex:[self.view.subviews count]];
-        count++;
-    }
+//    // Should be global params
+//    int HORIZONTAL_ROWS = 4;
+//    for ( NSDictionary *unit in imageInfo) {
+//        if (count > (HORIZONTAL_ROWS*10 - 1)) {
+//            count++;
+//            continue;
+//        }
+//        NSString *image_path = [unit objectForKey:@"image_path"];
+//        UIImage *image = [UIImage imageWithContentsOfFile:image_path];
+//        UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
+//        imageView.tag = [[unit objectForKey:@"image_id"] intValue];
+//        imageView.userInteractionEnabled = YES;
+//        
+//        int x,y;
+//        x = ((count % HORIZONTAL_ROWS) * 78) + 4;
+//        y = ((count / HORIZONTAL_ROWS) * 78) + 4 + 44;
+//        
+//        imageView.frame = CGRectMake(x, y, 74, 74);
+//        
+//        [scrollView insertSubview:imageView atIndex:[self.view.subviews count]];
+//        count++;
+//    }
     scrolledPage++;
     // viewにscrollViewをaddする
+    count = [imageInfo count];
     NSInteger heightCount = floor(count / 4) + 1;
     scrollView.contentSize = CGSizeMake(320, (78 * heightCount + 44));
     [self.view addSubview:scrollView];
+    [NSThread detachNewThreadSelector:@selector(afterViewDidAppear:) toTarget:self withObject:nil];
 }
 
 -(void)addImagesByScroll{
@@ -257,6 +261,49 @@
     navigationBar.translucent = YES;
 
     [self.view addSubview:navigationBar];
+}
+
+- (void) afterViewDidAppear:(id)arg { 
+//    for(NSUInteger i = 0; i < [self subViewCount]; ++i) {
+//        UIView *subView = [self subViewAt:i];
+//        if(imageView) {
+//            [self performSelectorOnMainThread:@selector(addView:) withObject:subView waitUntilDone:NO];
+//        }
+//    }
+    int HORIZONTAL_ROWS = 4;
+    int count = 0;
+    for ( NSDictionary *unit in imageInfo) {
+//        if (count <= (HORIZONTAL_ROWS*10*scrolledPage - 1) || count > (HORIZONTAL_ROWS*10*(scrolledPage+1) - 1)) {
+//            count++;
+//            continue;
+//        }
+        NSString *image_path = [unit objectForKey:@"image_path"];
+        UIImage *image = [UIImage imageWithContentsOfFile:image_path];
+        CGImageRef imageRef = [image CGImage];
+        UIGraphicsBeginImageContext(CGSizeMake(CGImageGetWidth(imageRef), CGImageGetHeight(imageRef)));
+        [image drawAtPoint:CGPointMake(0,0)];
+        image = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+
+        UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
+        imageView.tag = [[unit objectForKey:@"image_id"] intValue];
+        imageView.userInteractionEnabled = YES;
+        
+        int x,y;
+        x = ((count % HORIZONTAL_ROWS) * 78) + 4;
+        y = ((count / HORIZONTAL_ROWS) * 78) + 4 + 44;
+        
+        imageView.frame = CGRectMake(x, y, 74, 74);
+        
+        [scrollView insertSubview:imageView atIndex:[self.view.subviews count]];
+        [self performSelectorOnMainThread:@selector(addView:) withObject:imageView waitUntilDone:NO];
+        count++;
+    }
+    scrolledPage++;
+}
+
+- (void)addView:(id)subView {
+    [scrollView addSubview:subView];
 }
 
 @end
