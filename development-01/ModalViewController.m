@@ -724,8 +724,8 @@
     TagScrollView *tagScrollView = [[TagScrollView alloc]init];
     tagScrollView.delegate = self;
     //scrollviewの各種設定
-    tagScrollView.scrollEnabled = NO;
-    tagScrollView.pagingEnabled = YES;
+    tagScrollView.scrollEnabled = YES;
+    tagScrollView.pagingEnabled = NO;
     tagScrollView.showsHorizontalScrollIndicator = NO;
     tagScrollView.showsVerticalScrollIndicator = NO;
     tagScrollView.backgroundColor = [UIColor clearColor];
