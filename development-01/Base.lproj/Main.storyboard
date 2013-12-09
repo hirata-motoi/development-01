@@ -18,7 +18,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Home" image="first" id="u1e-5L-l1D"/>
+                    <tabBarItem key="tabBarItem" title="Home" image="homeicon.png" id="u1e-5L-l1D"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Qh2-T1-AhA" sceneMemberID="firstResponder"/>
             </objects>
@@ -29,7 +29,7 @@
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3o1-t6-xlF" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController title="Share" id="kPO-wt-oo6" customClass="ShareViewController" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Share" image="second" id="fVP-8F-fo1"/>
+                    <tabBarItem key="tabBarItem" title="Share" image="shareicon.png" id="fVP-8F-fo1"/>
                 </viewController>
             </objects>
             <point key="canvasLocation" x="566" y="152"/>
@@ -38,7 +38,7 @@
         <scene sceneID="Okc-rY-Dhy">
             <objects>
                 <viewController title="Setting" id="jgD-D3-TEA" customClass="SettingViewController" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Setting" image="first" id="KbO-Ak-Tcb"/>
+                    <tabBarItem key="tabBarItem" title="Setting" image="settingicon.png" id="KbO-Ak-Tcb"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eQ7-J9-Blr" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -66,8 +66,9 @@
         </scene>
     </scenes>
     <resources>
-        <image name="first" width="30" height="30"/>
-        <image name="second" width="30" height="30"/>
+        <image name="homeicon.png" width="24" height="24"/>
+        <image name="settingicon.png" width="24" height="24"/>
+        <image name="shareicon.png" width="24" height="24"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
