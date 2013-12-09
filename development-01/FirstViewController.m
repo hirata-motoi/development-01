@@ -105,10 +105,28 @@
     eachTagImageInfo = favoriteTagImageInfo;
     
     // imageViewを作ってscrollViewにはりつけ
-    int count = 0;
+    
+    // 大きくtagが一番ついてる写真をTopにつけてみる facebookみたいなイメージ
     Common *cm = [[Common alloc] init];
-    int x,y;
     DA *da = [DA da];
+    [da open];
+    
+    FMResultSet *results;
+    NSString *stmt = @"select count(*) as c, image_id from tag_map group by image_id order by c desc limit 1;";
+    results = [da executeQuery:stmt];
+    UIImage *topImage = [[UIImage alloc] init];
+    while ([results next]) {
+        NSNumber *topImageId = [NSNumber numberWithInt:[results intForColumn:@"image_id"]];
+        NSString *topImagePath = [cm getImagePathThumbnail:(NSNumber*)topImageId];
+        topImage = [UIImage imageWithContentsOfFile:topImagePath];
+    }
+    [da close];
+    UIImageView *topImageView = [[UIImageView alloc] initWithImage:topImage];
+    topImageView.frame = CGRectMake(5, 5, self.view.frame.size.width-10, 195);
+    [scrollView addSubview:topImageView];
+    
+    int count = 0;
+    int x,y;
     
     // ALL
     NSArray *allImages = [cm getImagesByTag:[NSNumber numberWithInt:-1]];
@@ -126,7 +144,7 @@
         allImageView.tag = -1; // -1:all  -2:untagged
         allImageView.userInteractionEnabled = YES;
         x = ((count % 3) * 105) + i*5 + 5;
-        y = ((count / 3) * 115) + i*5 + 5;
+        y = ((count / 3) * 125) + i*5 + 5 + 200;
         allImageView.frame = CGRectMake(x, y, 90, 90);
         [scrollView insertSubview:allImageView atIndex:2-i];
     }
@@ -142,9 +160,10 @@
     [allBudge addSubview:allBudgeLabel];
     [scrollView insertSubview:allBudge atIndex:3];
     
-    UILabel *allTagLabel = [[UILabel alloc] initWithFrame:CGRectMake(x, y + 90, 90, 20)];
-    allTagLabel.textColor = [UIColor blueColor];
-    allTagLabel.font = [UIFont fontWithName:@"AppleGothic" size:12];
+    UILabel *allTagLabel = [[UILabel alloc] initWithFrame:CGRectMake(x, y + 95, 90, 30)];
+    allTagLabel.textColor = [UIColor colorWithRed:0.3 green:0.5 blue:1.0 alpha:1.0];
+    allTagLabel.backgroundColor = [UIColor clearColor];
+    allTagLabel.font = [UIFont fontWithName:@"AppleGothic" size:20];
     allTagLabel.textAlignment = NSTextAlignmentCenter;
     allTagLabel.text = @"all";
     allTagLabel.tag = -1; // -1:all  -2:untagged
@@ -179,7 +198,7 @@
         unTagImageView.tag = -2;// -1:all  -2:untagged
         unTagImageView.userInteractionEnabled = YES;
         x = ((count % 3) * 105) + i*5 + 5;
-        y = ((count / 3) * 115) + i*5 + 5;
+        y = ((count / 3) * 125) + i*5 + 5 + 200;
         unTagImageView.frame = CGRectMake(x, y, 90, 90);
         [scrollView insertSubview:unTagImageView atIndex:2-i];
     }
@@ -194,9 +213,10 @@
     [unTagBudge addSubview:unTagBudgeLabel];
     [scrollView insertSubview:unTagBudge atIndex:3];
         
-    UILabel *unTagLabel = [[UILabel alloc] initWithFrame:CGRectMake(x, y + 90, 90, 20)];
-    unTagLabel.textColor = [UIColor blueColor];
-    unTagLabel.font = [UIFont fontWithName:@"AppleGothic" size:12];
+    UILabel *unTagLabel = [[UILabel alloc] initWithFrame:CGRectMake(x, y + 95, 90, 30)];
+    unTagLabel.textColor = [UIColor colorWithRed:0.3 green:0.5 blue:1.0 alpha:1.0];
+    unTagLabel.backgroundColor = [UIColor clearColor];
+    unTagLabel.font = [UIFont fontWithName:@"AppleGothic" size:20];
     unTagLabel.textAlignment = NSTextAlignmentCenter;
     unTagLabel.text = @"untagged";
     unTagLabel.tag = -2;// -1:all  -2:untagged
@@ -246,7 +266,7 @@
             imageView.tag = [[unit objectForKey:@"image_id"] intValue];
             imageView.userInteractionEnabled = YES;
             x = ((count % 3) * 105) + 5*i + 5;
-            y = ((count / 3) * 115) + 5*i + 5;
+            y = ((count / 3) * 125) + 5*i + 5 + 200;
             imageView.frame = CGRectMake(x, y, 90, 90);
             imageView.tag = [tag_id intValue];
         
@@ -265,9 +285,10 @@
         
         [imageView addGestureRecognizer:singleTap2];
         
-        UILabel *tagLabel = [[UILabel alloc] initWithFrame:CGRectMake(x, y + 90, 90, 20)];
-        tagLabel.textColor = [UIColor blueColor];
-        tagLabel.font = [UIFont fontWithName:@"AppleGothic" size:12];
+        UILabel *tagLabel = [[UILabel alloc] initWithFrame:CGRectMake(x, y + 95, 90, 30)];
+        tagLabel.textColor = [UIColor colorWithRed:0.3 green:0.5 blue:1.0 alpha:1.0];
+        tagLabel.backgroundColor = [UIColor clearColor];
+        tagLabel.font = [UIFont fontWithName:@"AppleGothic" size:20];
         tagLabel.textAlignment = NSTextAlignmentCenter;
         tagLabel.tag = [tag_id intValue];
         tagLabel.userInteractionEnabled =YES;
