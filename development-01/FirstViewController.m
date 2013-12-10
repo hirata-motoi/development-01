@@ -301,8 +301,14 @@
         count++;
     }
     // add scrollView
-    NSInteger heightCount = floor(count / 3) + 1;
-    scrollView.contentSize = CGSizeMake(320, (125 * heightCount) + 200 + 100);
+    NSInteger heightCount = floor((count - 1)/ 3) + 1;
+    NSString *ver = [[UIDevice currentDevice] systemVersion];
+    int ver_int = [ver intValue];
+    if (ver_int < 7) {
+        scrollView.contentSize = CGSizeMake(320, (125 * heightCount) + 200 + 50);
+    } else {
+        scrollView.contentSize = CGSizeMake(320, (125 * heightCount) + 200 + 100);
+    }
     [self.view addSubview:scrollView];
 }
 
