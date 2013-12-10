@@ -302,7 +302,7 @@
     }
     // add scrollView
     NSInteger heightCount = floor(count / 3) + 1;
-    scrollView.contentSize = CGSizeMake(320, (120 * heightCount));
+    scrollView.contentSize = CGSizeMake(320, (125 * heightCount) + 200 + 100);
     [self.view addSubview:scrollView];
 }
 
