@@ -9,6 +9,7 @@
 #import "SettingViewController.h"
 #import "ScrollView.h"
 #import "Session.h"
+#import "AppDelegate.h"
 
 @interface SettingViewController ()
 
@@ -45,16 +46,18 @@
         [view removeFromSuperview];
     }
     [self showSettingMenu];
+    [self setNavigationBar];
 }
 
 -(void)showSettingMenu
 {
+    AppDelegate *app =  [[UIApplication sharedApplication] delegate];
     ScrollView *scrollView = [[ScrollView alloc] init];
     scrollView.frame = self.view.bounds;
     scrollView.backgroundColor = [UIColor colorWithRed:0.95 green:0.8 blue:0.5 alpha:1.0];
     
     int settingNum = 6;
-    int offset = 50;
+    int offset = app.naviBarHeight;
     int width = (scrollView.frame.size.width-3)/2;
     for(int i = 0; i < settingNum; i++) {
         UIView *view= [[UIView alloc] init];
@@ -98,6 +101,28 @@
 {
     session = [[Session alloc] init];
     [session showLogoutView:self.view];
+}
+
+- (void)setNavigationBar {
+    AppDelegate *app =  [[UIApplication sharedApplication] delegate];
+    UINavigationBar * navigationBar = [[UINavigationBar alloc] initWithFrame: CGRectMake(0, 0, self.view.bounds.size.width, app.naviBarHeight)];
+
+    // ナビゲーションアイテムを生成
+    UINavigationItem* title = [[UINavigationItem alloc] initWithTitle:@"Setting"];
+    [navigationBar pushNavigationItem:title animated:YES];
+
+    [UINavigationBar appearance].titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
+
+    NSString *ver = [[UIDevice currentDevice] systemVersion];
+    int ver_int = [ver intValue];
+
+    if (ver_int < 7) {
+        [navigationBar setTintColor:app.naviBarColor];
+    } else {
+        navigationBar.barTintColor = app.naviBarColor;
+    }
+
+    [self.view addSubview:navigationBar];
 }
 
 @end

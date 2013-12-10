@@ -11,6 +11,9 @@
 @interface Session : NSObject
 
 @property UIView *baseView;
+@property(nonatomic, strong) UITapGestureRecognizer *singleTap;
+@property UITextField *name;
+@property UITextField *password;
 
 -(void)showLoginView:(UIView*)view;
 -(void)showLogoutView:(UIView*)view;
