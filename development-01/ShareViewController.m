@@ -44,6 +44,12 @@
     for (UIView *view in [self.view subviews]) {
         [view removeFromSuperview];
     }
+    
+    UIImage *backImage = [UIImage imageNamed:@"line_like_image.png"];
+    UIImageView *backImageView = [[UIImageView alloc] initWithImage:backImage];
+    backImageView.frame = self.view.frame;
+    [self.view addSubview:backImageView];
+
     [self showSareImageList];
     [self setNavigationBar];
 }
@@ -58,11 +64,11 @@
     CGRect srect = self.view.frame;
     srect.origin.y = app.naviBarHeight/2;// MAGIC NUMBER 2!
     scrollView.frame = srect;
-    scrollView.backgroundColor = [UIColor blackColor];
+//    scrollView.backgroundColor = [UIColor blackColor];
 
     CGRect frameSize = [[UIScreen mainScreen] applicationFrame];
     self.tableView = [[UITableView alloc] initWithFrame:scrollView.frame style:UITableViewStylePlain];
-    self.tableView.backgroundColor = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.0];
+    self.tableView.backgroundColor = [UIColor colorWithRed:0.0 green:1.0 blue:1.0 alpha:0.0];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
