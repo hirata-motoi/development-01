@@ -97,7 +97,8 @@
     scrollView.pagingEnabled = YES;
     scrollView.showsHorizontalScrollIndicator = NO;
     scrollView.showsVerticalScrollIndicator = NO;
-    scrollView.backgroundColor = [UIColor colorWithRed:0.95 green:0.95 blue:0.7 alpha:1.0];
+    UIImage * backgroundImage = [UIImage imageNamed:@"blackStripe.jpg"];
+    scrollView.backgroundColor = [UIColor colorWithPatternImage:backgroundImage];
     scrollView.userInteractionEnabled = YES;
     
     //1ページのフレームサイズ

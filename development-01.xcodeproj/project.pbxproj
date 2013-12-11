@@ -14,6 +14,7 @@
 		84207BC51846655B00B1D6DC /* ModalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84207BC41846655B00B1D6DC /* ModalViewController.m */; };
 		8448BF261858C82500E97E75 /* labelBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 8448BF251858C82500E97E75 /* labelBackground.png */; };
 		8448BF281858CA7A00E97E75 /* shareLabelBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 8448BF271858CA7A00E97E75 /* shareLabelBackground.png */; };
+		8448BF2C1858CF0700E97E75 /* blackStripe.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8448BF2A1858CF0700E97E75 /* blackStripe.jpg */; };
 		8452A8A5183A55370016EA3F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8452A8A4183A55370016EA3F /* Foundation.framework */; };
 		8452A8A7183A55370016EA3F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8452A8A6183A55370016EA3F /* CoreGraphics.framework */; };
 		8452A8A9183A55370016EA3F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8452A8A8183A55370016EA3F /* UIKit.framework */; };
@@ -75,6 +76,7 @@
 		84207BC41846655B00B1D6DC /* ModalViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ModalViewController.m; sourceTree = "<group>"; wrapsLines = 1; };
 		8448BF251858C82500E97E75 /* labelBackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = labelBackground.png; sourceTree = "<group>"; };
 		8448BF271858CA7A00E97E75 /* shareLabelBackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = shareLabelBackground.png; sourceTree = "<group>"; };
+		8448BF2A1858CF0700E97E75 /* blackStripe.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = blackStripe.jpg; sourceTree = "<group>"; };
 		8452A8A1183A55370016EA3F /* development-01.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "development-01.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8452A8A4183A55370016EA3F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		8452A8A6183A55370016EA3F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -294,6 +296,7 @@
 		8871249B1850EBF900550DEF /* image */ = {
 			isa = PBXGroup;
 			children = (
+				8448BF2A1858CF0700E97E75 /* blackStripe.jpg */,
 				8448BF271858CA7A00E97E75 /* shareLabelBackground.png */,
 				8448BF251858C82500E97E75 /* labelBackground.png */,
 				887124B318564E4200550DEF /* shareicon.png */,
@@ -386,6 +389,7 @@
 			files = (
 				887124A81854D56E00550DEF /* appicon.png in Resources */,
 				8871249D1850EC0C00550DEF /* icon.png in Resources */,
+				8448BF2C1858CF0700E97E75 /* blackStripe.jpg in Resources */,
 				887124B018564CD800550DEF /* homeicon.png in Resources */,
 				8452A8C0183A55370016EA3F /* Images.xcassets in Resources */,
 				8448BF261858C82500E97E75 /* labelBackground.png in Resources */,
