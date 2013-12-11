@@ -10,6 +10,7 @@
 #import "DA.h"
 #import "Common.h"
 #import "ScrollView.h"
+#import "AppDelegate.h"
 
 @interface ShareViewController ()
 
@@ -44,16 +45,24 @@
         [view removeFromSuperview];
     }
     [self showSareImageList];
+    [self setNavigationBar];
 }
 
 - (void)showSareImageList
 {
     [self getShareTagImages];
+
+    AppDelegate *app =  [[UIApplication sharedApplication] delegate];
+    // Create scrollView
     ScrollView *scrollView = [[ScrollView alloc] init];
-    scrollView.frame = self.view.bounds;
+    CGRect srect = self.view.frame;
+    srect.origin.y = app.naviBarHeight/2;// MAGIC NUMBER 2!
+    scrollView.frame = srect;
+    scrollView.backgroundColor = [UIColor blackColor];
+
     CGRect frameSize = [[UIScreen mainScreen] applicationFrame];
     self.tableView = [[UITableView alloc] initWithFrame:scrollView.frame style:UITableViewStylePlain];
-    self.tableView.backgroundColor = [UIColor colorWithRed:0.0 green:0.5 blue:0.7 alpha:0.7];
+    self.tableView.backgroundColor = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.0];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -77,7 +86,7 @@
 //    if (nil == cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
 //    }
-    cell.backgroundColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0];
+    cell.backgroundColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.0];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
 //    NSLog(@"index %d", indexPath.row);
 //    NSLog(@"%@", self.shareImageViewArray);
@@ -116,6 +125,28 @@
         [self.shareImageViewArray addObject:commentLabel];
     }
     [da close];
+}
+
+- (void)setNavigationBar {
+    AppDelegate *app =  [[UIApplication sharedApplication] delegate];
+    UINavigationBar * navigationBar = [[UINavigationBar alloc] initWithFrame: CGRectMake(0, 0, self.view.bounds.size.width, app.naviBarHeight)];
+
+    // ナビゲーションアイテムを生成
+    UINavigationItem* title = [[UINavigationItem alloc] initWithTitle:@"Share"];
+    [navigationBar pushNavigationItem:title animated:YES];
+
+    [UINavigationBar appearance].titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
+
+    NSString *ver = [[UIDevice currentDevice] systemVersion];
+    int ver_int = [ver intValue];
+
+    if (ver_int < 7) {
+        [navigationBar setTintColor:app.naviBarColor];
+    } else {
+        navigationBar.barTintColor = app.naviBarColor;
+    }
+
+    [self.view addSubview:navigationBar];
 }
 
 @end
