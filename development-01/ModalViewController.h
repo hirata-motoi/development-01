@@ -33,6 +33,7 @@
 @property (nonatomic,retain)NSMutableArray *existTagsArray;
 @property (nonatomic,retain)NSMutableDictionary *existTagsDictionary;
 @property (readwrite,nonatomic)int currentPageNo;
+@property (nonatomic,retain)NSDictionary *backgroundImages;
 @property Session *session;
 -(void)setImageInfo:(NSNumber*)image_id withIndex:(NSNumber*)index withImageIds:(NSArray*)image_ids;
 @end
