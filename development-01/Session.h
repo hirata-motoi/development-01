@@ -17,5 +17,6 @@
 
 -(void)showLoginView:(UIView*)view;
 -(void)showLogoutView:(UIView*)view;
+-(NSNumber*)isLogined;
 
 @end

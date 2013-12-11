@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "SettingView.h"
 #import "AttachedTagsView.h"
+#import "Session.h"
 @interface ModalViewController : UIViewController
 <
     UIScrollViewDelegate,
@@ -33,5 +34,6 @@
 @property (nonatomic,retain)NSMutableDictionary *existTagsDictionary;
 @property (readwrite,nonatomic)int currentPageNo;
 @property (nonatomic,retain)NSDictionary * colors;
+@property Session *session;
 -(void)setImageInfo:(NSNumber*)image_id withIndex:(NSNumber*)index withImageIds:(NSArray*)image_ids;
 @end
