@@ -18,7 +18,7 @@
 -(void)showLoginView:(UIView*)view
 {
     NSNumber *isLogined = [self isLogined];
-    NSLog(@"logiined : %@", isLogined);
+    NSLog(@"logined : %@", isLogined);
     self.singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onSingleTap:)];
     self.singleTap.delegate = self;
     self.singleTap.numberOfTapsRequired = 1;

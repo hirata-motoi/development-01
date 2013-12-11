@@ -14,6 +14,8 @@
 #import "FMDatabase.h"
 #import "TagScrollView.h"
 #import "CommentEditViewController.h"
+#import "Session.h"
+
 @interface ModalViewController ()
 
 
@@ -27,6 +29,7 @@
 @synthesize existTagsDictionary;
 @synthesize existTagsArray;
 @synthesize currentPageNo;
+@synthesize session;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -603,6 +606,17 @@
 }
 
 - (void)switchShareLabel:(id)sender {
+    session = [[Session alloc] init];
+    NSNumber *isLogin = [session isLogined];
+    if([isLogin intValue] == 0) {
+        [session showLoginView:self.view];
+    }
+    
+    isLogin = [session isLogined];
+    if([isLogin intValue] == 0) {
+        return;
+    }
+        
     //tag_id
     int tag_id = 1000; // TODO magic number
     NSNumber * tag_id_number = [NSNumber numberWithInt:tag_id];
