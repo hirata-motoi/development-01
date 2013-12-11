@@ -27,6 +27,8 @@
 @synthesize existTagsDictionary;
 @synthesize existTagsArray;
 @synthesize currentPageNo;
+@synthesize colors;
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -57,6 +59,18 @@
     _showSettingView = YES; // default表示
     self.existTagsDictionary = [[NSMutableDictionary alloc]init];
     self.existTagsArray = [[NSMutableArray alloc]init];
+    self.colors = @{
+        @"1": @{ @"left": [UIColor blackColor], @"right": [UIColor grayColor], @"text": [UIColor whiteColor] },
+        @"2": @{ @"left": [UIColor blueColor], @"right": [UIColor cyanColor], @"text": [UIColor blackColor] },
+        @"3": @{ @"left": [UIColor orangeColor], @"right": [UIColor lightGrayColor], @"text": [UIColor blackColor] },
+        @"4": @{ @"left": [UIColor greenColor], @"right": [UIColor yellowColor], @"text": [UIColor blackColor] },
+        @"5": @{ @"left": [UIColor brownColor], @"right": [UIColor whiteColor], @"text": [UIColor blackColor] },
+        @"6": @{ @"left": [UIColor redColor], @"right": [UIColor greenColor], @"text": [UIColor blackColor] },
+        @"7": @{ @"left": [UIColor grayColor], @"right": [UIColor orangeColor], @"text": [UIColor blackColor] },
+        @"8": @{ @"left": [UIColor purpleColor], @"right": [UIColor magentaColor], @"text": [UIColor blackColor] },
+        @"9": @{ @"left": [UIColor whiteColor], @"right": [UIColor grayColor], @"text": [UIColor blackColor] }
+    };
+
     
     //imageIdIndexMapのセット
     for (int i = 0; i < imageIds.count; i++) {
@@ -382,14 +396,14 @@
 //attachされているタグをfor文で回してframe.originを適切に設定
 - (void) arrangeTagLabelLocation:(NSMutableDictionary *)tagsForImageId withIndexes:(NSMutableArray *)tagIdsForIamgeId {
     int extra = 5;
-    int labelHeight = 15;
-    int labelWidth = 25;
+    int labelHeight = 25;
+    int labelWidth = 50;
     int labelOriginX = self.view.bounds.size.width - labelWidth - extra;
     int labelOriginInitialY = 5;
     for (int i = 0; i < tagIdsForIamgeId.count; i++) {
         NSNumber * index_number = [NSNumber numberWithInt:i];
 
-        int labelOriginY = labelOriginInitialY + labelHeight * i;
+        int labelOriginY = labelOriginInitialY + ( labelHeight + extra ) * i;
         
         NSNumber * tag_id_number = [tagIdsForIamgeId objectAtIndex:i];
         UIView * labelBackground = [tagsForImageId objectForKey:[tag_id_number stringValue]];
@@ -428,16 +442,20 @@
     //高さ : 15
     //余白 : 5
     int extra = 5;
-    int labelHeight = 15;
-    int labelWidth  = 25;
+    int labelHeight = 25;
+    int labelWidth  = 50;
     int labelOriginX = self.view.bounds.size.width - labelWidth - extra;
     
     int tag_id = [tag_id_number intValue];
+
+    UIColor * leftColor = [[colors objectForKey:[tag_id_number stringValue]] objectForKey:@"left"];
+    UIColor * rightColor = [[colors objectForKey:[tag_id_number stringValue]] objectForKey:@"right"];
+    UIColor * textColor = [[colors objectForKey:[tag_id_number stringValue]] objectForKey:@"text"];
     
     UILabel *label = [[UILabel alloc]init];
     label.text = tag_name;
     label.adjustsFontSizeToFitWidth = YES;
-    label.textColor = [UIColor whiteColor];
+    label.textColor = textColor;
     label.userInteractionEnabled = YES;
     label.textAlignment = UITextAlignmentCenter;
     label.tag = tag_id;
@@ -449,7 +467,8 @@
     labelBackground.backgroundColor = [UIColor clearColor];
     CAGradientLayer *gradient = [CAGradientLayer layer];
     gradient.frame = label.frame;
-    [gradient setColors:[NSArray arrayWithObjects:(id)([UIColor blackColor].CGColor), (id)([UIColor grayColor].CGColor),nil]];
+
+    [gradient setColors:[NSArray arrayWithObjects:(id)(leftColor.CGColor), (id)(rightColor.CGColor),nil]];
     gradient.endPoint=CGPointMake(1.0, 0.0);
     [labelBackground.layer addSublayer:gradient];
     [labelBackground addSubview:label];
@@ -749,9 +768,14 @@
         NSNumber * tag_id   = [unit objectForKey:@"id"];
         NSString * tag_name = [unit objectForKey:@"tag_name"];
         UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 50, 40)];
+        
+        UIColor * leftColor = [[colors objectForKey:[tag_id stringValue]] objectForKey:@"left"];
+        UIColor * rightColor = [[colors objectForKey:[tag_id stringValue]] objectForKey:@"right"];
+        UIColor * textColor = [[colors objectForKey:[tag_id stringValue]] objectForKey:@"text"];
+        
         label.text = tag_name;
         label.adjustsFontSizeToFitWidth = YES;
-        label.textColor = [UIColor whiteColor];
+        label.textColor = textColor;
         label.userInteractionEnabled = YES;
         label.textAlignment = UITextAlignmentCenter;
         label.tag = [tag_id integerValue];
@@ -759,7 +783,7 @@
         UIView * labelBackground = [[UIView alloc]initWithFrame:CGRectMake((10 + (50 + 10)* i), 0, 50, 40)];
         label.backgroundColor = [UIColor clearColor];
         CAGradientLayer *gradient = [CAGradientLayer layer];
-        [gradient setColors:[NSArray arrayWithObjects:(id)([UIColor blackColor].CGColor), (id)([UIColor grayColor].CGColor),nil]];
+        [gradient setColors:[NSArray arrayWithObjects:(id)(leftColor.CGColor), (id)(rightColor.CGColor),nil]];
         gradient.frame = CGRectMake(0, 0, 50, 40);
         gradient.endPoint=CGPointMake(1.0, 0.0);
         [labelBackground.layer addSublayer:gradient];
