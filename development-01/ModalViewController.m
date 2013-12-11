@@ -688,6 +688,9 @@
     NSLog(@"tag_name : %@", tag_name);
     UIView * labelBackgroundView = [self createAttachedTagLabelView:tag_id_number withTagName:tag_name];
     
+    UIImage * backgroundImage = [UIImage imageNamed:@"shareLabelBackground.png"];
+    labelBackgroundView.backgroundColor = [UIColor colorWithPatternImage:backgroundImage];
+        
     // 既存タグ情報に追加
     [tagsForImageId setObject:labelBackgroundView forKey:[tag_id_number stringValue]];
     //[tagIdsForImageId addObject:tag_id_number];
@@ -701,13 +704,6 @@
     int labelOriginX = extra;
     int labelOriginY = extra;
 
-    UIView * labelBackground = [tagsForImageId objectForKey:[tag_id_number stringValue]];
-        
-    CGRect rect = labelBackground.frame;
-    rect.origin.x = labelOriginX;
-    rect.origin.y = labelOriginY;
-    labelBackground.frame = rect;
-    
     //新規のラベルを表示
     UIImageView * targetImageView = [addedImagesWithIndex objectForKey:[image_index stringValue]];
     [targetImageView addSubview:labelBackgroundView];
