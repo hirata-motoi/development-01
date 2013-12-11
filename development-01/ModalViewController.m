@@ -30,6 +30,7 @@
 @synthesize existTagsArray;
 @synthesize currentPageNo;
 @synthesize session;
+@synthesize backgroundImages;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -61,6 +62,14 @@
     _showSettingView = YES; // default表示
     self.existTagsDictionary = [[NSMutableDictionary alloc]init];
     self.existTagsArray = [[NSMutableArray alloc]init];
+    self.backgroundImages = @{
+                              @"1": @"labelBackground.png",
+                              @"2": @"redLabelBackground.png",
+                              @"3": @"greenLabelBackground.png",
+                              @"4": @"purpleLabelBackground.png",
+                              @"5": @"brownLabelBackground.png",
+                              @"6": @"grayLabelBackground.png"
+                              };
 
     
     //imageIdIndexMapのセット
@@ -452,7 +461,8 @@
     label.text = tag_name;
     
     UIView * labelBackground = [[UIView alloc]initWithFrame:CGRectMake(0, 0, labelWidth, labelHeight)];
-    UIImage * backgroundImage = [UIImage imageNamed:@"labelBackground.png"];
+    NSString * image_file = [backgroundImages objectForKey:[tag_id_number stringValue]];
+    UIImage * backgroundImage = [UIImage imageNamed:image_file];
     labelBackground.backgroundColor = [UIColor colorWithPatternImage:backgroundImage];
     [labelBackground addSubview:label];
     
@@ -774,7 +784,8 @@
         UIView * labelBackground = [[UIView alloc]initWithFrame:CGRectMake((10 + (50 + 10)* i), 0, 50, 25)];
         label.backgroundColor = [UIColor clearColor];
 
-        UIImage * backgroundImage = [UIImage imageNamed:@"labelBackground.png"];
+        NSString * image_file = [backgroundImages objectForKey:[tag_id stringValue]];
+        UIImage * backgroundImage = [UIImage imageNamed:image_file];
         labelBackground.backgroundColor = [UIColor colorWithPatternImage:backgroundImage];
         [labelBackground addSubview:label];
         label.text = tag_name;

@@ -15,6 +15,11 @@
 		8448BF261858C82500E97E75 /* labelBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 8448BF251858C82500E97E75 /* labelBackground.png */; };
 		8448BF281858CA7A00E97E75 /* shareLabelBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 8448BF271858CA7A00E97E75 /* shareLabelBackground.png */; };
 		8448BF2C1858CF0700E97E75 /* blackStripe.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8448BF2A1858CF0700E97E75 /* blackStripe.jpg */; };
+		8448BF321858D94E00E97E75 /* grayLabelBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 8448BF2D1858D94E00E97E75 /* grayLabelBackground.png */; };
+		8448BF331858D94E00E97E75 /* brownLabelBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 8448BF2E1858D94E00E97E75 /* brownLabelBackground.png */; };
+		8448BF341858D94E00E97E75 /* purpleLabelBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 8448BF2F1858D94E00E97E75 /* purpleLabelBackground.png */; };
+		8448BF351858D94E00E97E75 /* greenLabelBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 8448BF301858D94E00E97E75 /* greenLabelBackground.png */; };
+		8448BF361858D94E00E97E75 /* redLabelBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 8448BF311858D94E00E97E75 /* redLabelBackground.png */; };
 		8452A8A5183A55370016EA3F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8452A8A4183A55370016EA3F /* Foundation.framework */; };
 		8452A8A7183A55370016EA3F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8452A8A6183A55370016EA3F /* CoreGraphics.framework */; };
 		8452A8A9183A55370016EA3F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8452A8A8183A55370016EA3F /* UIKit.framework */; };
@@ -78,6 +83,11 @@
 		8448BF251858C82500E97E75 /* labelBackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = labelBackground.png; sourceTree = "<group>"; };
 		8448BF271858CA7A00E97E75 /* shareLabelBackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = shareLabelBackground.png; sourceTree = "<group>"; };
 		8448BF2A1858CF0700E97E75 /* blackStripe.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = blackStripe.jpg; sourceTree = "<group>"; };
+		8448BF2D1858D94E00E97E75 /* grayLabelBackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = grayLabelBackground.png; sourceTree = "<group>"; };
+		8448BF2E1858D94E00E97E75 /* brownLabelBackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = brownLabelBackground.png; sourceTree = "<group>"; };
+		8448BF2F1858D94E00E97E75 /* purpleLabelBackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = purpleLabelBackground.png; sourceTree = "<group>"; };
+		8448BF301858D94E00E97E75 /* greenLabelBackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = greenLabelBackground.png; sourceTree = "<group>"; };
+		8448BF311858D94E00E97E75 /* redLabelBackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = redLabelBackground.png; sourceTree = "<group>"; };
 		8452A8A1183A55370016EA3F /* development-01.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "development-01.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8452A8A4183A55370016EA3F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		8452A8A6183A55370016EA3F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -300,6 +310,11 @@
 			children = (
 				882187761858D246004CE1A0 /* line_like_image.png */,
 				8448BF2A1858CF0700E97E75 /* blackStripe.jpg */,
+				8448BF2D1858D94E00E97E75 /* grayLabelBackground.png */,
+				8448BF2E1858D94E00E97E75 /* brownLabelBackground.png */,
+				8448BF2F1858D94E00E97E75 /* purpleLabelBackground.png */,
+				8448BF301858D94E00E97E75 /* greenLabelBackground.png */,
+				8448BF311858D94E00E97E75 /* redLabelBackground.png */,
 				8448BF271858CA7A00E97E75 /* shareLabelBackground.png */,
 				8448BF251858C82500E97E75 /* labelBackground.png */,
 				887124B318564E4200550DEF /* shareicon.png */,
@@ -392,13 +407,18 @@
 			files = (
 				887124A81854D56E00550DEF /* appicon.png in Resources */,
 				8871249D1850EC0C00550DEF /* icon.png in Resources */,
+				8448BF341858D94E00E97E75 /* purpleLabelBackground.png in Resources */,
 				8448BF2C1858CF0700E97E75 /* blackStripe.jpg in Resources */,
 				887124B018564CD800550DEF /* homeicon.png in Resources */,
 				8452A8C0183A55370016EA3F /* Images.xcassets in Resources */,
 				8448BF261858C82500E97E75 /* labelBackground.png in Resources */,
+				8448BF321858D94E00E97E75 /* grayLabelBackground.png in Resources */,
+				8448BF361858D94E00E97E75 /* redLabelBackground.png in Resources */,
 				887124B218564D8F00550DEF /* settingicon.png in Resources */,
 				8448BF281858CA7A00E97E75 /* shareLabelBackground.png in Resources */,
+				8448BF331858D94E00E97E75 /* brownLabelBackground.png in Resources */,
 				887124B418564E4200550DEF /* shareicon.png in Resources */,
+				8448BF351858D94E00E97E75 /* greenLabelBackground.png in Resources */,
 				882187771858D246004CE1A0 /* line_like_image.png in Resources */,
 				8452A8AF183A55370016EA3F /* InfoPlist.strings in Resources */,
 				8452A8B8183A55370016EA3F /* Main.storyboard in Resources */,
