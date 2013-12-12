@@ -7,10 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ScrollView.h"
 
 @interface ShareViewController : UIViewController
 
 @property(nonatomic, strong) UITapGestureRecognizer *singleTap;
+@property ScrollView *scrollView;
 @property UITextView *textField;
+@property UIView *textView;
+@property int tabHeight;
+@property int textHeight;
 
 @end

@@ -19,6 +19,10 @@
 @implementation ShareViewController
 
 @synthesize textField;
+@synthesize textView;
+@synthesize tabHeight;
+@synthesize textHeight;
+@synthesize scrollView;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -54,25 +58,45 @@
 
     [self showSareImageList];
     [self setNavigationBar];
+    
+    //キーボード表示・非表示の通知を開始
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    //キーボード表示・非表示の通知を終了
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)showSareImageList
 {
+    self.singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onSingleTap:)];
     self.singleTap.delegate = self;
+    self.singleTap.numberOfTapsRequired = 1;
+    [self.view addGestureRecognizer:self.singleTap];
     
     AppDelegate *app =  [[UIApplication sharedApplication] delegate];
     Common *cm = [[Common alloc] init];
 
     // Params TODO
     int naviHeight = 44;
-    int tabHeight = 49;
-    int textHeight = 40;
+
+    NSString *ver = [[UIDevice currentDevice] systemVersion];
+    tabHeight = 49;
+    int ver_int = [ver intValue];
+    if (ver_int < 7) {
+        tabHeight = 0;
+    }
+
+    textHeight = 40;
     int imageSize = 100;
     int myImageLeft = 200;
     int contentSize = 0;
 
     // Create scrollView
-    ScrollView *scrollView = [[ScrollView alloc] init];
+    scrollView = [[ScrollView alloc] init];
     CGRect srect = self.view.frame;
     srect.origin.y = app.naviBarHeight;
     srect.size.height -= (naviHeight + tabHeight + textHeight);
@@ -97,7 +121,7 @@
         contentSize = y + imageSize + 10;
     }
     
-    UIView *textView = [[UIView alloc] init];
+    textView = [[UIView alloc] init];
     textView.frame = CGRectMake(0, self.view.frame.size.height - tabHeight - textHeight, self.view.frame.size.width, textHeight);
     textView.backgroundColor = [UIColor grayColor];
     textField = [[UITextView alloc] init];
@@ -138,8 +162,46 @@
 }
 
 -(void)onSingleTap:(UITapGestureRecognizer *)recognizer {
-    NSLog(@"tapped");
     [textField resignFirstResponder];
+}
+
+- (void)keyboardWillShow:(NSNotification *)aNotification {
+    //キーボードの高さをとる
+    CGRect keyboardRect = [[aNotification userInfo][UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    keyboardRect = [[self.view superview] convertRect:keyboardRect fromView:nil];
+    NSNumber *duration = [aNotification.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey];
+    
+    //アニメーションでtextFieldを動かす
+    [UIView animateWithDuration:[duration doubleValue]
+        animations:^{
+            CGRect rect = self.textView.frame;
+            rect.origin.y = keyboardRect.origin.y - self.textView.frame.size.height;
+            self.textView.frame = rect;
+            
+            CGPoint offset;
+            offset.x = 0.0f;
+            offset.y = scrollView.contentSize.height - scrollView.frame.size.height + keyboardRect.size.height - 49;//TODO:49
+            [scrollView setContentOffset:offset animated:YES];
+        }
+    ];
+}
+
+- (void)keyboardWillHide:(NSNotification *)aNotification {
+    NSNumber *duration = [aNotification.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey];
+
+    //アニメーションでtextFieldを動かす
+    [UIView animateWithDuration:[duration doubleValue]
+        animations:^{
+            CGRect rect = self.textView.frame;
+            rect.origin.y = self.view.frame.size.height - tabHeight - textHeight;
+            self.textView.frame = rect;
+            
+            CGPoint offset;
+            offset.x = 0.0f;
+            offset.y = scrollView.contentSize.height - scrollView.frame.size.height;
+            [scrollView setContentOffset:offset animated:YES];
+        }
+    ];
 }
 
 @end
