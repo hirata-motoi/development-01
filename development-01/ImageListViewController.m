@@ -279,11 +279,13 @@
 //        }
         NSString *image_path = [unit objectForKey:@"image_path"];
         UIImage *image = [UIImage imageWithContentsOfFile:image_path];
-//        CGImageRef imageRef = [image CGImage];
-//        UIGraphicsBeginImageContext(CGSizeMake(CGImageGetWidth(imageRef), CGImageGetHeight(imageRef)));
-//        [image drawAtPoint:CGPointMake(0,0)];
-//        image = UIGraphicsGetImageFromCurrentImageContext();
-//        UIGraphicsEndImageContext();
+
+        CGImageRef imageRef = [image CGImage];
+        UIGraphicsBeginImageContext(CGSizeMake(CGImageGetWidth(imageRef), CGImageGetHeight(imageRef)));
+        [image drawAtPoint:CGPointMake(0,0)];
+        image = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        
         int x,y;
         x = ((count % HORIZONTAL_ROWS) * 78) + 4;
         y = ((count / HORIZONTAL_ROWS) * 78) + 4 + 44;
@@ -293,6 +295,7 @@
         imageView.tag = [[unit objectForKey:@"image_id"] intValue];
         imageView.userInteractionEnabled = YES;
         imageView.frame = CGRectMake(x, y, 74, 74);
+
         
         [scrollView insertSubview:imageView atIndex:[self.view.subviews count]];
         [self performSelectorOnMainThread:@selector(addView:) withObject:imageView waitUntilDone:NO];
