@@ -23,6 +23,7 @@
 @synthesize scrolledPage;
 @synthesize scrollView;
 @synthesize tagId;
+@synthesize processing;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -38,7 +39,7 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     [self setImagesByTagId:tagId];
-    [self setNavigationBar]; 
+    [self setNavigationBar];
 }
 
 
@@ -53,10 +54,11 @@
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)sender {
-    return;
     scrollPosition = sender.contentOffset.y;
-    if (scrollPosition > (74 * 10 * scrolledPage - self.view.bounds.size.height)) {
-        //[self addImagesByScroll];
+
+    int scrollPositionInt = (int)scrollPosition;
+    NSLog(@"scrollPositionInt : %d  scrolledPage : %d", scrollPositionInt, scrolledPage);
+    if (scrollPositionInt > (74 * 7 * scrolledPage - self.view.bounds.size.height) && processing == NO) {
         [NSThread detachNewThreadSelector:@selector(afterViewDidAppear:) toTarget:self withObject:nil];
     }
 }
@@ -108,12 +110,13 @@
 //        [scrollView insertSubview:imageView atIndex:[self.view.subviews count]];
 //        count++;
 //    }
-    scrolledPage++;
+    //scrolledPage++;
     // viewにscrollViewをaddする
     count = [imageInfo count];
     NSInteger heightCount = floor(count / 4) + 1;
     scrollView.contentSize = CGSizeMake(320, (78 * heightCount + 44));
     [self.view addSubview:scrollView];
+    
     [NSThread detachNewThreadSelector:@selector(afterViewDidAppear:) toTarget:self withObject:nil];
 }
 
@@ -263,42 +266,42 @@
     [self.view addSubview:navigationBar];
 }
 
-- (void) afterViewDidAppear:(id)arg { 
-//    for(NSUInteger i = 0; i < [self subViewCount]; ++i) {
-//        UIView *subView = [self subViewAt:i];
-//        if(imageView) {
-//            [self performSelectorOnMainThread:@selector(addView:) withObject:subView waitUntilDone:NO];
-//        }
-//    }
+- (void) afterViewDidAppear:(id)arg {
+    scrolledPage++;
+    processing = YES;
     int HORIZONTAL_ROWS = 4;
     int count = 0;
-    for ( NSDictionary *unit in imageInfo) {
-//        if (count <= (HORIZONTAL_ROWS*10*scrolledPage - 1) || count > (HORIZONTAL_ROWS*10*(scrolledPage+1) - 1)) {
-//            count++;
-//            continue;
-//        }
+    int rowsPerPage = 7;
+    
+    int initIndex = (scrolledPage - 1 )* HORIZONTAL_ROWS * rowsPerPage;
+    int lastIndex = (initIndex + HORIZONTAL_ROWS * rowsPerPage< [imageInfo count]) ? initIndex + HORIZONTAL_ROWS * rowsPerPage : [imageInfo count];
+    for (int i = initIndex; i < lastIndex; i++) {
+
+        NSDictionary *unit = [imageInfo objectAtIndex:i];
         NSString *image_path = [unit objectForKey:@"image_path"];
         UIImage *image = [UIImage imageWithContentsOfFile:image_path];
-//        CGImageRef imageRef = [image CGImage];
-//        UIGraphicsBeginImageContext(CGSizeMake(CGImageGetWidth(imageRef), CGImageGetHeight(imageRef)));
-//        [image drawAtPoint:CGPointMake(0,0)];
-//        image = UIGraphicsGetImageFromCurrentImageContext();
-//        UIGraphicsEndImageContext();
+
+        CGImageRef imageRef = [image CGImage];
+        UIGraphicsBeginImageContext(CGSizeMake(CGImageGetWidth(imageRef), CGImageGetHeight(imageRef)));
+        [image drawAtPoint:CGPointMake(0,0)];
+        image = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        
         int x,y;
         x = ((count % HORIZONTAL_ROWS) * 78) + 4;
-        y = ((count / HORIZONTAL_ROWS) * 78) + 4 + 44;
+        y = (((count / HORIZONTAL_ROWS) + (scrolledPage - 1 ) * rowsPerPage) * 78) + 4 + 44;
         
 
         UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
         imageView.tag = [[unit objectForKey:@"image_id"] intValue];
         imageView.userInteractionEnabled = YES;
         imageView.frame = CGRectMake(x, y, 74, 74);
-        
-        [scrollView insertSubview:imageView atIndex:[self.view.subviews count]];
+
         [self performSelectorOnMainThread:@selector(addView:) withObject:imageView waitUntilDone:NO];
         count++;
     }
-    scrolledPage++;
+    processing = NO;
+
 }
 
 - (void)addView:(id)subView {
