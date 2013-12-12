@@ -57,7 +57,6 @@
     scrollPosition = sender.contentOffset.y;
 
     int scrollPositionInt = (int)scrollPosition;
-    NSLog(@"scrollPositionInt : %d  scrolledPage : %d", scrollPositionInt, scrolledPage);
     if (scrollPositionInt > (74 * 7 * scrolledPage - self.view.bounds.size.height) && processing == NO) {
         [NSThread detachNewThreadSelector:@selector(afterViewDidAppear:) toTarget:self withObject:nil];
     }
@@ -113,7 +112,7 @@
     //scrolledPage++;
     // viewにscrollViewをaddする
     count = [imageInfo count];
-    NSInteger heightCount = floor(count / 4) + 1;
+    NSInteger heightCount = floor((count - 1)/ 4) + 1;
     scrollView.contentSize = CGSizeMake(320, (78 * heightCount + 44));
     [self.view addSubview:scrollView];
     
