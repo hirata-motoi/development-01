@@ -10,7 +10,7 @@
 
 @interface ShareViewController : UIViewController
 
-@property UITableView *tableView;
-@property NSMutableArray *shareImageViewArray;
+@property(nonatomic, strong) UITapGestureRecognizer *singleTap;
+@property UITextView *textField;
 
 @end

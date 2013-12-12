@@ -18,6 +18,8 @@
 
 @implementation ShareViewController
 
+@synthesize textField;
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -56,81 +58,61 @@
 
 - (void)showSareImageList
 {
-    [self getShareTagImages];
-
+    self.singleTap.delegate = self;
+    
     AppDelegate *app =  [[UIApplication sharedApplication] delegate];
+    Common *cm = [[Common alloc] init];
+
+    // Params TODO
+    int naviHeight = 44;
+    int tabHeight = 49;
+    int textHeight = 40;
+    int imageSize = 100;
+    int myImageLeft = 200;
+    int contentSize = 0;
+
     // Create scrollView
     ScrollView *scrollView = [[ScrollView alloc] init];
     CGRect srect = self.view.frame;
-    srect.origin.y = app.naviBarHeight/2;// MAGIC NUMBER 2!
+    srect.origin.y = app.naviBarHeight;
+    srect.size.height -= (naviHeight + tabHeight + textHeight);
     scrollView.frame = srect;
-//    scrollView.backgroundColor = [UIColor blackColor];
-
-    CGRect frameSize = [[UIScreen mainScreen] applicationFrame];
-    self.tableView = [[UITableView alloc] initWithFrame:scrollView.frame style:UITableViewStylePlain];
-    self.tableView.backgroundColor = [UIColor colorWithRed:0.0 green:1.0 blue:1.0 alpha:0.0];
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-    [scrollView addSubview:self.tableView];
-    [self.view addSubview:scrollView];
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return [self.shareImageViewArray count];
-}
-
-- (CGFloat)tableView:(UITableView*)tableView heightForRowAtIndexPath:(NSIndexPath*)indexPath {
-    return 110;
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    static NSString * identifier = @"basis-cell";
-    UITableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:identifier];
-//    if (nil == cell) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
-//    }
-    cell.backgroundColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.0];
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-//    NSLog(@"index %d", indexPath.row);
-//    NSLog(@"%@", self.shareImageViewArray);
-//    NSLog(@"shared %@", [self.shareImageViewArray objectAtIndex:indexPath.row]);
-
-    if (indexPath.row % 2 == 1) {
-        UIImage *iconImage=[UIImage imageNamed:@"icon.png"];
-        UIImageView *iconImageView = [[UIImageView alloc] initWithImage:iconImage];
-        iconImageView.frame = CGRectMake(10, 10, 30, 30);
-        [cell addSubview:iconImageView];
+    
+    NSArray *shareImageList = [cm getImagesByTag:[NSNumber numberWithInt:1000]];
+    UIImageView *shareImageView;
+    int count = 0;
+    int x = 0;
+    int y = 0;
+    for (NSDictionary *unit in shareImageList) {
+        NSString *shareImagePath = [unit objectForKey:@"image_path"];
+        UIImage *shareImage = [UIImage imageWithContentsOfFile:shareImagePath];
+        shareImageView = [[UIImageView alloc] initWithImage:shareImage];
+        shareImageView.tag = 1000; // 1000:share
+        shareImageView.userInteractionEnabled = YES;
+        x = myImageLeft;
+        y = (imageSize + 10) * count;
+        shareImageView.frame = CGRectMake(x, y, imageSize, imageSize);
+        [scrollView insertSubview:shareImageView atIndex:0];
+        count++;
+        contentSize = y + imageSize + 10;
     }
     
-    [cell addSubview:[self.shareImageViewArray objectAtIndex:indexPath.row]];
-    return cell;
-}
+    UIView *textView = [[UIView alloc] init];
+    textView.frame = CGRectMake(0, self.view.frame.size.height - tabHeight - textHeight, self.view.frame.size.width, textHeight);
+    textView.backgroundColor = [UIColor grayColor];
+    textField = [[UITextView alloc] init];
+    textField.frame = CGRectMake(5, 5, self.view.frame.size.width - 50, 30);
+    [textView addSubview:textField];
 
-- (void) getShareTagImages
-{
-    self.shareImageViewArray = [[NSMutableArray alloc] init];
-    NSString *stmt = @"select image_id from tag_map where tag_id = 1000 order by created_at;";
-    DA *da = [DA da];
-    [da open];
-    FMResultSet *results = [da executeQuery:stmt];
-    Common *cm = [[Common alloc] init];
-    while ([results next]) {
-        NSString *imagePath = [cm getImagePathThumbnail:[NSNumber numberWithInt:[results intForColumn:@"image_id"]]];
-        UIImage *image = [UIImage imageWithContentsOfFile:imagePath];
-        UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
-        imageView.frame = CGRectMake(200, 0, 110, 110);
-        [self.shareImageViewArray addObject:imageView];
-//        NSLog(@"index %d", [self.shareImageViewArray count]);
-        UILabel *commentLabel = [[UILabel alloc] init];
-        commentLabel.text = @"いいね！";
-        commentLabel.backgroundColor = [UIColor whiteColor];
-        commentLabel.frame = CGRectMake(50, 10, 100, 50);
-        [self.shareImageViewArray addObject:commentLabel];
-    }
-    [da close];
+    scrollView.contentSize = CGSizeMake(320, contentSize);
+
+    CGPoint offset;
+    offset.x = 0.0f;
+    offset.y = scrollView.contentSize.height - scrollView.frame.size.height;
+    [scrollView setContentOffset:offset animated:YES];
+
+    [self.view addSubview:scrollView];
+    [self.view addSubview:textView];
 }
 
 - (void)setNavigationBar {
@@ -153,6 +135,11 @@
     }
 
     [self.view addSubview:navigationBar];
+}
+
+-(void)onSingleTap:(UITapGestureRecognizer *)recognizer {
+    NSLog(@"tapped");
+    [textField resignFirstResponder];
 }
 
 @end
