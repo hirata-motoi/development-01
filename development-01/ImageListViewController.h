@@ -20,4 +20,5 @@
 @property(readwrite,nonatomic) int scrolledPage;
 @property ScrollView *scrollView;
 @property NSNumber *tagId;
+@property BOOL processing;
 @end
