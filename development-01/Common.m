@@ -65,7 +65,7 @@
     [da executeUpdate:insert_map_def_data, [NSNumber numberWithInt:2], [NSString stringWithFormat:@"smile"]];
     [da executeUpdate:insert_map_def_data, [NSNumber numberWithInt:3], [NSString stringWithFormat:@"cry"]];
     [da executeUpdate:insert_map_def_data, [NSNumber numberWithInt:4], [NSString stringWithFormat:@"angry"]];
-    [da executeUpdate:insert_map_def_data, [NSNumber numberWithInt:5], [NSString stringWithFormat:@"lagh"]];
+    [da executeUpdate:insert_map_def_data, [NSNumber numberWithInt:5], [NSString stringWithFormat:@"laugh"]];
     [da executeUpdate:insert_map_def_data, [NSNumber numberWithInt:6], [NSString stringWithFormat:@"eat"]];
     [da executeUpdate:insert_map_def_data, [NSNumber numberWithInt:1000], [NSString stringWithFormat:@"share"]];
     
