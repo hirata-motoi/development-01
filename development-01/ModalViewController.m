@@ -175,7 +175,6 @@
         if (pageNo < 0 || pageNo > imageIds.count - 1) {
             return;
         }
-
         //ページが変わってなかったら何もしない
         if (pageNo == currentPageNo) {
             return;
@@ -207,8 +206,8 @@
         //attach済のtag labelを表示
         [self switchTagLabels:image_id_number];
         
-        //非表示のimageのメモリ解放
-        [self releaseRedundantImage:index_list withSelfIndex:[NSNumber numberWithInt:pageNo]];
+        //非表示のimageとtag labelのメモリ解放
+        [self releaseRedundantObjects:index_list withSelfIndex:[NSNumber numberWithInt:pageNo]];
     }
 }
 
@@ -800,7 +799,7 @@
     settingViewObject = settingView;
 }
 
-- (void) releaseRedundantImage:(NSMutableArray *)index_list withSelfIndex:selfIndex {
+- (void) releaseRedundantObjects:(NSMutableArray *)index_list withSelfIndex:selfIndex {
     NSMutableDictionary * index_dictionary = [[NSMutableDictionary alloc]init];
     for (NSNumber * index in index_list) {
         [index_dictionary setObject:@"1" forKey:[index stringValue]];
@@ -812,10 +811,16 @@
         if ([index_dictionary objectForKey:key]) {
             continue;
         }
-        //オブジェクトを破棄
+        //imageオブジェクトを破棄
         UIView * obj = [addedImagesWithIndex objectForKey:key];
         [obj removeFromSuperview];
         [addedImagesWithIndex removeObjectForKey:key];
+
+        //tag labelオブジェクトを破棄
+        int index = [key intValue];
+        NSNumber * image_id = [imageIds objectAtIndex:index];
+        [attachedTagIdsArrayByImageId removeObjectForKey:[image_id stringValue]];
+        [attachedTagLabelsForImageId removeObjectForKey:[image_id stringValue]];
     }
 }
 
