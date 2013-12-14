@@ -21,4 +21,5 @@
 -(void)filesystemInitializer;
 -(void)kickImageSync;
 -(NSMutableArray*)getImagesByTag:(NSNumber*)tag_id;
+-(UIImage*)resize:(UIImage*)image rect:(CGRect)rect;
 @end

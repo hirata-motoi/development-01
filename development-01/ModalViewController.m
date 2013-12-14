@@ -31,6 +31,8 @@
 @synthesize currentPageNo;
 @synthesize session;
 @synthesize backgroundImages;
+@synthesize tagLabelHeight;
+@synthesize tagLabelWidth;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -70,6 +72,8 @@
                               @"5": @"brownLabelBackground.png",
                               @"6": @"grayLabelBackground.png"
                               };
+    self.tagLabelHeight = 25 * 1.5;
+    self.tagLabelWidth  = 50 * 1.5;
 
     
     //imageIdIndexMapのセット
@@ -397,8 +401,8 @@
 //attachされているタグをfor文で回してframe.originを適切に設定
 - (void) arrangeTagLabelLocation:(NSMutableDictionary *)tagsForImageId withIndexes:(NSMutableArray *)tagIdsForIamgeId {
     int extra = 5;
-    int labelHeight = 25;
-    int labelWidth = 50;
+    int labelHeight = tagLabelHeight;
+    int labelWidth  = tagLabelWidth;
     int labelOriginX = self.view.bounds.size.width - labelWidth - extra;
     int labelOriginInitialY = 5;
     for (int i = 0; i < tagIdsForIamgeId.count; i++) {
@@ -443,8 +447,8 @@
     //高さ : 15
     //余白 : 5
     int extra = 5;
-    int labelHeight = 25;
-    int labelWidth  = 50;
+    int labelHeight = tagLabelHeight;
+    int labelWidth  = tagLabelWidth;
     int labelOriginX = self.view.bounds.size.width - labelWidth - extra;
     
     int tag_id = [tag_id_number intValue];
@@ -463,6 +467,8 @@
     UIView * labelBackground = [[UIView alloc]initWithFrame:CGRectMake(0, 0, labelWidth, labelHeight)];
     NSString * image_file = [backgroundImages objectForKey:[tag_id_number stringValue]];
     UIImage * backgroundImage = [UIImage imageNamed:image_file];
+    Common * cm = [[Common alloc]init];
+    backgroundImage = [cm resize:backgroundImage rect:CGRectMake(0, 0, tagLabelWidth, tagLabelHeight)];
     labelBackground.backgroundColor = [UIColor colorWithPatternImage:backgroundImage];
     [labelBackground addSubview:label];
     
@@ -755,8 +761,8 @@
     tagScrollView.userInteractionEnabled = YES;
     
     //1ページのフレームサイズ
-    int scrollViewWidth = ((50 + 10) * existTagsArray.count + 10) < self.view.bounds.size.width ? self.view.bounds.size.width : ((50 + 10) *  existTagsArray.count + 10);
-    int scrollViewHeight = 40;
+    int scrollViewWidth = ((tagLabelWidth + 10) * existTagsArray.count + 10) < self.view.bounds.size.width ? self.view.bounds.size.width : ((tagLabelWidth + 10) *  existTagsArray.count + 10);
+    int scrollViewHeight = tagLabelHeight * 1.3;
     int scrollViewOriginX = 5;
     int scrollViewOriginY = 55;
     
@@ -771,7 +777,7 @@
         NSDictionary * unit = [existTagsArray objectAtIndex:i];
         NSNumber * tag_id   = [unit objectForKey:@"id"];
         NSString * tag_name = [unit objectForKey:@"tag_name"];
-        UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 50, 25)];
+        UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, tagLabelWidth, tagLabelHeight)];
 
         
         label.text = tag_name;
@@ -781,11 +787,13 @@
         label.textAlignment = UITextAlignmentCenter;
         label.tag = [tag_id integerValue];
         
-        UIView * labelBackground = [[UIView alloc]initWithFrame:CGRectMake((10 + (50 + 10)* i), 0, 50, 25)];
+        UIView * labelBackground = [[UIView alloc]initWithFrame:CGRectMake((10 + (tagLabelWidth + 10)* i), 0, tagLabelWidth, tagLabelHeight)];
         label.backgroundColor = [UIColor clearColor];
 
         NSString * image_file = [backgroundImages objectForKey:[tag_id stringValue]];
         UIImage * backgroundImage = [UIImage imageNamed:image_file];
+        Common * cm = [[Common alloc]init];
+        backgroundImage = [cm resize:backgroundImage rect:CGRectMake(0, 0, tagLabelWidth, tagLabelHeight)];
         labelBackground.backgroundColor = [UIColor colorWithPatternImage:backgroundImage];
         [labelBackground addSubview:label];
         label.text = tag_name;

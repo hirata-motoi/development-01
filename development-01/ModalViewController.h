@@ -35,5 +35,7 @@
 @property (readwrite,nonatomic)int currentPageNo;
 @property (nonatomic,retain)NSDictionary *backgroundImages;
 @property Session *session;
+@property (readwrite,nonatomic)int tagLabelHeight;
+@property (readwrite,nonatomic)int tagLabelWidth;
 -(void)setImageInfo:(NSNumber*)image_id withIndex:(NSNumber*)index withImageIds:(NSArray*)image_ids;
 @end

@@ -175,4 +175,17 @@
     return images;
 }
 
+- (UIImage *)resize:(UIImage *)image
+               rect:(CGRect)rect
+{
+    UIGraphicsBeginImageContext(rect.size);
+    [image drawInRect:rect];
+    UIImage* resizedImage = UIGraphicsGetImageFromCurrentImageContext();
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetInterpolationQuality(context, kCGInterpolationHigh);
+    UIGraphicsEndImageContext();
+    return resizedImage;
+}
+
+
 @end
