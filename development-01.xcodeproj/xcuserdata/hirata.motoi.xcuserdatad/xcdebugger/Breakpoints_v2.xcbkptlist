@@ -281,7 +281,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "216"
             endingLineNumber = "216"
-            landmarkName = "-scrollViewDidScroll:"
+            landmarkName = "-getCurrentImageIndex"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

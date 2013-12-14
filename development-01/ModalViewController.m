@@ -51,7 +51,6 @@
 
 - (void)viewDidLoad
 {
-    NSLog(@"viewDidLoad");
     [super viewDidLoad];
     self.wantsFullScreenLayout = YES;
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleBlackTranslucent;
@@ -124,6 +123,9 @@
     
     scrollViewObject = scrollView;
 
+    //画面ができたところで現在のページを取得  setContentOffsetの後で呼ぶ必要あり
+    self.currentPageNo = [self getCurrentImageIndex];
+
     // タップされた画像とその前後だけ出す
     NSMutableArray *index_list = [[NSMutableArray alloc]init];
     [index_list addObject:imageIndex];
@@ -138,22 +140,10 @@
         [index_list addObject:afterIndexNumber];
     }
     [self addImagesToScrollViewWithIndexes:index_list];
-    
-    
+     
     // attach済tagのlabelを表示
     [self showAttachedTagLabels:imageId];
 
-    //タップした時の処理を定義
-
-    //settingviewをゲット
-    //settingViewをaddSubviewする
-    //settingViewをインスタンス変数にadd
-    //タップ時の処理をここで定義
-    
-    //image_idからattachedTagsをゲット
-    //attachedTagsをaddSubviewする
-    //attachedTagsをインスタンス変数にadd
-    //タップ時の処理をここで定義
     [self.view addSubview:scrollView];
     
     // settingViewを表示
@@ -329,13 +319,10 @@
         [attachedTagLabelsForImageId setObject:tagsForImageId forKey:[image_id stringValue]];
     }
     NSMutableArray * tagIdsForImageId = [attachedTagIdsArrayByImageId objectForKey:[image_id stringValue]];
-    NSLog(@"tagIdssForImageId2 : %@", tagIdsForImageId);
-    NSLog(@"attachedTagIdsArrayByImageId : %@   image_id:%@", attachedTagIdsArrayByImageId, image_id);
     if (!tagIdsForImageId) {
         tagIdsForImageId = [[NSMutableArray alloc]init];
         [attachedTagIdsArrayByImageId setObject:tagIdsForImageId forKey:[image_id stringValue]];
     }
-    NSLog(@"tagIdssForImageId : %@", tagIdsForImageId);
     
     //全tagの情報
     NSMutableDictionary * tagsDictionary = [self getTagsInfo];
@@ -416,7 +403,6 @@
         CGRect rect = labelBackground.frame;
         rect.origin.x = labelOriginX;
         rect.origin.y = labelOriginY;
-        NSLog(@"origin.x:%d origin.y:%d", rect.origin.x, rect.origin.y);
         
         labelBackground.frame = rect;
     }
@@ -644,9 +630,6 @@
     NSNumber * image_index = [NSNumber numberWithInt:currentPageNo];
     NSNumber * image_id = [imageIds objectAtIndex:[image_index integerValue]];
     
-    NSLog(@"switchShareLabel tag_id:%@ image_id:%@", tag_id_number, image_id);
-    
-    
     // 以下はlabelTappedとほぼ同じ処理。冗長だが今の手間を省いてコピペする
     // TODO ラベル作成用classを継承した2つのclass(classify(写真整理用)とaction(何らかのアクションを引き起こす用))とかかな
     // 既存のタグ情報
@@ -701,7 +684,6 @@
     //TODO ここも子class作って処理を移譲したい
     //TODO shareは特別な画像とかにしたい
     NSString *tag_name = [[tagsDictionary objectForKey:[tag_id_number stringValue]] objectForKey:@"tag_name" ];
-    NSLog(@"tag_name : %@", tag_name);
     UIView * labelBackgroundView = [self createAttachedTagLabelView:tag_id_number withTagName:tag_name];
     
     UIImage * backgroundImage = [UIImage imageNamed:@"shareLabelBackground.png"];
@@ -875,7 +857,6 @@
 
 - (void)commentTapped_old:(UITapGestureRecognizer *) recognizer{
     UITextView * view = recognizer.view;
-    NSLog(@"comentTapped comment:%@", view.text);
 
     CGRect rect = self.view.bounds;
     UIScrollView * commentEditScrollView = [[UIScrollView alloc]initWithFrame:rect];
@@ -892,7 +873,6 @@
     [textView becomeFirstResponder];
 
     [commentEditScrollView addSubview:textView];
-    NSLog(@"attache commentEditScrollView %@", commentEditScrollView);
    
     [self.view addSubview:commentEditScrollView];
 }
