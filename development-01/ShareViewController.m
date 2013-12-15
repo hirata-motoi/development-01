@@ -91,9 +91,10 @@
     }
 
     textHeight = 40;
-    int imageSize = 100;
-    int myImageLeft = 200;
+    int imageSize = 220;
+    int myImageLeft = 50;
     int contentSize = 0;
+    int commentSize = 100;
 
     // Create scrollView
     scrollView = [[ScrollView alloc] init];
@@ -101,6 +102,9 @@
     srect.origin.y = app.naviBarHeight;
     srect.size.height -= (naviHeight + tabHeight + textHeight);
     scrollView.frame = srect;
+    
+    UIImage *iineImage = [[UIImage imageNamed:@"iine.png"] stretchableImageWithLeftCapWidth:0 topCapHeight:1];
+    UIImage *commentImage = [[UIImage imageNamed:@"comments.png"] stretchableImageWithLeftCapWidth:0 topCapHeight:1];
     
     NSArray *shareImageList = [cm getImagesByTag:[NSNumber numberWithInt:1000]];
     UIImageView *shareImageView;
@@ -114,11 +118,24 @@
         shareImageView.tag = 1000; // 1000:share
         shareImageView.userInteractionEnabled = YES;
         x = myImageLeft;
-        y = (imageSize + 10) * count;
+        y = (commentSize + imageSize + 10) * count;
         shareImageView.frame = CGRectMake(x, y, imageSize, imageSize);
         [scrollView insertSubview:shareImageView atIndex:0];
+        
+        UIImageView *iineImageView = [[UIImageView alloc] initWithImage:iineImage];
+        x = 180;
+        y = (commentSize + imageSize + 10) * count + imageSize;
+        iineImageView.frame = CGRectMake(x, y, 100, 30);
+        [scrollView insertSubview:iineImageView atIndex:0];
+        
+        UIImageView *commentImageView = [[UIImageView alloc] initWithImage:commentImage];
+        x = myImageLeft;
+        y = (commentSize + imageSize + 10) * count + imageSize + 40;
+        commentImageView.frame = CGRectMake(x, y, imageSize, 50);
+        [scrollView insertSubview:commentImageView atIndex:0];
+    
         count++;
-        contentSize = y + imageSize + 10;
+        contentSize = y + 50;
     }
     
     textView = [[UIView alloc] init];
